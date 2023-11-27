@@ -8,7 +8,7 @@ public class EarBeeApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(EarBeeApplication.class, args);
-        System.out.println("test");
+
     }
 
 }
