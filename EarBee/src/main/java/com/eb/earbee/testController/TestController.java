@@ -1,11 +1,11 @@
-package testController;
+package com.eb.earbee.testController;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class TestController {
-    @GetMapping("/")
+    @GetMapping("/test")
     public String tempJsp() {
         // prefix: /WEB-INF/views
         // suffix: .jsp
