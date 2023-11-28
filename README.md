@@ -44,6 +44,13 @@
 
 # 테스트
 
+<details>
+    <summary>자세히 보기</summary>
+
+1. restAPI test (확인 완료)
+    ![img.png](img.png)
+</details>
+
 <br>
 
 # 서버
