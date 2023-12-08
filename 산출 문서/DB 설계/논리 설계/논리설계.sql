@@ -1,6 +1,5 @@
 select * from user_tab_comments;
 SELECT 'DROP TABLE "' || TABLE_NAME || '" CASCADE CONSTRAINTS;' FROM user_tables;
-commit;
 
 -- 이미지 1
 create table img(
