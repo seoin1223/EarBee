@@ -35,8 +35,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mustache'
 
     /* PostgreSql driver 추가*/
-//    runtimeOnly 'org.postgresql:postgresql'
-    runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
+    runtimeOnly 'org.postgresql:postgresql'
+//    runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
 
 //    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -50,7 +50,7 @@ dependencies {
 
 
     // oracle
-//    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
 
 
