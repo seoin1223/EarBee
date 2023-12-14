@@ -1,7 +1,103 @@
 {{>layouts/header}}
 
+<div class="business">
+    <form>
+        <table>
+
+            <tr>
+                <td colspan="3"><label style="margin-bottom: 5px">사업자 번호</label></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="mb-3 ">
+                        <input name="businessNumber" type="text" class="form-control" readonly>
+                    </div>
+                </td>
+                <td>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal"
+                                data-bs-whatever="@mdo">조회
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">주소</td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="mb-3 ">
+                        <input name="businessNumber" type="text" class="form-control" readonly>
+                    </div>
+                </td>
+                <td>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal"
+                                data-bs-whatever="@mdo">조회
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div class="modal fade" id="Modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">사업자 번호 조회</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Recipient:</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary">조회</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
+<script>
+    // 모달창 이벤트
+    {
+        const Modal = document.getElementById('Modal');
 
+        if (Modal) {
+            Modal.addEventListener('show.bs.modal', event => {
+
+                const button = event.relatedTarget
+
+                const recipient = button.getAttribute('data-bs-whatever')
+
+                const modalTitle = Modal.querySelector('.modal-title')
+                const modalBodyInput = Modal.querySelector('.modal-body input')
+
+                modalTitle.textContent = `New message to ${recipient}`
+                modalBodyInput.value = recipient
+            })
+        }
+    }
+
+</script>
+
+<style>
+    .business {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid black;
+    }
+
+</style>
 
 {{>layouts/footer}}

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/main")
+@RequestMapping("/earbee")
 @Slf4j
 public class BusinessController {
 
@@ -18,10 +18,9 @@ public class BusinessController {
     }
 
     // 업체 등록 작성 페이지
-    @GetMapping("/insert")
+    @GetMapping("/applyplace")
     public String applyPlace(){
-
-        return "apply";
+        return "business/apply";
     }
 
 }
