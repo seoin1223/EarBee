@@ -11,16 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 public class BusinessController {
 
+    // 업체 등록 게시판
     @GetMapping("")
     public String businessCollection(){
-
         return "business/main";
     }
 
+    // 업체 등록 작성 페이지
     @GetMapping("/insert")
-    public String insertBusiness(){
+    public String applyPlace(){
 
-        return "business/insert";
+        return "apply";
     }
 
 }
