@@ -52,12 +52,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="searchType" datatype="null">
                     <div class="mb-3">
                         <input type="text" class="form-control" id="inputNumber">
                     </div>
                     <div style="float:right">
-                        <button type="button" class="btn btn-primary" onclick="search">조회</button>
+                        <button type="button" class="btn btn-primary" onclick="search()">조회</button>
                     </div>
                 </form>
             </div>
@@ -79,23 +79,47 @@
 
                 // 데이터 가져오기
                 const modalType = button.getAttribute("data-bs-type");
-                const modalName = button.getAttribute("data-bs-name");
 
                 // 모달창에 데이터 반영
-                document.querySelector('#selectName').innerText = modalName;
+                document.querySelector('#selectName').innerText = button.getAttribute("data-bs-name");
 
-                // type 별로 placeholder 바꾸기
+                // type 별로 placeholder 바꾸기 및 현재 폼이 어떤 RestApi을 호출할 것인지 form에 data-sort-type을 지정함
                 if(modalType !== 'business'){
                     document.querySelector('#inputNumber').removeAttribute("placeholder");
+                    document.querySelector('#searchType').setAttribute('data-sort-type','null')
                 }else{
                     document.querySelector('#inputNumber').setAttribute('placeholder',"- 제거해서 입력해주세요");
+                    document.querySelector('#searchType').setAttribute('data-sort-type','businessNum')
+                    document.querySelector('#inputNumber').setAttribute('type','number');
                 }
 
             })
         }
     }
 
-    function select(){
+    function search(){
+        const dataSortType = document.querySelector('#searchType').getAttribute('data-sort-type');
+        const businessNum = document.querySelector('#inputNumber').value;
+
+        if(dataSortType !== 'businessNum'){
+            
+           return false
+        }
+        const url = "/api/business/search";
+        const body = {
+            intNumber : businessNum
+        }
+        fetch(url,{
+            method : "post",
+            body : JSON.stringify(body),
+            headers :{
+                "Content-Type" : "application/json"
+            }
+        }).then(response => {
+            console.log('ok');
+        })
+
+
 
     }
 
