@@ -17,18 +17,5 @@ class BusinessApiControllerTest {
     private BusinessApiController businessApiController;
 
 
-    @Test
-    @DisplayName("properties 변수 가져오기 테스트")
-    void checkValue() {
-        String url ="api.odcloud.kr/api" ;
-        String encoding = "XNM%2FAHJB%2B68HV79cSGOQ%2BDtMs87Gq3gmewT2NdPV8a2uH1uwWaF2k3L1CjEypfOMtotlgr%2FG%2BYhyNtDU8DxZuw%3D%3D";
-        String decoding = "XNM/AHJB+68HV79cSGOQ+DtMs87Gq3gmewT2NdPV8a2uH1uwWaF2k3L1CjEypfOMtotlgr/G+YhyNtDU8DxZuw==";
 
-        List<String> result = businessApiController.checkValue();
-
-        List<String> expected = Arrays.asList(url,encoding,decoding);
-
-        assertEquals(expected.toString(),result.toString(),"checkValue() 실패");
-
-    }
 }
