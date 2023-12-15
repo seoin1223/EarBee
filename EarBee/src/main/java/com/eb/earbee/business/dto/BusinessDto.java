@@ -1,4 +1,4 @@
-package com.eb.earbee.business.vo;
+package com.eb.earbee.business.dto;
 
 import com.eb.earbee.business.entity.Business;
 import lombok.AllArgsConstructor;

@@ -54,10 +54,10 @@
             <div class="modal-body">
                 <form>
                     <div class="mb-3">
-                        <input type="text" class="form-control" id="hint">
+                        <input type="text" class="form-control" id="inputNumber">
                     </div>
                     <div style="float:right">
-                        <button  type="button" class="btn btn-primary">조회</button>
+                        <button type="button" class="btn btn-primary" onclick="search">조회</button>
                     </div>
                 </form>
             </div>
@@ -86,15 +86,17 @@
 
                 // type 별로 placeholder 바꾸기
                 if(modalType !== 'business'){
-                    document.querySelector('#hint').removeAttribute("placeholder");
+                    document.querySelector('#inputNumber').removeAttribute("placeholder");
                 }else{
-                    document.querySelector('#hint').setAttribute('placeholder',"- 제거해서 입력해주세요");
+                    document.querySelector('#inputNumber').setAttribute('placeholder',"- 제거해서 입력해주세요");
                 }
-
-
 
             })
         }
+    }
+
+    function select(){
+
     }
 
 </script>
