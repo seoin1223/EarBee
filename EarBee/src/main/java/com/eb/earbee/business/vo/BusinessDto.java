@@ -8,9 +8,9 @@ import lombok.Data;
 @AllArgsConstructor
 public class BusinessDto {
     private Long id;
-    
+
     public Business toEntity(){
-        return new Business(id);
+        return new Business();
     }
 
 }

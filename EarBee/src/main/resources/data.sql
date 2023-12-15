@@ -157,3 +157,6 @@
 --                             CONSTRAINT reservation_user_seq FOREIGN key(user_seq) REFERENCES userinfo(user_seq) on delete cascade,
 --                             CONSTRAINT reservation_Room_seq FOREIGN key(room_seq) REFERENCES room(room_Seq) on delete cascade
 -- );
+
+
+insert into business(title, content) values('제목1','내용1');

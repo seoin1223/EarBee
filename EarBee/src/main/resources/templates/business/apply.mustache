@@ -3,7 +3,6 @@
 <div class="business">
     <form>
         <table>
-
             <tr>
                 <td colspan="3"><label style="margin-bottom: 5px">사업자 번호</label></td>
             </tr>
@@ -16,7 +15,7 @@
                 <td>
                     <div class="mb-3">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal"
-                                data-bs-whatever="@mdo">조회
+                                data-bs-name='사업자 번호 조회' data-bs-type="business">조회
                         </button>
                     </div>
                 </td>
@@ -33,7 +32,7 @@
                 <td>
                     <div class="mb-3">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal"
-                                data-bs-whatever="@mdo">조회
+                                data-bs-name='주소 조회' data-bs-type="address">조회
                         </button>
                     </div>
                 </td>
@@ -41,24 +40,26 @@
         </table>
     </form>
 </div>
+
+<!-- 모달창 -->
+
+
 <div class="modal fade" id="Modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">사업자 번호 조회</h1>
+                <h1 class="modal-title fs-5" id="selectName">#</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label">Recipient:</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                        <input type="text" class="form-control" id="hint">
+                    </div>
+                    <div style="float:right">
+                        <button  type="button" class="btn btn-primary">조회</button>
                     </div>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                <button type="button" class="btn btn-primary">조회</button>
             </div>
         </div>
     </div>
@@ -66,22 +67,32 @@
 
 
 <script>
-    // 모달창 이벤트
-    {
+
+    {   // 모달창 이벤트
         const Modal = document.getElementById('Modal');
 
         if (Modal) {
             Modal.addEventListener('show.bs.modal', event => {
 
-                const button = event.relatedTarget
+                // 트리거 버튼 찾기
+                const button = event.relatedTarget;
 
-                const recipient = button.getAttribute('data-bs-whatever')
+                // 데이터 가져오기
+                const modalType = button.getAttribute("data-bs-type");
+                const modalName = button.getAttribute("data-bs-name");
 
-                const modalTitle = Modal.querySelector('.modal-title')
-                const modalBodyInput = Modal.querySelector('.modal-body input')
+                // 모달창에 데이터 반영
+                document.querySelector('#selectName').innerText = modalName;
 
-                modalTitle.textContent = `New message to ${recipient}`
-                modalBodyInput.value = recipient
+                // type 별로 placeholder 바꾸기
+                if(modalType !== 'business'){
+                    document.querySelector('#hint').removeAttribute("placeholder");
+                }else{
+                    document.querySelector('#hint').setAttribute('placeholder',"- 제거해서 입력해주세요");
+                }
+
+
+
             })
         }
     }
