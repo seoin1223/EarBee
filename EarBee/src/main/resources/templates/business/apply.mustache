@@ -1,7 +1,114 @@
 {{>layouts/header}}
 
+<div class="business">
+    <form>
+        <table>
+            <tr>
+                <td colspan="3"><label style="margin-bottom: 5px">사업자 번호</label></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="mb-3 ">
+                        <input name="businessNumber" type="text" class="form-control" readonly>
+                    </div>
+                </td>
+                <td>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal"
+                                data-bs-name='사업자 번호 조회' data-bs-type="business">조회
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">주소</td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="mb-3 ">
+                        <input name="businessNumber" type="text" class="form-control" readonly>
+                    </div>
+                </td>
+                <td>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal"
+                                data-bs-name='주소 조회' data-bs-type="address">조회
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<!-- 모달창 -->
+
+
+<div class="modal fade" id="Modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="selectName">#</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="hint">
+                    </div>
+                    <div style="float:right">
+                        <button  type="button" class="btn btn-primary">조회</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    {   // 모달창 이벤트
+        const Modal = document.getElementById('Modal');
+
+        if (Modal) {
+            Modal.addEventListener('show.bs.modal', event => {
+
+                // 트리거 버튼 찾기
+                const button = event.relatedTarget;
+
+                // 데이터 가져오기
+                const modalType = button.getAttribute("data-bs-type");
+                const modalName = button.getAttribute("data-bs-name");
+
+                // 모달창에 데이터 반영
+                document.querySelector('#selectName').innerText = modalName;
+
+                // type 별로 placeholder 바꾸기
+                if(modalType !== 'business'){
+                    document.querySelector('#hint').removeAttribute("placeholder");
+                }else{
+                    document.querySelector('#hint').setAttribute('placeholder',"- 제거해서 입력해주세요");
+                }
 
 
 
+            })
+        }
+    }
+
+</script>
+
+<style>
+    .business {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid black;
+    }
+
+</style>
 
 {{>layouts/footer}}

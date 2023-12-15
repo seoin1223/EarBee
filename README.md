@@ -25,6 +25,7 @@
     
     
 ### API
+- 국세청_사업자등록정보 진위확인 및 상태조회 서비스
     
 ### Server
 
@@ -49,6 +50,9 @@
 
 1. restAPI test (확인 완료)
     ![img.png](img.png)
+
+2. 사업자 번호 조회 api test(postman- 확인 완료)
+   ![img_1.png](img_1.png)
 </details>
 
 <br>

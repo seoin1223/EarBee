@@ -1,27 +1,38 @@
 package com.eb.earbee.business.controller;
 
 
+import com.eb.earbee.business.entity.Business;
+import com.eb.earbee.business.service.BusinessService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
-@RequestMapping("/main")
+@RequestMapping("/earbee")
 @Slf4j
 public class BusinessController {
+    @Autowired
+    private BusinessService businessService;
 
     // 업체 등록 게시판
     @GetMapping("")
-    public String businessCollection(){
+    public String businessCollection(Model m){
+        List<Business> businessList = businessService.findAll();
+        m.addAttribute("businessList",businessList);
+
         return "business/main";
     }
 
     // 업체 등록 작성 페이지
-    @GetMapping("/insert")
+    @GetMapping("/applyplace")
     public String applyPlace(){
 
-        return "apply";
+        return "business/apply";
     }
 
 }
