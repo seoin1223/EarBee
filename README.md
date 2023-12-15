@@ -137,6 +137,15 @@ spring boot에서는 jsp를 사용하기 위해서는 추가적으로 의존성 
     &rarr; 정상적으로 변수를 불러옴을 확인
 
 
+#### 공공 API Connect
+
+1. HttpURLConnection
+2. 서비스 코드 
+   - postman 또는 웹 브라우저에서는 인증키를 Encoding키 사용
+   - spring server에서는 인증키를 Decoding 사용
+
+
+
 
 </details>
 
