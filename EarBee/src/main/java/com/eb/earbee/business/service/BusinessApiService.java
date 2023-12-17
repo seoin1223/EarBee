@@ -33,12 +33,11 @@ public class BusinessApiService {
         return Arrays.asList(urlBusiness,encodingKey,decodingKey);
     }
 
-    public void businessSerchNum(BusinessApplyRequest dto) {
+    public String businessSerchNum(BusinessApplyRequest dto) {
         StringBuilder str = new StringBuilder();
         str.append(urlBusiness);
         str.append(encodingKey);
-
-        System.out.println(str.toString());
+        StringBuffer sb = new StringBuffer();
 
         try {
             URL url = new URL(str.toString());
@@ -53,7 +52,7 @@ public class BusinessApiService {
             os.close();
 
             BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
-            StringBuffer sb = new StringBuffer();
+
             String inputLine;
 
             while((inputLine=br.readLine())!=null){
@@ -61,11 +60,13 @@ public class BusinessApiService {
             }
             br.close();
 
-            System.out.println(sb.toString());
+
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        return sb.toString();
 
     }
 }
