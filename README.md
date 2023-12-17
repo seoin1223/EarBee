@@ -16,6 +16,17 @@
 
 <br>
 
+# 추가
+- resource에 business.properties 추가 
+- https://www.data.go.kr/data/15081808/openapi.do 에서 활용 신청 후 키 삽입 
+    ```
+    business.url=https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=
+    business.encoding=인코딩키
+    business.decoding=디코딩키
+    ```
+
+
+
 # 사용 기술
 
 
@@ -63,8 +74,12 @@
    - BusinessApiControllerTest
         - checkValue() : properties 내용을 정상적으로 가져오는지 테스트 진행   
      
-          <img src="img/junit/checkValue.png" width="500" height=150 alt="경로 오류">
-
+          <img src="img/junit/checkValue.png" width="500" height=150 alt="경로 오류">   
+          
+        -  businessSerchNum   
+           - request내용이 정상적으로 post로 보내고 결과값을 받는지 확인   
+           - testcase는 식별되지 않은 사업자와, 정상적인 사용자로 지정
+                <img src="img/junit/businessSearchNum.png">
 
 
 
@@ -142,7 +157,7 @@ spring boot에서는 jsp를 사용하기 위해서는 추가적으로 의존성 
 1. HttpURLConnection
 2. 서비스 코드 
    - postman 또는 웹 브라우저에서는 인증키를 Encoding키 사용
-   - spring server에서는 인증키를 Decoding 사용
+   - spring server에서는 인증키를 Decoding 사용 (로컬은 encoding key)
 
 
 
