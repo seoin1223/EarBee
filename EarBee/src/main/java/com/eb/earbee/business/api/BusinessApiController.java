@@ -2,23 +2,15 @@ package com.eb.earbee.business.api;
 
 
 
-import com.eb.earbee.business.dto.BusinessApplyDto;
+import com.eb.earbee.business.request.BusinessApplyRequest;
 
 import com.eb.earbee.business.service.BusinessApiService;
 import jakarta.xml.ws.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -34,19 +26,13 @@ public class BusinessApiController {
     @GetMapping()
     public List<String> checkValue(){
         return businessApiService.checkValue();
-
     }
 
 
     // 모달창에서 넣은 사업자 번호를 조회
     @PostMapping("/search")
-    public <T> Response<T> businessSearchNum(@RequestBody BusinessApplyDto dto){
-        businessApiService.businessSErchNum(dto);
-
-
-
-
-
+    public <T> Response<T> businessSearchNum(@RequestBody BusinessApplyRequest dto){
+        businessApiService.businessSerchNum(dto);
         return null;
     }
 }
