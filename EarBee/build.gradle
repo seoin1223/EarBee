@@ -36,17 +36,19 @@ dependencies {
 
     /* PostgreSql driver 추가*/
     runtimeOnly 'org.postgresql:postgresql'
-//    runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
+    //    runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
 
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
+    //    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
 
+    implementation 'net.minidev:json-smart:2.3' // Use the latest version available
+
 
     // jsp
-//    implementation 'javax.servlet:jstl:1.2'
-//    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
-//    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+    // implementation 'javax.servlet:jstl:1.2'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    //    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 
 
     // oracle
