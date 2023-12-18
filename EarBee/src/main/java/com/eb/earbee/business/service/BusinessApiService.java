@@ -2,6 +2,9 @@ package com.eb.earbee.business.service;
 
 
 import com.eb.earbee.business.request.BusinessApplyRequest;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -19,6 +22,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @PropertySource("classpath:business.properties")
@@ -69,17 +73,22 @@ public class BusinessApiService {
 
             // String -> JSON 변경 후 자바 객체로 변경
             JSONParser jsonParser = new JSONParser();
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(result); // 전체 JSON parser
+            Object match_cnt = jsonObject.get("match_cnt"); // 매칭된 데이터 수를 Object에 임시 저장
 
-            String match_cnt = jsonObject.get("match_cnt").toString();
-            
-            if(match_cnt == null || match_cnt == ""){
+            if( match_cnt== null ){
                 System.out.println("조회 결과 없음");
                 return null;
             }
-            System.out.println(match_cnt+"건의 결과 도출");
 
+            String cnt = jsonObject.get("match_cnt").toString(); // null이 아니면 cnt에 매칭된 수 저장
 
+            // JSON data의 배열을 저장
+
+            JSONArray jsonArray = (JSONArray) jsonObject.get("data");
+            JSONObject data = (JSONObject) jsonArray.get(0);
+            System.out.println("data");
+            System.out.println(data.get("tax_type"));
 
 
 
