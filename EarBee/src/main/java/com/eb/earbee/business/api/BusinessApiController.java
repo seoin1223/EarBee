@@ -32,7 +32,8 @@ public class BusinessApiController {
     // 모달창에서 넣은 사업자 번호를 조회
     @PostMapping("/search")
     public <T> Response<T> businessSearchNum(@RequestBody BusinessApplyRequest dto){
-        businessApiService.businessSerchNum(dto);
+        String str = businessApiService.businessSerchNum(dto);
+        System.out.println(str);
         return null;
     }
 }
