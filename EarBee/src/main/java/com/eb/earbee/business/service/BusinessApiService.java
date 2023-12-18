@@ -71,9 +71,14 @@ public class BusinessApiService {
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
 
-            System.out.println(jsonObject.toJSONString());
-            System.out.println(jsonObject.get("data"));
-            System.out.println();System.out.println();System.out.println();
+            String match_cnt = jsonObject.get("match_cnt").toString();
+            
+            if(match_cnt == null || match_cnt == ""){
+                System.out.println("조회 결과 없음");
+                return null;
+            }
+            System.out.println(match_cnt+"건의 결과 도출");
+
 
 
 

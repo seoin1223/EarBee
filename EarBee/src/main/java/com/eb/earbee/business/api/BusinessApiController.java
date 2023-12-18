@@ -33,7 +33,7 @@ public class BusinessApiController {
     @PostMapping("/search")
     public <T> Response<T> businessSearchNum(@RequestBody BusinessApplyRequest dto){
         String str = businessApiService.businessSerchNum(dto);
-        System.out.println(str);
+
         return null;
     }
 }
