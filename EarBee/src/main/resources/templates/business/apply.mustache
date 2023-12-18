@@ -102,12 +102,11 @@
         const businessNum = document.querySelector('#inputNumber').value;
 
         if(dataSortType !== 'businessNum'){
-
            return false
         }
         const url = "/api/business/search";
         const body = {
-            intNumber : businessNum
+            b_no : businessNum
         }
         fetch(url,{
             method : "post",
