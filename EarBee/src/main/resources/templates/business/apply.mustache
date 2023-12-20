@@ -1,5 +1,5 @@
 {{>layouts/header}}
-
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <div class="business">
     <form>
         <table>
@@ -9,7 +9,8 @@
             <tr>
                 <td>
                     <div class="mb-3 ">
-                        <input name="businessNumber" type="text" class="form-control" readonly placeholder="사업자 번호를 조회해주세요">
+                        <input name="businessNumber" type="text" class="form-control" id ="businessNum" readonly
+                               placeholder="사업자 번호를 조회해주세요">
                     </div>
                 </td>
                 <td>
@@ -42,19 +43,17 @@
 </div>
 
 <!-- 모달창 -->
-
-
 <div class="modal fade" id="Modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="selectName">#</h1>
+                <h1 class="modal-title fs-5" id="selectName">ㅁㄴㅇㅁㄴㅇㅁㄴㅇㅁ</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="searchType" datatype="null">
                     <div class="mb-3">
-                        <input type="text" class="form-control" id="inputNumber">
+                        <input type="Number" class="form-control" id="inputNumber" >
                     </div>
                     <div style="float:right">
                         <button type="button" class="btn btn-primary" onclick="search()">조회</button>
@@ -84,42 +83,68 @@
                 document.querySelector('#selectName').innerText = button.getAttribute("data-bs-name");
 
                 // type 별로 placeholder 바꾸기 및 현재 폼이 어떤 RestApi을 호출할 것인지 form에 data-sort-type을 지정함
-                if(modalType !== 'business'){
+                if (modalType !== 'business') {
                     document.querySelector('#inputNumber').removeAttribute("placeholder");
-                    document.querySelector('#searchType').setAttribute('data-sort-type','null')
-                }else{
-                    document.querySelector('#inputNumber').setAttribute('placeholder',"- 제거해서 입력해주세요");
-                    document.querySelector('#searchType').setAttribute('data-sort-type','businessNum')
-                    document.querySelector('#inputNumber').setAttribute('type','number');
+                    document.querySelector('#searchType').setAttribute('data-sort-type', 'null')
+                    document.querySelector('#inputNumber').setAttribute('type', 'text');
+                } else {
+                    document.querySelector('#inputNumber').setAttribute('placeholder', "- 제거해서 입력해주세요");
+                    document.querySelector('#searchType').setAttribute('data-sort-type', 'businessNum')
+                    document.querySelector('#inputNumber').setAttribute('type', 'number');
                 }
 
             })
         }
     }
+    // 모달창 텍스트 길이 확인
+    function isBusinessNumValid(businessNum) {
+        const desiredLength = 10;
 
-    function search(){
+        // 문자열의 길이를 확인하여 유효성을 검사합니다.
+        if (businessNum.length !== 10) {
+            alert("사업자 번호를 확인해주세요");
+            $('#inputNumber').val('');
+            return false;
+        }
+        // 유효한 경우 true 반환
+        return true;
+    }
+
+    function search() {
         const dataSortType = document.querySelector('#searchType').getAttribute('data-sort-type');
         const businessNum = document.querySelector('#inputNumber').value;
 
-        if(dataSortType !== 'businessNum'){
-           return false
+        if (dataSortType !== 'businessNum' ||  !isBusinessNumValid(businessNum)) {
+            return false
         }
         const url = "/api/business/search";
         const body = {
-            b_no : businessNum
+            b_no: businessNum
         }
-        fetch(url,{
-            method : "post",
-            body : JSON.stringify(body),
-            headers :{
-                "Content-Type" : "application/json"
+        fetch(url, {
+            method: "post",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json"
             }
         }).then(response => {
-            response.
-        })
+            if (!response.ok) {
+                alert("사업자 번호를 확인해주세요");
+                $('#inputNumber').val('');
+            }
+            return response.json();
+        }).then(data => {
+            console.log('Received data:', data);
+            // 여기서 data는 자바 객체로 사용 가능
+            // 예를 들어, 특정 속성에 접근하거나 처리할 수 있습니다.
 
+            // 성공적으로 처리되었을 때 모달 닫기
+            $('#businessNum').val(data.b_no); // 메인 폼에 사업자 번호 삽입
+            $('#Modal').modal('hide'); // 모달창 숨기기
 
-
+        }).catch(error => {
+            console.error('Error:', error);
+        });
     }
 
 </script>
@@ -134,6 +159,19 @@
         border: 1px solid black;
     }
 
+    /*스피너 숨기기*/
+    input::-webkit-inner-spin-button,
+    input::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
 </style>
+
 
 {{>layouts/footer}}
