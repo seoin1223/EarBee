@@ -2,6 +2,7 @@ package com.eb.earbee.business.service;
 
 import com.eb.earbee.business.dto.BusinessDto;
 import com.eb.earbee.business.request.BusinessApplyRequest;
+import com.eb.earbee.business.response.BusinessApplyResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,29 +41,28 @@ class BusinessApiServiceTest {
             BusinessApplyRequest dto = new BusinessApplyRequest("1234567890");
 
             // 실제
-            String result = businessApiService.businessSerchNum(dto);
+            BusinessApplyResponse result = businessApiService.businessSerchNum(dto);
 
             // 예상
-            String expected ="{\"request_cnt\":1,\"status_code\":\"OK\",\"data\":[{\"b_no\":\"1234567890\",\"b_stt\":\"\",\"b_stt_cd\":\"\",\"tax_type\":\"국세청에 등록되지 않은 사업자등록번호입니다.\",\"tax_type_cd\":\"\",\"end_dt\":\"\",\"utcc_yn\":\"\",\"tax_type_change_dt\":\"\",\"invoice_apply_dt\":\"\",\"rbf_tax_type\":\"\",\"rbf_tax_type_cd\":\"\"}]}";
-
+            BusinessApplyResponse expected = null;
             // 비교
-            assertEquals(expected,result,"사업자 번호 조회 번호 없는 경우가 실패했습니다");
+            assertEquals(expected,result, "사업자 번호 조회 번호 없는 경우가 실패했습니다");
         }
 
         // 정상적인 사업자 번호일 경우
         {
-            // 사업자 번호 없는 경우
+            // 사업자 번호 있는 경우
             // Data
             BusinessApplyRequest dto = new BusinessApplyRequest("1308189095");
 
             // 실제
-            String result = businessApiService.businessSerchNum(dto);
+            BusinessApplyResponse result = businessApiService.businessSerchNum(dto);
 
             // 예상
-            String expected ="{\"request_cnt\":1,\"match_cnt\":1,\"status_code\":\"OK\",\"data\":[{\"b_no\":\"1308189095\",\"b_stt\":\"계속사업자\",\"b_stt_cd\":\"01\",\"tax_type\":\"부가가치세 일반과세자\",\"tax_type_cd\":\"01\",\"end_dt\":\"\",\"utcc_yn\":\"N\",\"tax_type_change_dt\":\"\",\"invoice_apply_dt\":\"\",\"rbf_tax_type\":\"해당없음\",\"rbf_tax_type_cd\":\"99\"}]}";
+            BusinessApplyResponse expected = new BusinessApplyResponse(1308189095,1);
 
             // 비교
-            assertEquals(expected,result,"사업자 번호 조회 번호 없는 경우가 실패했습니다");
+            assertEquals(expected,result,"사업자 번호 조회 번호 있는 경우가 실패했습니다");
         }
     }
 }
