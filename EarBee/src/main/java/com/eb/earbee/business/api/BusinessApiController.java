@@ -4,10 +4,12 @@ package com.eb.earbee.business.api;
 
 import com.eb.earbee.business.request.BusinessApplyRequest;
 
+import com.eb.earbee.business.response.BusinessApplyResponse;
 import com.eb.earbee.business.service.BusinessApiService;
 import jakarta.xml.ws.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -31,9 +33,8 @@ public class BusinessApiController {
 
     // 모달창에서 넣은 사업자 번호를 조회
     @PostMapping("/search")
-    public <T> Response<T> businessSearchNum(@RequestBody BusinessApplyRequest dto){
-        String str = businessApiService.businessSerchNum(dto);
-
-        return null;
+    public ResponseEntity<BusinessApplyResponse> businessSearchNum(@RequestBody BusinessApplyRequest dto){
+        BusinessApplyResponse result = businessApiService.businessSerchNum(dto);
+        return (result !=null)? ResponseEntity.ok(result) : ResponseEntity.badRequest().build();
     }
 }
