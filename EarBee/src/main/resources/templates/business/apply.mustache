@@ -120,14 +120,12 @@
 
 
     // 엔터 키 이벤트 처리 (보류)
-/*
     function handleKeyPress(event) {
         if (event.key === 'Enter') {
             // 엔터 키인 경우 검색 함수 호출
             search();
         }
     }
-*/
 
 
     // 모달창 텍스트 길이 확인
@@ -145,7 +143,7 @@
     function search() {
         const dataSortType = document.querySelector('#searchType').getAttribute('data-sort-type');
         const businessNum = document.querySelector('#inputNumber').value;
-
+        const inputNum = document.querySelector('#inputNumber');
         if(!isBusinessNumValid(businessNum)){
             return false;
         }
@@ -162,12 +160,7 @@
                     "Content-Type": "application/json"
                 }
             }).then(response => {
-                if (!response.ok) {
-                    alert("사업자 번호를 확인해주세요2");
-                    console.log(response);
-                    $('#inputNumber').val('');
-                    $('#inputNumber').focus();
-                }else{
+                if (response.ok) {
                     return response.json();
                 }
             }).then(data => {
@@ -179,6 +172,11 @@
                 if(data!=null) {
                     $('#businessNum').val(data.b_no); // 메인 폼에 사업자 번호 삽입
                     $('#Modal').modal('hide'); // 모달창 숨기기}
+                }else{
+                    alert("사업자 번호를 확인하세요");
+                    inputNum.val('');
+                    inputNum.focus();
+                    return false;
                 }
 
             }).catch(error => {
@@ -186,7 +184,7 @@
 
             });
 
-        }else{alert("사업자 번호를 확인하세요");}
+        }
 
 
 
