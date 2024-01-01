@@ -35,7 +35,6 @@ public class BusinessApiController {
     @PostMapping("/search")
     public ResponseEntity<BusinessApplyResponse> businessSearchNum(@RequestBody BusinessApplyRequest dto){
         BusinessApplyResponse result = businessApiService.businessSerchNum(dto);
-
         return (result !=null)? ResponseEntity.ok(result) : ResponseEntity.badRequest().build();
     }
 }
