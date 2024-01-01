@@ -25,7 +25,7 @@ if (Modal) {
         // type 별로 placeholder 바꾸기 및 현재 폼이 어떤 RestApi을 호출할 것인지 form에 data-sort-type을 지정함
         if (modalType !== 'business') {
             document.querySelector('#inputNumber').removeAttribute("placeholder");
-            document.querySelector('#searchType').setAttribute('data-sort-type', 'null')
+            document.querySelector('#searchType').setAttribute('data-sort-type', 'address')
             document.querySelector('#inputNumber').setAttribute('type', 'text');
         } else {
             document.querySelector('#inputNumber').setAttribute('placeholder', "- 제거해서 입력해주세요");
@@ -33,15 +33,12 @@ if (Modal) {
             document.querySelector('#inputNumber').setAttribute('type', 'number');
 
         }
-        // inputNumber에 대한 keypress 이벤트 리스너 등록
 
     });
 }
 
 
-
-
-// 모달창 텍스트 길이 확인
+// 사업자 번호 텍스트 길이 확인
 function isBusinessNumValid(businessNum) {
     // 문자열의 길이를 확인하여 유효성을 검사합니다.
     if (businessNum.length !== 10) {
@@ -53,50 +50,57 @@ function isBusinessNumValid(businessNum) {
     return true;
 }
 
-function search() {
+function search() { // 조회가 사업자 조회인지 주소 검색인지 분류
     const dataSortType = document.querySelector('#searchType').getAttribute('data-sort-type');
+
+    if (!(dataSortType !== 'businessNum')) {
+        searchBusiness();
+    }else{
+        searchAddr();
+    }
+}
+
+function searchBusiness(){
     const businessNum = document.querySelector('#inputNumber').value;
+
     if(!isBusinessNumValid(businessNum)){
         return false;
+    } // 사업자 번호가 정상적인지 체크
+
+    const url = "/api/business/search";
+    const body = {
+        b_no: businessNum
     }
-    if (!(dataSortType !== 'businessNum')) {
-        const url = "/api/business/search";
-        const body = {
-            b_no: businessNum
+
+    fetch(url, {
+        method: "post",
+        body: JSON.stringify(body),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(response => {
+        if (response.ok) {
+            return response.json();
+        }else {
+            alert("사업자 번호를 확인하세요");
+            $('#inputNumber').val('').focus();
+        }
+    }).then(data => {
+        if(data!=null) {
+            console.log('Received data:', data);
+            $('#businessNum').val(data.b_no); // 메인 폼에 사업자 번호 삽입
+            $('#Modal').modal('hide'); // 모달창 숨기기
+        }else{
+            return false;
         }
 
-        fetch(url, {
-            method: "post",
-            body: JSON.stringify(body),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then(response => {
-            if (response.ok) {
-                return response.json();
-            }else {
-                return null
-            }
-        }).then(data => {
+    }).catch(error => {
+        return false;
 
-            // 여기서 data는 자바 객체로 사용 가능
-            // 예를 들어, 특정 속성에 접근하거나 처리할 수 있습니다.
+    });
 
-            // 성공적으로 처리되었을 때 모달 닫기
-            if(data!=null) {
-                console.log('Received data:', data);
-                $('#businessNum').val(data.b_no); // 메인 폼에 사업자 번호 삽입
-                $('#Modal').modal('hide'); // 모달창 숨기기}
-            }else{
-                alert("사업자 번호를 확인하세요");
-                $('#inputNumber').val('').focus();
-                return false;
-            }
+}
 
-        }).catch(error => {
-            console.error('Error:', error);
-
-        });
-
-    }
+function searchAddr(){
+    console.log("address 조회 버튼 확인")
 }
