@@ -1,5 +1,4 @@
-// 모달창 이벤트
-// 엔터 키 이벤트 처리 (보류)
+// 엔터키 이벤트
 function handleKeyPress(event) {
     if (event.key === 'Enter') {
         event.preventDefault()
@@ -8,7 +7,7 @@ function handleKeyPress(event) {
     }
 }
 
-
+// 모달창 이벤트
 const Modal = document.getElementById('Modal');
 document.querySelector('#inputNumber').addEventListener('keypress', handleKeyPress);
 
@@ -38,6 +37,18 @@ if (Modal) {
 }
 
 
+
+
+function search() { // 조회가 사업자 조회인지 주소 검색인지 분류
+    const dataSortType = document.querySelector('#searchType').getAttribute('data-sort-type');
+
+    if (!(dataSortType !== 'businessNum')) {
+        searchBusiness();
+    }else{
+        searchAddr();
+    }
+}
+
 // 사업자 번호 텍스트 길이 확인
 function isBusinessNumValid(businessNum) {
     // 문자열의 길이를 확인하여 유효성을 검사합니다.
@@ -48,16 +59,6 @@ function isBusinessNumValid(businessNum) {
     }
     // 유효한 경우 true 반환
     return true;
-}
-
-function search() { // 조회가 사업자 조회인지 주소 검색인지 분류
-    const dataSortType = document.querySelector('#searchType').getAttribute('data-sort-type');
-
-    if (!(dataSortType !== 'businessNum')) {
-        searchBusiness();
-    }else{
-        searchAddr();
-    }
 }
 
 function searchBusiness(){
@@ -102,5 +103,33 @@ function searchBusiness(){
 }
 
 function searchAddr(){
-    console.log("address 조회 버튼 확인")
+    const addr = document.querySelector('#inputNumber').value;
+
+    const url = "/api/business/addr";
+    const body = {
+        addr: addr
+    }
+
+    fetch(url, {
+        method: "post",
+        body: JSON.stringify(body),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(response => {
+        console.log("정상적으로 확인 환요")
+
+    }).then(data => {
+        if(data!=null) {
+            console.log('Received data:', data);
+
+            $('#Modal').modal('hide'); // 모달창 숨기기
+        }else{
+            return false;
+        }
+
+    }).catch(error => {
+        return false;
+
+    });
 }
