@@ -45,9 +45,15 @@ public class BusinessApiService {
     private String decodingKey;
 
     @Value("${address.key}")
-    String confmKey;
+    private String confmKey;
     @Value("${address.url}")
     private String urlAddr;
+
+    @Value("${naver.client.id}")
+    private String clientId;
+    @Value("${naver.client.secret}")
+    private String clientSecret;
+
 
     // 변수값이 정상적으로 들어오는지 확인하는 메서드
     public List<String> checkValue() {
