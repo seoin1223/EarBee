@@ -71,6 +71,9 @@
    - 주소 검색 조회 api test (확인 완료)
      <img src="img/postman/businessAddr.png" width="700" height=300 alt="경로 오류">
   
+   - 네이버 Geocoding api test (확인 완료)
+     <img src="img/postman/geocoding.png" width="700" height=300 alt="경로 오류">
+
 <br>
 
 ### JUnit

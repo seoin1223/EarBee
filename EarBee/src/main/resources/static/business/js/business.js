@@ -23,10 +23,12 @@ if (Modal) {
         document.querySelector('#selectName').innerText = button.getAttribute("data-bs-name");
         // type 별로 placeholder 바꾸기 및 현재 폼이 어떤 RestApi을 호출할 것인지 form에 data-sort-type을 지정함
         if (modalType !== 'business') {
+            document.getElementById("inputNumber").value = "";
             document.querySelector('#inputNumber').removeAttribute("placeholder");
             document.querySelector('#searchType').setAttribute('data-sort-type', 'address')
             document.querySelector('#inputNumber').setAttribute('type', 'text');
         } else {
+
             document.querySelector('#inputNumber').setAttribute('placeholder', "- 제거해서 입력해주세요");
             document.querySelector('#searchType').setAttribute('data-sort-type', 'businessNum')
             document.querySelector('#inputNumber').setAttribute('type', 'number');
@@ -61,6 +63,9 @@ function isBusinessNumValid(businessNum) {
     return true;
 }
 
+
+
+
 function searchBusiness(){
     const businessNum = document.querySelector('#inputNumber').value;
 
@@ -88,8 +93,9 @@ function searchBusiness(){
         }
     }).then(data => {
         if(data!=null) {
-            console.log('Received data:', data);
+            // conso0le.log('Received data:', data);
             $('#businessNum').val(data.b_no); // 메인 폼에 사업자 번호 삽입
+            $("#inputNumber").val('');
             $('#Modal').modal('hide'); // 모달창 숨기기
         }else{
             return false;
@@ -107,7 +113,7 @@ function searchAddr(){
 
     const url = "/api/business/addr";
     const body = {
-        addr: addr
+        keyword: addr
     }
 
     fetch(url, {
@@ -118,6 +124,7 @@ function searchAddr(){
         }
     }).then(response => {
         console.log("정상적으로 확인 환요")
+        return response.json();
 
     }).then(data => {
         if(data!=null) {

@@ -7,6 +7,8 @@ import com.eb.earbee.business.request.BusinessApplyRequest;
 import com.eb.earbee.business.response.BusinessAddrResponse;
 import com.eb.earbee.business.response.BusinessApplyResponse;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,7 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.*;
 import java.net.HttpURLConnection;
 
-import java.net.MalformedURLException;
+
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -42,9 +45,15 @@ public class BusinessApiService {
     private String decodingKey;
 
     @Value("${address.key}")
-    String confmKey;
+    private String confmKey;
     @Value("${address.url}")
     private String urlAddr;
+
+    @Value("${naver.client.id}")
+    private String clientId;
+    @Value("${naver.client.secret}")
+    private String clientSecret;
+
 
     // 변수값이 정상적으로 들어오는지 확인하는 메서드
     public List<String> checkValue() {
@@ -54,7 +63,7 @@ public class BusinessApiService {
 
     // 사업자 번호 조회 메서드
     @Transactional
-    public  BusinessApplyResponse businessSerchNum(BusinessApplyRequest dto) {
+    public BusinessApplyResponse businessSearchNum(BusinessApplyRequest dto) {
         StringBuilder str = new StringBuilder(); // url 넣을 stringBuilder
         str.append(urlBusiness);
         str.append(encodingKey);
@@ -98,7 +107,7 @@ public class BusinessApiService {
                 String b_no = String.valueOf(data.get("b_no"));
                 String b_stt_cd = String.valueOf(data.get("b_stt_cd"));
 
-                return new BusinessApplyResponse(Integer.parseInt(b_no),Integer.parseInt(b_stt_cd));
+                return new BusinessApplyResponse(Integer.parseInt(b_no), Integer.parseInt(b_stt_cd));
             }
             System.out.println("조회 결과 없음");
             return null;
@@ -122,7 +131,8 @@ public class BusinessApiService {
             String postData = "confmKey=" + URLEncoder.encode(confmKey, StandardCharsets.UTF_8.toString())
                     + "&currentPage=1"
                     + "&keyword=" + encodedKeyword
-                    + "&countPerPage=10";
+                    + "&countPerPage=10"
+                    + "&resultType=json";
 
             // HTTP 요청 보내기
             URL url = new URL(urlAddr);
@@ -133,6 +143,8 @@ public class BusinessApiService {
 
             try (OutputStream os = con.getOutputStream()) {
                 os.write(postData.getBytes(StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
             // HTTP 응답 처리
@@ -140,16 +152,42 @@ public class BusinessApiService {
                 return null;
             }
 
+            // JSON 문자열을 읽기
             try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-                String result = br.readLine();
-                System.out.println(result);
-            }
-            return null;
+                StringBuilder responseStringBuilder = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) {
+                    responseStringBuilder.append(line);
+                }
+                // 결과 String
+                String result = responseStringBuilder.toString();
+                JSONParser jsonParser = new JSONParser();
+                JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+                ObjectMapper objectMapper = new ObjectMapper();
+                String prettyJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonObject);
+                System.out.println(prettyJson);
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+                JSONObject results = (JSONObject) jsonObject.get("results");
+                JSONArray jusoList = (JSONArray) results.get("juso");
+
+                for (Object juso : jusoList) {
+                    JSONObject jusoDetails = (JSONObject) juso;
+                    String zipNo = (String) jusoDetails.get("zipNo");
+                    System.out.println("zipNo: " + zipNo);
+                }
+
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
+                return null; // 적절한 리턴값으로 변경
+            } catch (ParseException | IOException e) {
+                throw new RuntimeException(e);
+            }
+
         }
     }
-}
+
+
 
 

@@ -41,7 +41,7 @@ class BusinessApiServiceTest {
             BusinessApplyRequest dto = new BusinessApplyRequest("1234567890");
 
             // 실제
-            BusinessApplyResponse result = businessApiService.businessSerchNum(dto);
+            BusinessApplyResponse result = businessApiService.businessSearchNum(dto);
 
             // 예상
             BusinessApplyResponse expected = null;
@@ -56,7 +56,7 @@ class BusinessApiServiceTest {
             BusinessApplyRequest dto = new BusinessApplyRequest("1308189095");
 
             // 실제
-            BusinessApplyResponse result = businessApiService.businessSerchNum(dto);
+            BusinessApplyResponse result = businessApiService.businessSearchNum(dto);
 
             // 예상
             BusinessApplyResponse expected = new BusinessApplyResponse(1308189095,1);
