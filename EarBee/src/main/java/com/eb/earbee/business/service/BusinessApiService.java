@@ -1,42 +1,50 @@
 package com.eb.earbee.business.service;
 
 
+import com.eb.earbee.business.request.BusinessAddrRequest;
 import com.eb.earbee.business.request.BusinessApplyRequest;
 
+import com.eb.earbee.business.response.BusinessAddrResponse;
 import com.eb.earbee.business.response.BusinessApplyResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
+
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+
 
 @Service
 @PropertySource("classpath:business.properties")
 
 
 public class BusinessApiService {
+
     @Value("${business.url}")
     private String urlBusiness;
     @Value("${business.encoding}")
     private String encodingKey;
     @Value("${business.decoding}")
     private String decodingKey;
+
+    @Value("${address.key}")
+    String confmKey;
+    @Value("${address.url}")
+    private String urlAddr;
 
     // 변수값이 정상적으로 들어오는지 확인하는 메서드
     public List<String> checkValue() {
@@ -50,7 +58,6 @@ public class BusinessApiService {
         StringBuilder str = new StringBuilder(); // url 넣을 stringBuilder
         str.append(urlBusiness);
         str.append(encodingKey);
-        StringBuffer sb = new StringBuffer();
         BufferedReader br;
         String result = "";
 
@@ -92,18 +99,57 @@ public class BusinessApiService {
                 String b_stt_cd = String.valueOf(data.get("b_stt_cd"));
 
                 return new BusinessApplyResponse(Integer.parseInt(b_no),Integer.parseInt(b_stt_cd));
-
-
             }
             System.out.println("조회 결과 없음");
             return null;
-
-
-
         } catch (IOException | ParseException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public BusinessAddrResponse searchAddr(BusinessAddrRequest dto) {
+        try {
+            // 검색어 인코딩
+            String encodedKeyword = URLEncoder.encode(dto.getKeyword(), StandardCharsets.UTF_8.toString());
 
+            // 검색어가 입력되지 않았을 때의 처리
+            if (encodedKeyword == null || encodedKeyword.trim().isEmpty()) {
+                System.out.println("검색어가 입력되지 않았습니다.");
+                return null;
+            }
+
+            // 데이터를 x-www-form-urlencoded 형식으로 만들기
+            String postData = "confmKey=" + URLEncoder.encode(confmKey, StandardCharsets.UTF_8.toString())
+                    + "&currentPage=1"
+                    + "&keyword=" + encodedKeyword
+                    + "&countPerPage=10";
+
+            // HTTP 요청 보내기
+            URL url = new URL(urlAddr);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+            con.setDoOutput(true);
+
+            try (OutputStream os = con.getOutputStream()) {
+                os.write(postData.getBytes(StandardCharsets.UTF_8));
+            }
+
+            // HTTP 응답 처리
+            if (con.getResponseCode() != 200) {
+                return null;
+            }
+
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                String result = br.readLine();
+                System.out.println(result);
+            }
+            return null;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
+
+

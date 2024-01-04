@@ -27,6 +27,7 @@ public class BusinessApiController {
     private BusinessApiService businessApiService;
 
 
+
     // 정상적으로 변수를 가져오는지 체크
     @GetMapping()
     public List<String> checkValue(){
@@ -43,10 +44,8 @@ public class BusinessApiController {
 
     // 모달창에서 넣은 주소를 검색
     @PostMapping("/addr")
-    public ResponseEntity<BusinessAddrResponse> addrSearch(@RequestBody BusinessAddrRequest businessAddrRequest){
-        System.out.println(businessAddrRequest.toString());
-        System.out.println("정상적으로 동작 확인");
-        BusinessAddrResponse result = null;
-        return ResponseEntity.ok(result);
+    public ResponseEntity<BusinessAddrResponse> addrSearch(@RequestBody BusinessAddrRequest dto){
+        BusinessAddrResponse result = businessApiService.searchAddr(dto);
+        return (result !=null)? ResponseEntity.ok(result):ResponseEntity.badRequest().build();
     }
 }
