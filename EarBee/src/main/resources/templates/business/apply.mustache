@@ -60,14 +60,19 @@
                     </div>
                 </form>
                 <!-- 조회 결과를 표시할 부분 -->
-                <div id="searchResults" style="margin-top: 20px;"></div>
             </div>
+            <div id="searchResults" class="table-scroll" style="margin-top: 20px;"></div>
         </div>
     </div>
 </div>
 <script src="/business/js/business.js"></script>
 
 <style>
+    .table-scroll {
+        max-height: 300px; /* 최대 높이 지정 */
+        overflow-y: auto; /* 세로 스크롤 활성화 */
+        overflow-x: auto; /* 가로 스크롤 활성화 */
+    }
     .business {
         margin: 0;
         padding: 0;
@@ -89,9 +94,12 @@
         -moz-appearance: textfield;
     }
 
+
+
+
+
+
+
 </style>
-
-
-
 
 {{>layouts/footer}}
