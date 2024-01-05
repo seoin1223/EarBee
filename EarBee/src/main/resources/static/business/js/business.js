@@ -21,10 +21,12 @@ if (Modal) {
 
         // 모달창에 데이터 반영
         document.querySelector('#selectName').innerText = button.getAttribute("data-bs-name");
+        const searchResultsDiv = document.getElementById('searchResults');
+        searchResultsDiv.innerHTML = '';
         // type 별로 placeholder 바꾸기 및 현재 폼이 어떤 RestApi을 호출할 것인지 form에 data-sort-type을 지정함
         if (modalType !== 'business') {
             document.getElementById("inputNumber").value = "";
-            document.querySelector('#inputNumber').removeAttribute("placeholder");
+            document.querySelector('#inputNumber').setAttribute("placeholder","매곡푸르지오");
             document.querySelector('#searchType').setAttribute('data-sort-type', 'address')
             document.querySelector('#inputNumber').setAttribute('type', 'text');
         } else {
@@ -108,35 +110,125 @@ function searchBusiness(){
 
 }
 
-function searchAddr(){
-    const addr = document.querySelector('#inputNumber').value;
-
-    const url = "/api/business/addr";
-    const body = {
-        keyword: addr
-    }
-
-    fetch(url, {
-        method: "post",
-        body: JSON.stringify(body),
-        headers: {
-            "Content-Type": "application/json"
-        }
-    }).then(response => {
-        console.log("정상적으로 확인 환요")
-        return response.json();
-
-    }).then(data => {
-        if(data!=null) {
-            console.log('Received data:', data);
-
-            $('#Modal').modal('hide'); // 모달창 숨기기
-        }else{
+// 주소 검색 필터링
+function checkAddr(obj){
+    if(obj.value.length >0){
+        //특수문자 제거
+        const expText = /[%=><]/;
+        if(expText.test(obj.value) === true){
+            alert(`특수문자를 입력 할수 없습니다.`) ;
+            obj.value = obj.split(expText).join("");
             return false;
         }
 
-    }).catch(error => {
-        return false;
+        //특정문자열(sql예약어의 앞뒤공백포함) 제거
+        const sqlArray = ["OR", "SELECT", "INSERT", "DELETE", "UPDATE", "CREATE", "DROP", "EXEC",
+            "UNION", "FETCH", "DECLARE", "TRUNCATE"];
 
+        let regex;
+        for(let i=0; i<sqlArray.length; i++){
+            regex = new RegExp( sqlArray[i] ,"gi") ;
+
+            if (regex.test(obj.value) ) {
+                alert("\"" + sqlArray[i]+"\"와(과) 같은 특정문자로 검색할 수 없습니다.");
+                obj.value =obj.value.replace(regex, "");
+                return false;
+            }
+        }
+    }else{
+        alert(`주소를 입력해주세요`);
+        return false;
+    }
+    return true ;
+}
+
+
+
+
+function searchAddr() {
+    const addr = document.querySelector('#inputNumber');
+    const searchResultsDiv = document.getElementById('searchResults');
+    searchResultsDiv.innerHTML = ''; // 이전에 표시된 결과를 초기화
+    if (!checkAddr(addr)) {
+        // 검증에 실패하면 여기서 중단하고 이후 코드를 실행하지 않음
+        return false;
+    }
+
+    const url = "/api/business/addr";
+    const body = { keyword: addr.value };
+
+    fetch(url, {
+        method: "POST",  // HTTP 메서드는 대문자로 지정
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    })
+        .then(response => {
+            // HTTP 응답이 성공이면 다음 then 블록으로 이동
+            if (!response.ok) {
+                // 응답이 실패하면 에러 처리
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            console.log("HTTP 응답 정상 확인");
+
+            // JSON 데이터 파싱 및 반환
+            return response.json();
+        })
+        .then(data => {
+            // 서버로부터 받은 데이터 처리
+            if (data != null) {
+                displaySearchResults(data);
+            } else {
+                // 받은 데이터가 null이면 실패로 처리
+                throw new Error('Received data is null.');
+            }
+        })
+        .catch(error => {
+            console.error('Error during fetch:', error);
+        });
+}
+
+
+function displaySearchResults(results) {
+    const searchResultsDiv = document.getElementById('searchResults');
+    searchResultsDiv.innerHTML = ''; // 이전에 표시된 결과를 초기화
+    // 결과를 표시할 테이블 생성
+    const table = document.createElement('table');
+    table.classList.add('table'); // Bootstrap의 테이블 스타일을 사용하려면 'table' 클래스를 추가
+
+    // 테이블 헤더 생성
+    const headerRow = document.createElement('tr');
+    const nameLabel = document.createElement('th');
+    nameLabel.textContent = '우편번호'; // 결과의 필드에 따라 수정
+    headerRow.appendChild(nameLabel);
+
+    const additionalInfoLabel = document.createElement('th');
+    additionalInfoLabel.textContent = '도로명 주소'; // 추가 정보의 필드에 따라 수정
+    headerRow.appendChild(additionalInfoLabel);
+
+    // 헤더를 테이블에 추가
+    table.appendChild(headerRow);
+
+    // 결과를 순회하면서 각 행을 생성하여 추가
+    results.forEach(result => {
+        const row = document.createElement('tr');
+
+        // 결과 필드에 따라 수정
+        const nameCell = document.createElement('td');
+        nameCell.textContent = result.zipNo;
+        row.appendChild(nameCell);
+
+        // 추가 정보 필드에 따라 수정
+        const additionalInfoCell = document.createElement('td');
+        additionalInfoCell.textContent = result.roadAddr; // 추가 정보가 없으면 빈 문자열 처리
+        row.appendChild(additionalInfoCell);
+
+        // 행을 테이블에 추가
+        table.appendChild(row);
     });
+
+    // 테이블을 결과 표시 영역에 추가
+
+    searchResultsDiv.appendChild(table);
 }
