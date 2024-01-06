@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -42,8 +43,9 @@ public class BusinessApiController {
 
     // 모달창에서 넣은 주소를 검색
     @PostMapping("/addr")
-    public ResponseEntity<BusinessAddrResponse> addrSearch(@RequestBody BusinessAddrRequest dto) {
-        BusinessAddrResponse result = businessApiService.searchAddr(dto);
+    public ResponseEntity<BusinessAddrResponse[]> addrSearch(@RequestBody BusinessAddrRequest dto) {
+        BusinessAddrResponse[] result = businessApiService.searchAddr(dto);
+        System.out.println(Arrays.toString(result));
         return (result !=null)? ResponseEntity.ok(result):ResponseEntity.badRequest().build();
     }
 }

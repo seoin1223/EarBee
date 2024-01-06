@@ -21,10 +21,12 @@ if (Modal) {
 
         // 모달창에 데이터 반영
         document.querySelector('#selectName').innerText = button.getAttribute("data-bs-name");
+        const searchResultsDiv = document.getElementById('searchResults');
+        searchResultsDiv.innerHTML = '';
         // type 별로 placeholder 바꾸기 및 현재 폼이 어떤 RestApi을 호출할 것인지 form에 data-sort-type을 지정함
         if (modalType !== 'business') {
             document.getElementById("inputNumber").value = "";
-            document.querySelector('#inputNumber').removeAttribute("placeholder");
+            document.querySelector('#inputNumber').setAttribute("placeholder", "매곡푸르지오");
             document.querySelector('#searchType').setAttribute('data-sort-type', 'address')
             document.querySelector('#inputNumber').setAttribute('type', 'text');
         } else {
@@ -39,14 +41,12 @@ if (Modal) {
 }
 
 
-
-
 function search() { // 조회가 사업자 조회인지 주소 검색인지 분류
     const dataSortType = document.querySelector('#searchType').getAttribute('data-sort-type');
 
     if (!(dataSortType !== 'businessNum')) {
         searchBusiness();
-    }else{
+    } else {
         searchAddr();
     }
 }
@@ -64,12 +64,10 @@ function isBusinessNumValid(businessNum) {
 }
 
 
-
-
-function searchBusiness(){
+function searchBusiness() {
     const businessNum = document.querySelector('#inputNumber').value;
 
-    if(!isBusinessNumValid(businessNum)){
+    if (!isBusinessNumValid(businessNum)) {
         return false;
     } // 사업자 번호가 정상적인지 체크
 
@@ -87,17 +85,17 @@ function searchBusiness(){
     }).then(response => {
         if (response.ok) {
             return response.json();
-        }else {
+        } else {
             alert("사업자 번호를 확인하세요");
             $('#inputNumber').val('').focus();
         }
     }).then(data => {
-        if(data!=null) {
+        if (data != null) {
             // conso0le.log('Received data:', data);
             $('#businessNum').val(data.b_no); // 메인 폼에 사업자 번호 삽입
             $("#inputNumber").val('');
             $('#Modal').modal('hide'); // 모달창 숨기기
-        }else{
+        } else {
             return false;
         }
 
@@ -108,35 +106,137 @@ function searchBusiness(){
 
 }
 
-function searchAddr(){
-    const addr = document.querySelector('#inputNumber').value;
+// 주소 검색 필터링
+function checkAddr(obj) {
+    if (obj.value.length > 0) {
+        //특수문자 제거
+        const expText = /[%=><]/;
+        if (expText.test(obj.value) === true) {
+            alert(`특수문자를 입력 할수 없습니다.`);
+            obj.value = obj.split(expText).join("");
+            return false;
+        }
 
-    const url = "/api/business/addr";
-    const body = {
-        keyword: addr
+        //특정문자열(sql예약어의 앞뒤공백포함) 제거
+        const sqlArray = ["OR", "SELECT", "INSERT", "DELETE", "UPDATE", "CREATE", "DROP", "EXEC",
+            "UNION", "FETCH", "DECLARE", "TRUNCATE"];
+
+        let regex;
+        for (let i = 0; i < sqlArray.length; i++) {
+            regex = new RegExp(sqlArray[i], "gi");
+
+            if (regex.test(obj.value)) {
+                alert("\"" + sqlArray[i] + "\"와(과) 같은 특정문자로 검색할 수 없습니다.");
+                obj.value = obj.value.replace(regex, "");
+                return false;
+            }
+        }
+    } else {
+        alert(`주소를 입력해주세요`);
+        return false;
+    }
+    return true;
+}
+
+
+function searchAddr() {
+    const addr = document.querySelector('#inputNumber');
+    const searchResultsDiv = document.getElementById('searchResults');
+    searchResultsDiv.innerHTML = ''; // 이전에 표시된 결과를 초기화
+    if (!checkAddr(addr)) {
+        // 검증에 실패하면 여기서 중단하고 이후 코드를 실행하지 않음
+        return false;
     }
 
+    const url = "/api/business/addr";
+    const body = {keyword: addr.value};
+
     fetch(url, {
-        method: "post",
-        body: JSON.stringify(body),
+        method: "POST",  // HTTP 메서드는 대문자로 지정
         headers: {
             "Content-Type": "application/json"
-        }
-    }).then(response => {
-        console.log("정상적으로 확인 환요")
-        return response.json();
+        },
+        body: JSON.stringify(body)
+    })
+        .then(response => {
+            // HTTP 응답이 성공이면 다음 then 블록으로 이동
+            if (!response.ok) {
+                // 응답이 실패하면 에러 처리
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            console.log("HTTP 응답 정상 확인");
 
-    }).then(data => {
-        if(data!=null) {
-            console.log('Received data:', data);
-
-            $('#Modal').modal('hide'); // 모달창 숨기기
-        }else{
-            return false;
-        }
-
-    }).catch(error => {
-        return false;
-
-    });
+            // JSON 데이터 파싱 및 반환
+            return response.json();
+        })
+        .then(data => {
+            // 서버로부터 받은 데이터 처리
+            if (data != null) {
+                displaySearchResults(data);
+            } else {
+                // 받은 데이터가 null이면 실패로 처리
+                throw new Error('Received data is null.');
+            }
+        })
+        .catch(error => {
+            console.error('Error during fetch:', error);
+        });
 }
+
+
+function displaySearchResults(results) {
+    const searchResultsDiv = document.getElementById('searchResults');
+    searchResultsDiv.innerHTML = ''; // 이전에 표시된 결과를 초기화
+
+
+    // 결과를 표시할 테이블 생성
+    const table = document.createElement('table');
+
+    table.classList.add('table', 'table-scroll'); // Bootstrap의 테이블 스타일을 사용하려면 'table' 클래스를 추가
+
+    // 테이블 헤더 생성
+    const headerRow = document.createElement('tr');
+    const nameLabel = document.createElement('th');
+    nameLabel.textContent = '우편번호'; // 결과의 필드에 따라 수정
+    nameLabel.style.width = '20%'; //
+    nameLabel.style.textAlign = 'center'; // 텍스트 정렬 설정
+    headerRow.appendChild(nameLabel);
+
+    const additionalInfoLabel = document.createElement('th');
+    additionalInfoLabel.textContent = '도로명 주소'; // 추가 정보의 필드에 따라 수정
+    additionalInfoLabel.style.textAlign = 'center';
+    headerRow.appendChild(additionalInfoLabel);
+
+    // 헤더를 테이블에 추가
+    table.appendChild(headerRow);
+
+    // 결과를 순회하면서 각 행을 생성하여 추가
+    results.forEach(result => {
+        const row = document.createElement('tr');
+        row.onclick=function(event){
+                alert(`주소 클릭함: ${event.target.textContent}`);
+            };
+
+        // 결과 필드에 따라 수정
+        const nameCell = document.createElement('td');
+        nameCell.textContent = result.zipNo;
+        nameCell.style.width = '20%'; // 스타일 직접 설정
+        nameCell.style.textAlign = 'center';
+        row.appendChild(nameCell);
+
+        // 추가 정보 필드에 따라 수정
+        const additionalInfoCell = document.createElement('td');
+        const link = document.createElement('a');
+        link.textContent = result.roadAddr; // 추가 정보가 없으면 빈 문자열 처리
+        additionalInfoCell.appendChild(link);
+
+        row.appendChild(additionalInfoCell);
+
+        // 행을 테이블에 추가
+        table.appendChild(row);
+    });
+
+    // 테이블을 결과 표시 영역에 추가
+    searchResultsDiv.appendChild(table);
+}
+
