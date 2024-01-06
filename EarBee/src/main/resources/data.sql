@@ -32,7 +32,7 @@
 --                          user_name VARCHAR2(20) NOT NULL,
 --                          user_rrn VARCHAR2(100) NOT NULL,
 --                          user_phone VARCHAR2(15) NOT NULL UNIQUE,
---                          user_eamil VARCHAR2(30) NOT NULL UNIQUE,
+--                          user_email VARCHAR2(30) NOT NULL UNIQUE,
 --                          user_address VARCHAR2(50),
 --                          user_role VARCHAR2(10) NOT NULL,
 --                          img_seq NUMBER
