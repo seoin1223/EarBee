@@ -1,6 +1,7 @@
 package com.eb.earbee.business.controller;
 
 
+import com.eb.earbee.business.dto.BusinessForm;
 import com.eb.earbee.business.entity.Business;
 import com.eb.earbee.business.service.BusinessService;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -31,6 +34,13 @@ public class BusinessController {
     @GetMapping("/applyplace")
     public String applyPlace(){
         return "business/apply";
+    }
+
+    @PostMapping("/business/add")
+    public String add(BusinessForm businessForm){
+        Business business = businessService.addBusiness(businessForm.toEntity());
+        log.info(business.toString());
+        return "redirect:/earbee";
     }
 
 }

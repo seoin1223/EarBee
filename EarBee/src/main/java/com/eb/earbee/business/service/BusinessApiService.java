@@ -57,7 +57,6 @@ public class BusinessApiService {
     public BusinessApplyResponse businessSearchNum(BusinessApplyRequest dto) {
         try {
             URL url = new URL(urlBusiness+encodingKey);
-            System.out.println(url);
             HttpURLConnection con = openHttpURLConnection(url);
 
             con.setRequestMethod("POST");
@@ -92,6 +91,7 @@ public class BusinessApiService {
         }
     }
 
+    @Transactional
     public BusinessAddrResponse[] searchAddr(BusinessAddrRequest dto) {
         try {
             String encodedKeyword = URLEncoder.encode(dto.getKeyword(), StandardCharsets.UTF_8);

@@ -25,8 +25,6 @@ public class BusinessApiController {
     @Autowired
     private BusinessApiService businessApiService;
 
-
-
     // 정상적으로 변수를 가져오는지 체크
     @GetMapping()
     public List<String> checkValue(){
@@ -45,7 +43,6 @@ public class BusinessApiController {
     @PostMapping("/addr")
     public ResponseEntity<BusinessAddrResponse[]> addrSearch(@RequestBody BusinessAddrRequest dto) {
         BusinessAddrResponse[] result = businessApiService.searchAddr(dto);
-        System.out.println(Arrays.toString(result));
         return (result !=null)? ResponseEntity.ok(result):ResponseEntity.badRequest().build();
     }
 }

@@ -1,6 +1,5 @@
 package com.eb.earbee.business.service;
 
-import com.eb.earbee.business.dto.BusinessDto;
 import com.eb.earbee.business.request.BusinessApplyRequest;
 import com.eb.earbee.business.response.BusinessApplyResponse;
 import org.junit.jupiter.api.DisplayName;

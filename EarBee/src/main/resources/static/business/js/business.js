@@ -213,21 +213,42 @@ function displaySearchResults(results) {
     // 결과를 순회하면서 각 행을 생성하여 추가
     results.forEach(result => {
         const row = document.createElement('tr');
-        row.onclick=function(event){
-                alert(`주소 클릭함: ${event.target.textContent}`);
-            };
+        row.addEventListener('mouseover', function () {
+            row.style.backgroundColor = '#e6f7ff'; // 마우스가 올라갔을 때 배경색 변경
+        });
+
+        // 마우스가 행에서 나갔을 때의 이벤트 처리
+        row.addEventListener('mouseout', function () {
+            row.style.backgroundColor = ''; // 마우스가 나갔을 때 배경색 초기화 (기본값으로)
+        });
+        row.onclick = function (event) {
+            const zipCode = document.getElementById('zipCode');
+            const addr = document.getElementById('addr');
+            const details = document.getElementById('detail');
+
+            const textContentArray = Array.from(event.currentTarget.children).map(td => td.textContent);
+
+            if (textContentArray.length >= 2) {
+                zipCode.value = textContentArray[0];
+                addr.value = textContentArray[1];
+                details.readOnly = false;
+                $('#Modal').modal('hide'); // 모달창 숨기기
+            }
+        };
 
         // 결과 필드에 따라 수정
         const nameCell = document.createElement('td');
         nameCell.textContent = result.zipNo;
         nameCell.style.width = '20%'; // 스타일 직접 설정
         nameCell.style.textAlign = 'center';
+        nameCell.style.fontSize = '10px';
         row.appendChild(nameCell);
 
         // 추가 정보 필드에 따라 수정
         const additionalInfoCell = document.createElement('td');
         const link = document.createElement('a');
         link.textContent = result.roadAddr; // 추가 정보가 없으면 빈 문자열 처리
+        link.style.fontSize='10px';
         additionalInfoCell.appendChild(link);
 
         row.appendChild(additionalInfoCell);
@@ -238,5 +259,27 @@ function displaySearchResults(results) {
 
     // 테이블을 결과 표시 영역에 추가
     searchResultsDiv.appendChild(table);
+}
+
+
+function checkBusiness() {
+    const bNo = document.getElementById('businessNum');
+    const zipCode = document.getElementById('zipCode');
+    const addr = document.getElementById('addr');
+    const detail = document.getElementById('detail');
+
+    const isEmpty = bNo.value.trim() === '' || zipCode.value.trim() === '' || addr.value.trim() === '' || detail.value.trim() === '';
+
+    if (isEmpty) {
+        alert('빈칸을 채워주세요');
+    }
+
+    return !isEmpty;
+}
+
+function businessSubmit() {
+    if (checkBusiness()) {
+        document.getElementById('form').submit();
+    }
 }
 

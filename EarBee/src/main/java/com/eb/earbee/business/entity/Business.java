@@ -14,9 +14,15 @@ public class Business {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String title;
+    @Column(name = "b_no")
+    private String bNo;
+
+    @Column(name = "zip_code")
+    private String zipCode;
 
     @Column
-    private String content;
+    private String addr;
+
+    @Column
+    private String detail;
 }
