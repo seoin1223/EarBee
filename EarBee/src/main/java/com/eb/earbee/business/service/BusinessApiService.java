@@ -46,11 +46,6 @@ public class BusinessApiService {
     @Value("${address.url}")
     private String urlAddr;
 
-    // 네이버 카카오 중 협의 후 체크
-    @Value("${naver.client.id}")
-    private String clientId;
-    @Value("${naver.client.secret}")
-    private String clientSecret;
 
     // 변수값이 정상적으로 들어오는지 확인하는 메서드
     public List<String> checkValue() {
@@ -61,7 +56,7 @@ public class BusinessApiService {
     @Transactional
     public BusinessApplyResponse businessSearchNum(BusinessApplyRequest dto) {
         try {
-            URL url = new URL(urlBusiness);
+            URL url = new URL(urlBusiness+encodingKey);
             HttpURLConnection con = openHttpURLConnection(url);
 
             con.setRequestMethod("POST");
@@ -96,6 +91,7 @@ public class BusinessApiService {
         }
     }
 
+    @Transactional
     public BusinessAddrResponse[] searchAddr(BusinessAddrRequest dto) {
         try {
             String encodedKeyword = URLEncoder.encode(dto.getKeyword(), StandardCharsets.UTF_8);
