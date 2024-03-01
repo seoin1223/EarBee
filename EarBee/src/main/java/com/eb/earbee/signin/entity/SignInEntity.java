@@ -1,30 +1,31 @@
-package com.eb.earbee.signin.entiry;
+package com.eb.earbee.signin.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignIn {
+public class SignInEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long num; // 회원 번호
+
+    @Column(nullable = false, length = 12, unique = true)
+    private String id; // 찐 아이디
 
     @Column(nullable = false, length = 20)
     private String pwd;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private String rrn;
+    private boolean rrn;
 
     @Column(nullable = false, unique = true)
     private String phone;
@@ -33,9 +34,9 @@ public class SignIn {
     private String email;
 
     @Column(nullable = false)
-    private String address;
+    private String addr;
 
-    @Column
-    private String role;
+//    @Column
+//    private String role;
 
 }

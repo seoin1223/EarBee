@@ -1,7 +1,6 @@
 package com.eb.earbee.signin.service;
 
-import com.eb.earbee.signin.entiry.SignIn;
-import com.eb.earbee.signin.repository.MemorySignInRepository;
+import com.eb.earbee.signin.entity.SignInEntity;
 import com.eb.earbee.signin.repository.SignInRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,35 +14,27 @@ import java.util.Optional;
 public class SignInService {
 
 
-
-    private final SignInRepository signInRepository;
-
-    // 리파지터리를 외부에서 넣을수있게
     @Autowired
-    public SignInService(SignInRepository signInRepository) {
-        this.signInRepository = signInRepository;
+    SignInRepository signInRepository;
+
+    // 유저 기본키 중복 체크 함수
+    public boolean checkUserNum(SignInEntity signin) {
+        Optional<SignInEntity> byId = signInRepository.findById(signin.getNum()); // 기본키 중복 체크
+        SignInEntity existingEntity = byId.orElse(null); // null 체크
+        return existingEntity != null;
     }
 
-    // 회원가입
-    public Long join(SignIn signin) {
-        duplicationSignIn(signin); // 중복 검증
-        signInRepository.save(signin);
-        return signin.getId();
+    // 회원가입 함수
+    private SignInEntity addUser(SignInEntity signin) { // 유저 정보를 repository에 추가하는 메서드
+        boolean check = checkUserNum(signin); // 유저 중복 체크
+        if(!check){
+            return null;
+        }
+        return signInRepository.save(signin);
     }
 
-    private void duplicationSignIn(SignIn signin) {
-        signInRepository.findByName(signin.getName())
-            .ifPresent(s ->  {
-                throw new IllegalStateException("이미 존재하는 회원입니다!");
-            });
-    }
 
-    // 회원 조회
-    public List<SignIn> findSignIn(){
-        return signInRepository.findAll();
-    }
-
-    public  Optional<SignIn> findOne(Long signInId){
+    public  Optional<SignInEntity> findOne(Long signInId){
         return  signInRepository.findById(signInId);
     }
 
