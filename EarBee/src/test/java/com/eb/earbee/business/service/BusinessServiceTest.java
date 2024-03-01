@@ -28,6 +28,6 @@ class BusinessServiceTest {
             assertEquals(result,business,"실패");
         }
 
-        
+
     }
 }
