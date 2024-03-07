@@ -1,67 +1,105 @@
 {{>layouts/header}}
+<main>
 
-<div class="business">
-    <form id = 'form' action="/earbee/business/add" method="post">
-        <table>
-            <tr>
-                <td colspan="3"><label style="margin-bottom: 5px">사업자 번호</label></td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="mb-3 mr-3">
-                        <input name="bNo" type="text" class="form-control" id ="businessNum" readonly
-                               placeholder="사업자 번호를 조회해주세요" style="font-size: 10px">
-                    </div>
-                </td>
-                <td>
-                    <div class="mb-3 ml-3">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal"
-                                data-bs-name='사업자 번호 조회' data-bs-type="business">조회
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">주소</td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="mb-3 mr-3 ">
-                        <input name="zipCode" type="text" class="form-control" style="font-size: 15px" readonly
-                            placeholder="조회를 눌러주세요" id="zipCode">
-                    </div>
-                </td>
-                <td>
-                    <div class="mb-3">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal"
-                                data-bs-name='주소 조회' data-bs-type="address">조회
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <div class="mb-3 ">
-                        <input name="addr" type="text" class="form-control" id = "addr" style="font-size: 10px" readonly>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <div class="mb-3 ">
-                        <input name="detail" type="text" class="form-control" id = "detail" style="font-size: 10px" readonly>
-                    </div>
-                </td>
-            </tr>
-        </table>
+    <form id='form' action="/earbee/business/add" method="post">
+        <section id="button-section">
 
-        <div class="d-flex justify-content-center mt-3 mb-3">
-            <button type="button" onclick="businessSubmit()">
-                신청하기
-            </button>
-        </div>
+
+                <button type="button" class="btn btn-primary" onclick="businessSubmit()" style="margin-right: 5px;">
+                    신청하기
+                </button>
+
+                <button type="button" class="btn btn-primary ml-5 mr-10" onclick="x()"
+                        style="margin-left: 5px; margin-right: 10px;">
+                    다시 작성
+                </button>
+
+        </section>
+        <section id="table-first-section">
+                <label> 사업자 등록 정보 삽입</label>
+
+                <table border="1" id="left-table">
+                    <tr>
+                        <td colspan="3"><label style="margin-bottom: 5px">사업자 번호</label></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <div class="mb-3 mr-3">
+                                <input name="bNo" type="text" class="form-control" id="businessNum" readonly
+                                       placeholder="사업자 번호를 조회해주세요" style="font-size: 10px">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="mb-3 ml-3">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#Modal"
+                                        data-bs-name='사업자 번호 조회' data-bs-type="business">조회
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="3">주소</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <div class="mb-3 mr-3 ">
+                                <input name="zipCode" type="text" class="form-control" style="font-size: 15px"
+                                       readonly
+                                       placeholder="조회를 눌러주세요" id="zipCode">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#Modal"
+                                        data-bs-name='주소 조회' data-bs-type="address">조회
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="3">
+                            <div class="mb-3 ">
+                                <input name="addr" type="text" class="form-control" id="addr"
+                                       style="font-size: 10px" readonly>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="3">
+                            <div class="mb-3 ">
+                                <input name="detail" type="text" class="form-control" id="detail"
+                                       style="font-size: 10px" readonly>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+        </section>
+
+        <section id="table-second-section">
+
+                <table border="1" id="right-table">
+                    <tr>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                    </tr>
+                </table>
+        </section>
     </form>
-</div>
+</main>
 
 <!-- 모달창 -->
 <div class="modal fade" id="Modal">
@@ -77,7 +115,7 @@
                         <input type="Number" class="form-control" id="inputNumber">
                     </div>
                     <div style="float:right">
-                        <button type="button" id = "inputBumBtm" class="btn btn-primary" onclick="search()">조회</button>
+                        <button type="button" id="inputBumBtm" class="btn btn-primary" onclick="search()">조회</button>
                     </div>
                 </form>
                 <!-- 조회 결과를 표시할 부분 -->
@@ -86,27 +124,10 @@
         </div>
     </div>
 </div>
+
 <script src="/business/js/business.js"></script>
 
 <style>
-    form input[type="text"]{
-
-    }
-
-    .table-scroll {
-        max-height: 300px; /* 최대 높이 지정 */
-        overflow-y: auto; /* 세로 스크롤 활성화 */
-        overflow-x: auto; /* 가로 스크롤 활성화 */
-    }
-    .business {
-        margin: 0;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid black;
-    }
-
     /*스피너 숨기기*/
     input::-webkit-inner-spin-button,
     input::-webkit-outer-spin-button {
@@ -114,15 +135,9 @@
         margin: 0;
     }
 
-    /* Firefox */
-    input[type="number"] {
-        -moz-appearance: textfield;
+    section {
+        border : 1px solid red;
     }
-
-
-
-
-
 
 
 </style>
