@@ -1,103 +1,99 @@
 {{>layouts/header}}
-<main>
-
+<main class="container">
     <form id='form' action="/earbee/business/add" method="post">
-        <section id="button-section">
+        <div class="d-flex" id="second-div">
+            <section id="table-first-section" class="col-6">
+                <div class="container">
+                    <div class="row" style="height: 150px">
+                        <div class="col-3 mt-2" >
+                            <img src="#" alt="#" style="max-width: 100%;min-width: 100%; min-height: 100%;">
+                        </div>
+                        <div class="col-9 container mt-2">
+                            <label class=" mb-2" style="height: 20%">소개</label>
+                            <textarea class="form-control" style="height: 75%; width: 90.5%;" ></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-5 ml-2">
+                    <div class="row mb-1">
+                        <div class="col-3">
+                            <label for="businessNum" class="form-label" style="margin-bottom: 5px; text-align: center;font-size: 20px;">사업자
+                                번호</label>
+                        </div>
+                        <div class="col-8">
+                            <input name="bNo" type="text" class="form-control" id="businessNum" readonly
+                                   placeholder="사업자 번호를 조회해주세요" style="font-size: 10px">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-11 d-flex justify-content-end"> <!-- 버튼 영역 -->
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#Modal" data-bs-name='사업자 번호 조회' data-bs-type="business">조회
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row mb-1 mt-5">
+                        <div class="col-3">
+                            <label for="zipCode" class="form-label" style="text-align: center; font-size: 20px;">주소</label>
+                        </div>
+                        <div class="col-8">
+                            <input name="zipCode" type="text" class="form-control" style="font-size: 15px"
+                                   readonly placeholder="조회를 눌러주세요" id="zipCode">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-11 d-flex justify-content-end">
+                            <button type="button" class="btn btn-primary mt-1" data-bs-toggle="modal"
+                                    data-bs-target="#Modal" data-bs-name='주소 조회' data-bs-type="address">조회
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3 mt-5">
+                    <div class="col-3 ">
+                        <label for="detail" class="form-label" style="font-size: 20px; text-align: center;">상세 주소</label>
+
+                    </div>
+                    <div class="col-8">
+                        <input name="detail" type="text" id="detail" maxlength="30" class="form-control"
+                               placeholder="조회를 눌러주세요"
+                               readonly>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-12 text-center">
+                        <button class="btn btn-primary">
+                            중복체크
+                        </button>
+                    </div>
+
+                </div>
+
+        </section>
 
 
+        <!--            <section id="table-second-section" class="col-6">-->
+        <!--                <div>-->
+        <!--                    <h1> 상세 정보를 입력할 예정</h1>-->
+        <!--                </div>-->
+        <!--            </section>-->
+        </div>
+        <section id="button-section" class="col-12">
+            <div class="d-flex justify-content-center">
                 <button type="button" class="btn btn-primary" onclick="businessSubmit()" style="margin-right: 5px;">
                     신청하기
                 </button>
-
                 <button type="button" class="btn btn-primary ml-5 mr-10" onclick="x()"
-                        style="margin-left: 5px; margin-right: 10px;">
-                    다시 작성
+                        style="margin-left: 5px; margin-right: 10px;">다시 작성
                 </button>
-
-        </section>
-        <section id="table-first-section">
-                <label> 사업자 등록 정보 삽입</label>
-
-                <table border="1" id="left-table">
-                    <tr>
-                        <td colspan="3"><label style="margin-bottom: 5px">사업자 번호</label></td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="2">
-                            <div class="mb-3 mr-3">
-                                <input name="bNo" type="text" class="form-control" id="businessNum" readonly
-                                       placeholder="사업자 번호를 조회해주세요" style="font-size: 10px">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="mb-3 ml-3">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#Modal"
-                                        data-bs-name='사업자 번호 조회' data-bs-type="business">조회
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="3">주소</td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="2">
-                            <div class="mb-3 mr-3 ">
-                                <input name="zipCode" type="text" class="form-control" style="font-size: 15px"
-                                       readonly
-                                       placeholder="조회를 눌러주세요" id="zipCode">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="mb-3">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#Modal"
-                                        data-bs-name='주소 조회' data-bs-type="address">조회
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="3">
-                            <div class="mb-3 ">
-                                <input name="addr" type="text" class="form-control" id="addr"
-                                       style="font-size: 10px" readonly>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="3">
-                            <div class="mb-3 ">
-                                <input name="detail" type="text" class="form-control" id="detail"
-                                       style="font-size: 10px" readonly>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-
+            </div>
         </section>
 
-        <section id="table-second-section">
-
-                <table border="1" id="right-table">
-                    <tr>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                    </tr>
-                </table>
-        </section>
     </form>
 </main>
 
@@ -136,9 +132,60 @@
     }
 
     section {
-        border : 1px solid red;
+        /*border: 1px solid red;*/
+        overflow-y: auto; /* 섹션의 수직 스크롤을 활성화합니다. */
+        max-height: 80vh; /* 섹션의 최대 높이를 지정합니다. */
     }
 
+
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* 브라우저 높이의 100%로 설정 */
+
+    }
+
+    header {
+        top: 0; /* 상단에 고정 */
+    }
+
+    footer {
+        bottom: 0; /* 하단에 고정 */
+    }
+
+
+    main {
+        flex: 1; /* main이 남은 공간을 모두 차지하도록 설정 */
+        display: flex;
+        justify-content: center;
+
+
+    }
+
+    hr {
+        width: 100%;
+    }
+
+    form {
+        width: 85%;
+    }
+
+    #second-div {
+        height: 60%;
+    }
+
+    div label {
+        display: block;
+        /* 기타 스타일 속성 */
+        margin-left: 10px;
+    }
+
+    textarea {
+        resize: none;
+    }
+    img{
+        border: 1px solid blue;
+    }
 
 </style>
 

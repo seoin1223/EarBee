@@ -26,8 +26,8 @@
     ```
 - https://business.juso.go.kr/addrlink/openApi/apiReqst.do
    ```
-   address.key=
-   address.url=
+   address.key=인증키
+   address.url=https://www.juso.go.kr/addrlink/addrLinkApi.do
    ```    
 
 
