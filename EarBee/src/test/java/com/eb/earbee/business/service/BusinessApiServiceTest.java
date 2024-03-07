@@ -51,7 +51,7 @@ class BusinessApiServiceTest {
         // 정상적인 사업자 번호일 경우
         {
             // 사업자 번호 있는 경우
-            // Data
+            // DataaI
             BusinessApplyRequest dto = new BusinessApplyRequest("1308189095");
 
             // 실제

@@ -27,6 +27,7 @@ public class BusinessController {
     public String businessCollection(Model m){
         List<Business> businessList = businessService.findAll();
         m.addAttribute("businessList",businessList);
+        
         return "business/main";
     }
 
