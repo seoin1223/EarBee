@@ -24,7 +24,11 @@
     business.encoding=인코딩키
     business.decoding=디코딩키
     ```
-
+- https://business.juso.go.kr/addrlink/openApi/apiReqst.do
+   ```
+   address.key=devU01TX0FVVEgyMDI0MDEwNDA3NDIyNDExNDQwMTc=
+   address.url=https://www.juso.go.kr/addrlink/addrLinkApi.do
+   ```    
 
 
 # 사용 기술
