@@ -26,8 +26,8 @@
     ```
 - https://business.juso.go.kr/addrlink/openApi/apiReqst.do
    ```
-   address.key=devU01TX0FVVEgyMDI0MDEwNDA3NDIyNDExNDQwMTc=
-   address.url=https://www.juso.go.kr/addrlink/addrLinkApi.do
+   address.key=
+   address.url=
    ```    
 
 
