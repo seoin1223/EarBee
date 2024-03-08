@@ -7,6 +7,7 @@ import com.eb.earbee.business.request.BusinessApplyRequest;
 
 import com.eb.earbee.business.response.BusinessAddrResponse;
 import com.eb.earbee.business.response.BusinessApplyResponse;
+import com.eb.earbee.business.response.testBusinessResponse;
 import com.eb.earbee.business.service.BusinessApiService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,11 @@ public class BusinessApiController {
     public ResponseEntity<BusinessAddrResponse[]> addrSearch(@RequestBody BusinessAddrRequest dto) {
         BusinessAddrResponse[] result = businessApiService.searchAddr(dto);
         return (result !=null)? ResponseEntity.ok(result):ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/testAjax")
+    public ResponseEntity<BusinessAddrResponse> testCode(@RequestBody testBusinessResponse check){
+        System.out.println(check);
+        return null;
     }
 }

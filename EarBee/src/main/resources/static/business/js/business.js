@@ -23,6 +23,7 @@ if (Modal) {
         document.querySelector('#selectName').innerText = button.getAttribute("data-bs-name");
         const searchResultsDiv = document.getElementById('searchResults');
         searchResultsDiv.innerHTML = '';
+
         // type 별로 placeholder 바꾸기 및 현재 폼이 어떤 RestApi을 호출할 것인지 form에 data-sort-type을 지정함
         if (modalType !== 'business') {
             document.getElementById("inputNumber").value = "";
@@ -30,17 +31,15 @@ if (Modal) {
             document.querySelector('#searchType').setAttribute('data-sort-type', 'address')
             document.querySelector('#inputNumber').setAttribute('type', 'text');
         } else {
-
             document.querySelector('#inputNumber').setAttribute('placeholder', "- 제거해서 입력해주세요");
             document.querySelector('#searchType').setAttribute('data-sort-type', 'businessNum')
             document.querySelector('#inputNumber').setAttribute('type', 'number');
-
         }
 
     });
 }
 
-
+// 조회 버튼이 어떤 조회버튼인지 구분하는 함수
 function search() { // 조회가 사업자 조회인지 주소 검색인지 분류
     const dataSortType = document.querySelector('#searchType').getAttribute('data-sort-type');
 
@@ -227,7 +226,7 @@ function displaySearchResults(results) {
             const details = document.getElementById('detail');
 
             const textContentArray = Array.from(event.currentTarget.children).map(td => td.textContent);
-
+            console.log(textContentArray);
             if (textContentArray.length >= 2) {
                 zipCode.value = textContentArray[0];
                 addr.value = textContentArray[1];
@@ -261,25 +260,49 @@ function displaySearchResults(results) {
     searchResultsDiv.appendChild(table);
 }
 
-
+// business 빈칸 내역 확인 함수(왼쪽)
 function checkBusiness() {
-    const bNo = document.getElementById('businessNum');
-    const zipCode = document.getElementById('zipCode');
-    const addr = document.getElementById('addr');
-    const detail = document.getElementById('detail');
+    const bNo = document.getElementById('businessNum').value.trim();
+    const zipCode = document.getElementById('zipCode').value.trim();
+    const addr = document.getElementById('addr').value.trim();
+    const detail = document.getElementById('detail').value.trim();
 
-    const isEmpty = bNo.value.trim() === '' || zipCode.value.trim() === '' || addr.value.trim() === '' || detail.value.trim() === '';
-
-    if (isEmpty) {
-        alert('빈칸을 채워주세요');
+    if (bNo === '' || zipCode === '' || addr === '' || detail === '') {
+        return false; // 빈칸이 있으면 false 반환
+    } else {
+        return { // 객체를 반환
+            bNo: bNo,
+            zipCode: zipCode,
+            addr: addr,
+            detail: detail
+        };
     }
-
-    return !isEmpty;
 }
 
 function businessSubmit() {
     if (checkBusiness()) {
         document.getElementById('form').submit();
+    }
+}
+
+// 왼쪽 section 중복 체크 이벤트
+function duplicateCheck(){
+    const dataToSend = checkBusiness(); // checkBusiness 함수를 통해 반환된 객체를 변수에 저장
+
+    if (!dataToSend) { // 빈칸이 있는지 확인
+        alert("빈칸을 채워주세요");
+    } else { // 빈칸이 없으면 AJAX 요청 보냄
+        $.ajax({
+            url: "/api/business/testAjax",
+            method: "POST",
+            contentType: "application/json", // Content-Type 설정
+            data: JSON.stringify(dataToSend),
+            dataType: "json",
+        }).done((res)=>{
+            alert("y");
+        }).fail((err)=>{
+            alert("n");
+        });
     }
 }
 
