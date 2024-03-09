@@ -90,15 +90,17 @@ function searchBusiness() {
         }
     }).then(data => {
         if (data != null) {
-            // conso0le.log('Received data:', data);
-            $('#businessNum').val(data.b_no); // 메인 폼에 사업자 번호 삽입
+            console.log('Received data:', data);
+            $('#businessNum').val(data.bno); // 메인 폼에 사업자 번호 삽입
             $("#inputNumber").val('');
             $('#Modal').modal('hide'); // 모달창 숨기기
         } else {
+            alert("error");
             return false;
         }
 
     }).catch(error => {
+
         return false;
 
     });
@@ -294,15 +296,15 @@ function duplicateCheck(){
         alert("빈칸을 채워주세요");
     } else { // 빈칸이 없으면 AJAX 요청 보냄
         $.ajax({
-            url: "/api/business/testAjax",
+            url: "/api/business/validation",
             method: "POST",
             contentType: "application/json", // Content-Type 설정
             data: JSON.stringify(dataToSend),
             dataType: "json",
         }).done((res)=>{
-            alert("y");
+            alert("신청할 수 있는 사업체입니다");
         }).fail((err)=>{
-            alert("n");
+            alert("이미 중복된 사업체입니다");
         });
     }
 }
