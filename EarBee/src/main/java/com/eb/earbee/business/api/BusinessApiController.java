@@ -7,7 +7,8 @@ import com.eb.earbee.business.request.BusinessApplyRequest;
 
 import com.eb.earbee.business.response.BusinessAddrResponse;
 import com.eb.earbee.business.response.BusinessApplyResponse;
-import com.eb.earbee.business.response.testBusinessResponse;
+import com.eb.earbee.business.request.BusinessValidationRequest;
+import com.eb.earbee.business.response.BusinessValidationResponse;
 import com.eb.earbee.business.service.BusinessApiService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -43,13 +43,20 @@ public class BusinessApiController {
     // 모달창에서 넣은 주소를 검색
     @PostMapping("/addr")
     public ResponseEntity<BusinessAddrResponse[]> addrSearch(@RequestBody BusinessAddrRequest dto) {
+
         BusinessAddrResponse[] result = businessApiService.searchAddr(dto);
         return (result !=null)? ResponseEntity.ok(result):ResponseEntity.badRequest().build();
     }
 
-    @PostMapping("/testAjax")
-    public ResponseEntity<BusinessAddrResponse> testCode(@RequestBody testBusinessResponse check){
-        System.out.println(check);
+    @PostMapping("/validation")
+    public ResponseEntity<BusinessAddrResponse> businessValidation(@RequestBody BusinessValidationRequest dto){
+        BusinessValidationResponse result = businessApiService(dto);
         return null;
+    }
+
+    private BusinessValidationResponse businessApiService(BusinessValidationRequest dto) {
+
+
+
     }
 }

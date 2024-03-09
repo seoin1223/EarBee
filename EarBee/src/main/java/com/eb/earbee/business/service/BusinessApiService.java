@@ -55,6 +55,7 @@ public class BusinessApiService {
     // 사업자 번호 조회 메서드
     @Transactional
     public BusinessApplyResponse businessSearchNum(BusinessApplyRequest dto) {
+
         try {
             URL url = new URL(urlBusiness+encodingKey);
             HttpURLConnection con = openHttpURLConnection(url);
@@ -91,6 +92,8 @@ public class BusinessApiService {
         }
     }
 
+
+    // 주소 검색 메서드
     @Transactional
     public BusinessAddrResponse[] searchAddr(BusinessAddrRequest dto) {
         try {
@@ -121,7 +124,10 @@ public class BusinessApiService {
             JsonNode rootNode = parseJson(result);
 
             JsonNode resultsNode = rootNode.get("results");
+            JsonNode commonNode = resultsNode.get("common");
             JsonNode jusoListNode = resultsNode.get("juso");
+
+            int totalCount = Integer.parseInt(commonNode.get("totalCount").asText());
 
             ArrayList<BusinessAddrResponse> addrList = new ArrayList<>();
 
@@ -131,7 +137,7 @@ public class BusinessApiService {
                 String siNm = jusoNode.get("siNm").asText();
                 String roadAddr = jusoNode.get("roadAddr").asText();
 
-                BusinessAddrResponse businessAddrResponse = new BusinessAddrResponse(zipNo,siNm,roadAddr);
+                BusinessAddrResponse businessAddrResponse = new BusinessAddrResponse(zipNo,siNm,roadAddr,totalCount);
                 addrList.add(businessAddrResponse);
             }
 
