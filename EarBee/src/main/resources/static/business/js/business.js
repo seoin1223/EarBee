@@ -137,6 +137,7 @@ function checkAddr(obj) {
     return true;
 }
 
+// 주소 검색 ajax
 
 function searchAddr() {
     const addr = document.querySelector('#inputNumber');
