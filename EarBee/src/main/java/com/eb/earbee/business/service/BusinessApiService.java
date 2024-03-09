@@ -1,14 +1,18 @@
 package com.eb.earbee.business.service;
 
 
+import com.eb.earbee.business.entity.Business;
+import com.eb.earbee.business.repository.BusinessRepository;
 import com.eb.earbee.business.request.BusinessAddrRequest;
 import com.eb.earbee.business.request.BusinessApplyRequest;
 
+import com.eb.earbee.business.request.BusinessValidationRequest;
 import com.eb.earbee.business.response.BusinessAddrResponse;
 import com.eb.earbee.business.response.BusinessApplyResponse;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 
@@ -30,6 +34,10 @@ import java.util.List;
 @PropertySource("classpath:business.properties")
 
 public class BusinessApiService {
+
+    @Autowired
+    BusinessRepository businessRepository;
+
 
     @Value("${business.url}")
     private String urlBusiness;
@@ -55,7 +63,6 @@ public class BusinessApiService {
     // 사업자 번호 조회 메서드
     @Transactional
     public BusinessApplyResponse businessSearchNum(BusinessApplyRequest dto) {
-
         try {
             URL url = new URL(urlBusiness+encodingKey);
             HttpURLConnection con = openHttpURLConnection(url);
@@ -77,7 +84,6 @@ public class BusinessApiService {
 
             if (matchCnt != null) {
                 JsonNode dataNode = rootNode.get("data").get(0);
-
                 int bNo = dataNode.get("b_no").asInt();
                 int bSttCd = dataNode.get("b_stt_cd").asInt();
 
@@ -128,11 +134,12 @@ public class BusinessApiService {
             JsonNode jusoListNode = resultsNode.get("juso");
 
             int totalCount = Integer.parseInt(commonNode.get("totalCount").asText());
-
+            System.out.println(totalCount);
             ArrayList<BusinessAddrResponse> addrList = new ArrayList<>();
 
             // 안에 내용 꺼내서 ArrayList에 담기
             for (JsonNode jusoNode : jusoListNode) {
+
                 String zipNo = jusoNode.get("zipNo").asText();
                 String siNm = jusoNode.get("siNm").asText();
                 String roadAddr = jusoNode.get("roadAddr").asText();
@@ -147,6 +154,42 @@ public class BusinessApiService {
             throw new RuntimeException(e);
         }
     }
+
+    // 현재 입력한 사업체 정보 유무 체크하는 함수
+    @Transactional
+    public Business checkValidation(BusinessValidationRequest dto) {
+        return businessRepository.checkEntity(dto.getBNo(),dto.getZipCode());
+        // 있으면 Business를 반환하고 없으면 null을 반환하게 됨
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // HTTP 프로토콜을 사용하여 서버와 연결할 객체를 반환
     private HttpURLConnection openHttpURLConnection(URL url) throws IOException {
@@ -178,6 +221,8 @@ public class BusinessApiService {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readTree(jsonString);
     }
+
+
 }
 
 
