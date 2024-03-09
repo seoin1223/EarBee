@@ -23,7 +23,7 @@ function validatePhoneNumber() {
 
 // 모달창 이벤트
 const Modal = document.getElementById('Modal');
-document.querySelector('#inputNumber').addEventListener('keypress', handleKeyPress);
+
 
 if (Modal) {
     Modal.addEventListener('show.bs.modal', event => {
@@ -51,8 +51,7 @@ if (Modal) {
 // 조회 버튼이 어떤 조회버튼인지 구분하는 함수
 function search() { // 조회가 사업자 조회인지 주소 검색인지 분류
     const dataSortType = document.querySelector('#searchType').getAttribute('data-sort-type');
-
-        searchAddr();
+    searchAddr();
 }
 
 // 주소 검색 필터링
