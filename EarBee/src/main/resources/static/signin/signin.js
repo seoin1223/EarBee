@@ -184,9 +184,12 @@ function displaySearchResults(results) {
             }
         };
 
+        console.log(result.zipNo);
+
         // 결과 필드에 따라 수정
         const nameCell = document.createElement('td');
         nameCell.textContent = result.zipNo;
+
         nameCell.style.width = '20%'; // 스타일 직접 설정
         nameCell.style.textAlign = 'center';
         nameCell.style.fontSize = '10px';
