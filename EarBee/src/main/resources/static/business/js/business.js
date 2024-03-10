@@ -250,7 +250,7 @@ function displaySearchResults(results) {
         const additionalInfoCell = document.createElement('td');
         const link = document.createElement('a');
         link.textContent = result.roadAddr; // 추가 정보가 없으면 빈 문자열 처리
-        link.style.fontSize='10px';
+        link.style.fontSize = '10px';
         additionalInfoCell.appendChild(link);
 
         row.appendChild(additionalInfoCell);
@@ -289,9 +289,10 @@ function businessSubmit() {
 }
 
 // 왼쪽 section 중복 체크 이벤트
-function duplicateCheck(){
+function duplicateCheck() {
     const dataToSend = checkBusiness(); // checkBusiness 함수를 통해 반환된 객체를 변수에 저장
-
+    const firstSection = document.getElementById("firstSection");
+    const secondSection = document.getElementById("secondSection");
     if (!dataToSend) { // 빈칸이 있는지 확인
         alert("빈칸을 채워주세요");
     } else { // 빈칸이 없으면 AJAX 요청 보냄
@@ -301,11 +302,61 @@ function duplicateCheck(){
             contentType: "application/json", // Content-Type 설정
             data: JSON.stringify(dataToSend),
             dataType: "json",
-        }).done((res)=>{
+        }).done((res) => {
             alert("신청할 수 있는 사업체입니다");
-        }).fail((err)=>{
+
+
+
+            // 첫번째 section의 너비를 12에서 6으로 바꿔준다.
+            firstSection.classList.remove('col-12');
+            firstSection.classList.add('col-6');
+
+            secondSection.style.display = 'block';
+
+
+        }).fail((err) => {
             alert("이미 중복된 사업체입니다");
         });
+    }
+}
+
+// 우측 section 방 추가 메서드
+function AddRoom() {
+    const countRoom = document.getElementById('countRoom');
+    let totalCount = parseInt(countRoom.value) + 1;
+
+    // 일정 범위를 초과하는지 확인
+    if (totalCount <= 15) { // 15개 이하로 제한
+        countRoom.value = totalCount;
+
+        // 새로운 div 요소 생성
+        const newRow = document.createElement('div');
+        newRow.className = 'row mt-2';
+
+        // div 내부에 컬럼 요소 추가
+        newRow.innerHTML = `
+            <div class="col">
+                <img src="#" alt="#">
+            </div>
+            <div class="col">
+                <input type="number" class="form-control">
+            </div>
+            <div class="col">
+                <input type="number" value="0" class="form-control">
+            </div>
+            <div class="col">
+                <select class="form-control">
+                    <option value="1">Tj</option>
+                    <option value="2">금영</option>
+                </select>
+            </div>
+        `;
+
+        // section 요소 내에 새로운 row를 추가합니다.
+        const section = document.getElementById('secondSection');
+        section.appendChild(newRow);
+    } else {
+        alert('최대 개수를 초과했습니다.');
     }
 }
 
