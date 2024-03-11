@@ -304,16 +304,11 @@ function duplicateCheck() {
             dataType: "json",
         }).done((res) => {
             alert("신청할 수 있는 사업체입니다");
-
-
-
             // 첫번째 section의 너비를 12에서 6으로 바꿔준다.
             firstSection.classList.remove('col-12');
             firstSection.classList.add('col-6');
 
             secondSection.style.display = 'block';
-
-
         }).fail((err) => {
             alert("이미 중복된 사업체입니다");
         });
@@ -359,4 +354,20 @@ function AddRoom() {
         alert('최대 개수를 초과했습니다.');
     }
 }
+
+
+document.getElementById('previewImage').addEventListener('click', function() {
+    document.getElementById('fileInput').click();
+});
+
+document.getElementById('fileInput').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('previewImage').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+});
 
