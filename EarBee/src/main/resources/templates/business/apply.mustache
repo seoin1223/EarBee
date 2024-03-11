@@ -9,10 +9,11 @@
                 <div class="container">
                     <div class="row" style="height: 200px">
                         <div class="col-3 mt-2">
-                            <img src="#" alt="#" style="max-width: 100%;min-width: 100%; min-height: 100%;">
+                            <img id="previewImage" src="#" alt="#" style="min-width: 100%; min-height: 100%; max-width: 100%; max-height: 100px; object-fit: contain;">
                         </div>
+                        <input type="file" id="fileInput" style="display: none;">
                         <div class="col-9 container mt-2">
-                            <label class=" mb-2" style="height: 20%">소개</label>
+                            <label class="mb-2" style="height: 20%">소개</label>
                             <textarea class="form-control" style="height: 75%; width: 90.5%;"></textarea>
                         </div>
                     </div>
@@ -93,6 +94,23 @@
                 <div class="container mt-3 d-flex justify-content-between">
                     <input type="number" value="1" id="countRoom" name="countRoom">
                     <button onclick="AddRoom()" type="button">추가</button>
+                </div>
+                <div class="row mt-2">
+                    <div class="col text-center">
+                        <label>내부 사진</label>
+                    </div>
+
+                    <div class="col text-center">
+                        <label>호실</label>
+                    </div>
+
+                    <div class="col text-center">
+                        <label>적정 인원수</label>
+                    </div>
+
+                    <div class="col text-center">
+                        <label>업종</label>
+                    </div>
                 </div>
 
                 <div class="row mt-2">
