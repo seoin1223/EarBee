@@ -28,6 +28,7 @@ if (Modal) {
         if (modalType !== 'business') {
             document.getElementById("inputNumber").value = "";
             document.querySelector('#inputNumber').setAttribute("placeholder", "매곡푸르지오");
+            document.querySelector('#inputNumber').setAttribute('data-current-page', "1");
             document.querySelector('#searchType').setAttribute('data-sort-type', 'address')
             document.querySelector('#inputNumber').setAttribute('type', 'text');
         } else {
@@ -100,12 +101,13 @@ function searchBusiness() {
         }
 
     }).catch(error => {
-
         return false;
-
     });
-
 }
+
+
+
+
 
 // 주소 검색 필터링
 function checkAddr(obj) {
@@ -139,19 +141,25 @@ function checkAddr(obj) {
     return true;
 }
 
-// 주소 검색 ajax
 
-function searchAddr() {
+
+
+
+// 주소 검색 ajax
+function searchAddr(keyword) {
     const addr = document.querySelector('#inputNumber');
     const searchResultsDiv = document.getElementById('searchResults');
-    searchResultsDiv.innerHTML = ''; // 이전에 표시된 결과를 초기화
+    // searchResultsDiv.innerHTML = ''; // 이전에 표시된 결과를 초기화 -> 페이징 처리로 인해 주석
     if (!checkAddr(addr)) {
         // 검증에 실패하면 여기서 중단하고 이후 코드를 실행하지 않음
         return false;
     }
 
     const url = "/api/business/addr";
-    const body = {keyword: addr.value};
+    const body = {
+        keyword: addr.value,
+        currentPage:addr.dataset.currentPage
+    };
 
     fetch(url, {
         method: "POST",  // HTTP 메서드는 대문자로 지정
@@ -166,6 +174,7 @@ function searchAddr() {
                 // 응답이 실패하면 에러 처리
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
+
             console.log("HTTP 응답 정상 확인");
 
             // JSON 데이터 파싱 및 반환
@@ -175,9 +184,11 @@ function searchAddr() {
             // 서버로부터 받은 데이터 처리
             if (data != null) {
                 displaySearchResults(data);
+
             } else {
                 // 받은 데이터가 null이면 실패로 처리
                 throw new Error('Received data is null.');
+
             }
         })
         .catch(error => {
@@ -186,14 +197,25 @@ function searchAddr() {
 }
 
 
+
+function handleMouseOver(row){
+    row.style.backgroundColor = '#e6f7ff'; // 마우스가 나갔을 때 배경색 초기화 (기본값으로)
+}
+
+function handleMouseLeave(row){
+    row.style.backgroundColor = ''; // 마우스가 나갔을 때 배경색 초기화 (기본값으로)
+}
+
+
+
+
 function displaySearchResults(results) {
     const searchResultsDiv = document.getElementById('searchResults');
     searchResultsDiv.innerHTML = ''; // 이전에 표시된 결과를 초기화
-
+    let contextCount = results.length; // 배열의 총 개수
 
     // 결과를 표시할 테이블 생성
     const table = document.createElement('table');
-
     table.classList.add('table', 'table-scroll'); // Bootstrap의 테이블 스타일을 사용하려면 'table' 클래스를 추가
 
     // 테이블 헤더 생성
@@ -212,45 +234,41 @@ function displaySearchResults(results) {
     // 헤더를 테이블에 추가
     table.appendChild(headerRow);
 
+
+
+
     // 결과를 순회하면서 각 행을 생성하여 추가
     results.forEach(result => {
         const row = document.createElement('tr');
-        row.addEventListener('mouseover', function () {
-            row.style.backgroundColor = '#e6f7ff'; // 마우스가 올라갔을 때 배경색 변경
-        });
-
-        // 마우스가 행에서 나갔을 때의 이벤트 처리
-        row.addEventListener('mouseout', function () {
-            row.style.backgroundColor = ''; // 마우스가 나갔을 때 배경색 초기화 (기본값으로)
-        });
+        row.addEventListener('mouseover',  () => handleMouseOver(row));
+        row.addEventListener('mouseleave', ()=>handleMouseLeave(row));
         row.onclick = function (event) {
             const zipCode = document.getElementById('zipCode');
             const addr = document.getElementById('addr');
             const details = document.getElementById('detail');
 
             const textContentArray = Array.from(event.currentTarget.children).map(td => td.textContent);
-            console.log(textContentArray);
             if (textContentArray.length >= 2) {
                 zipCode.value = textContentArray[0];
                 addr.value = textContentArray[1];
                 details.readOnly = false;
                 $('#Modal').modal('hide'); // 모달창 숨기기
             }
-        };
+        }
 
         // 결과 필드에 따라 수정
         const nameCell = document.createElement('td');
         nameCell.textContent = result.zipNo;
         nameCell.style.width = '20%'; // 스타일 직접 설정
         nameCell.style.textAlign = 'center';
-        nameCell.style.fontSize = '10px';
+        nameCell.style.fontSize = '15px';
         row.appendChild(nameCell);
 
         // 추가 정보 필드에 따라 수정
         const additionalInfoCell = document.createElement('td');
         const link = document.createElement('a');
         link.textContent = result.roadAddr; // 추가 정보가 없으면 빈 문자열 처리
-        link.style.fontSize = '10px';
+        link.style.fontSize = '15px';
         additionalInfoCell.appendChild(link);
 
         row.appendChild(additionalInfoCell);
@@ -259,9 +277,80 @@ function displaySearchResults(results) {
         table.appendChild(row);
     });
 
+
+    // 페이징 처리 추가
+
+    let current = results[0].currentPage;
+    let totalCount = results[0].totalCount;
+    let totalPages = Math.ceil(totalCount / 10);
+
+    const empt1 = document.createElement('tr'); // tr
+    const empt2 = document.createElement('td'); //td
+    const emtDiv = document.createElement('div'); //btn
+    empt2.colSpan = 2;
+    emtDiv.style.height = '30px'
+
+    empt2.appendChild(emtDiv);
+    empt1.appendChild(empt2);
+    table.appendChild(empt1);
+
+    const rowPageing = document.createElement('tfoot'); // tr
+    rowPageing.style.padding = '15px'
+    const paginationCell = document.createElement('td'); //td
+
+    paginationCell.colSpan = 2;
+    paginationCell.style.textAlign = 'center';
+
+    // 페이징 버튼 생성
+    const prevButton = document.createElement('button'); //btn
+    prevButton.style.display = 'inline-block';
+    prevButton.textContent = '<';
+
+    // 이전 페이지로 이동하는 이벤트 핸들러 추가
+    prevButton.addEventListener('click', () => {
+        // 이전 페이지 로직 구현할곳
+    });
+
+    paginationCell.appendChild(prevButton); //td < btn
+    // 페이지 번호 버튼을 생성하여 추가
+
+    for (let i = 1; i <= 5; i++) {
+        const pageButton = document.createElement('button'); // 페이지 버튼
+        pageButton.style.display = 'inline-block';
+        pageButton.textContent = i;
+
+        // 페이지 번호를 클릭하는 이벤트 핸들러 추가
+        pageButton.addEventListener('click', () => {
+        });
+
+        paginationCell.appendChild(pageButton); // 페이지 버튼을 컨테이너에 추가
+    }
+
+
+
+    const nextButton = document.createElement('button'); // btn
+    nextButton.style.display = 'inline-block';
+    nextButton.textContent = '>';
+
+    // 다음 페이지로 이동하는 이벤트 핸들러 추가
+    nextButton.addEventListener('click', () => {
+
+        // 다음 페이지 로직 구현할곳
+    });
+
+    paginationCell.appendChild(nextButton); // td < btn
+
+    rowPageing.appendChild(paginationCell); // tr < td
+
     // 테이블을 결과 표시 영역에 추가
+    table.appendChild(rowPageing); // table < tr
     searchResultsDiv.appendChild(table);
+
 }
+
+
+
+
 
 // business 빈칸 내역 확인 함수(왼쪽)
 function checkBusiness() {
