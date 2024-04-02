@@ -109,8 +109,9 @@ public class BusinessApiService {
                 System.out.println("검색어가 입력되지 않았습니다.");
                 return null;
             }
+            System.out.println("현재 페이지 " +dto.getCurrentPage());
 
-            String postData = String.format("confmKey=%s&currentPage=1&keyword=%s&countPerPage=10&resultType=json",
+            String postData = String.format("confmKey=%s&currentPage="+dto.getCurrentPage()+"&keyword=%s&countPerPage=10&resultType=json",
                     URLEncoder.encode(confmKey, StandardCharsets.UTF_8), encodedKeyword);
 
             URL url = new URL(urlAddr);
@@ -138,13 +139,15 @@ public class BusinessApiService {
             ArrayList<BusinessAddrResponse> addrList = new ArrayList<>();
 
             // 안에 내용 꺼내서 ArrayList에 담기
+            int id = 1;
             for (JsonNode jusoNode : jusoListNode) {
 
                 String zipNo = jusoNode.get("zipNo").asText();
                 String siNm = jusoNode.get("siNm").asText();
                 String roadAddr = jusoNode.get("roadAddr").asText();
+                int current = dto.getCurrentPage();
 
-                BusinessAddrResponse businessAddrResponse = new BusinessAddrResponse(zipNo,siNm,roadAddr,totalCount);
+                BusinessAddrResponse businessAddrResponse = new BusinessAddrResponse(id++,zipNo,siNm,roadAddr,current,totalCount);
                 addrList.add(businessAddrResponse);
             }
 
