@@ -146,7 +146,7 @@ function checkAddr(obj) {
 
 
 // 주소 검색 ajax
-function searchAddr(keyword) {
+function searchAddr(keyword,check) {
     const addr = document.querySelector('#inputNumber');
     const searchResultsDiv = document.getElementById('searchResults');
     // searchResultsDiv.innerHTML = ''; // 이전에 표시된 결과를 초기화 -> 페이징 처리로 인해 주석
@@ -183,7 +183,7 @@ function searchAddr(keyword) {
         .then(data => {
             // 서버로부터 받은 데이터 처리
             if (data != null) {
-                displaySearchResults(data);
+                displaySearchResults(data,addr.dataset.currentPage, 5); // result, currentPage, pageSize -> 후에 만약 pageSize 바꿀때 넘기는 파라메타 값을 변경하면 됨
 
             } else {
                 // 받은 데이터가 null이면 실패로 처리
@@ -207,256 +207,375 @@ function handleMouseLeave(row){
 }
 
 
+function displaySearchResults(result, currentPage, pageSize){
+    const searchResultDiv = document.getElementById('searchResults');
+    clearSearchResults(searchResultDiv);
 
+    const table = createTable(result, currentPage, pageSize);
 
-function displaySearchResults(results) {
-    const searchResultsDiv = document.getElementById('searchResults');
-    searchResultsDiv.innerHTML = ''; // 이전에 표시된 결과를 초기화
-    let contextCount = results.length; // 배열의 총 개수
+    searchResultDiv.appendChild(table);
+}
 
-    // 결과를 표시할 테이블 생성
+function clearSearchResults(searchResultsDiv){
+    searchResultsDiv.innerHTML=''; // 결과를 초기화 -> 테이블을 지웠다가 다시 생성
+}
+
+function createTable(results, currentPage, pageSize){
     const table = document.createElement('table');
-    table.classList.add('table', 'table-scroll'); // Bootstrap의 테이블 스타일을 사용하려면 'table' 클래스를 추가
+    table.classList.add('table', 'table-scroll');
 
-    // 테이블 헤더 생성
-    const headerRow = document.createElement('tr');
-    const nameLabel = document.createElement('th');
-    nameLabel.textContent = '우편번호'; // 결과의 필드에 따라 수정
-    nameLabel.style.width = '20%'; //
-    nameLabel.style.textAlign = 'center'; // 텍스트 정렬 설정
-    headerRow.appendChild(nameLabel);
-
-    const additionalInfoLabel = document.createElement('th');
-    additionalInfoLabel.textContent = '도로명 주소'; // 추가 정보의 필드에 따라 수정
-    additionalInfoLabel.style.textAlign = 'center';
-    headerRow.appendChild(additionalInfoLabel);
-
-    // 헤더를 테이블에 추가
+    const headerRow = createHeaderRow();
     table.appendChild(headerRow);
 
-
-
-
-    // 결과를 순회하면서 각 행을 생성하여 추가
-    results.forEach(result => {
-        const row = document.createElement('tr');
-        row.addEventListener('mouseover',  () => handleMouseOver(row));
-        row.addEventListener('mouseleave', ()=>handleMouseLeave(row));
-        row.onclick = function (event) {
-            const zipCode = document.getElementById('zipCode');
-            const addr = document.getElementById('addr');
-            const details = document.getElementById('detail');
-
-            const textContentArray = Array.from(event.currentTarget.children).map(td => td.textContent);
-            if (textContentArray.length >= 2) {
-                zipCode.value = textContentArray[0];
-                addr.value = textContentArray[1];
-                details.readOnly = false;
-                $('#Modal').modal('hide'); // 모달창 숨기기
-            }
-        }
-
-        // 결과 필드에 따라 수정
-        const nameCell = document.createElement('td');
-        nameCell.textContent = result.zipNo;
-        nameCell.style.width = '20%'; // 스타일 직접 설정
-        nameCell.style.textAlign = 'center';
-        nameCell.style.fontSize = '15px';
-        row.appendChild(nameCell);
-
-        // 추가 정보 필드에 따라 수정
-        const additionalInfoCell = document.createElement('td');
-        const link = document.createElement('a');
-        link.textContent = result.roadAddr; // 추가 정보가 없으면 빈 문자열 처리
-        link.style.fontSize = '15px';
-        additionalInfoCell.appendChild(link);
-
-        row.appendChild(additionalInfoCell);
-
-        // 행을 테이블에 추가
+    for (let i = 0; i < Math.min(results.length, 10); i++) {
+        const result = results[i];
+        const row = createRow(result);
         table.appendChild(row);
-    });
-
-
-    // 페이징 처리 추가
-
-    let current = results[0].currentPage;
-    let totalCount = results[0].totalCount;
-    let totalPages = Math.ceil(totalCount / 10);
-
-    const empt1 = document.createElement('tr'); // tr
-    const empt2 = document.createElement('td'); //td
-    const emtDiv = document.createElement('div'); //btn
-    empt2.colSpan = 2;
-    emtDiv.style.height = '30px'
-
-    empt2.appendChild(emtDiv);
-    empt1.appendChild(empt2);
-    table.appendChild(empt1);
-
-    const rowPageing = document.createElement('tfoot'); // tr
-    rowPageing.style.padding = '15px'
-    const paginationCell = document.createElement('td'); //td
-
-    paginationCell.colSpan = 2;
-    paginationCell.style.textAlign = 'center';
-
-    // 페이징 버튼 생성
-    const prevButton = document.createElement('button'); //btn
-    prevButton.style.display = 'inline-block';
-    prevButton.textContent = '<';
-
-    // 이전 페이지로 이동하는 이벤트 핸들러 추가
-    prevButton.addEventListener('click', () => {
-        // 이전 페이지 로직 구현할곳
-    });
-
-    paginationCell.appendChild(prevButton); //td < btn
-    // 페이지 번호 버튼을 생성하여 추가
-
-    for (let i = 1; i <= 5; i++) {
-        const pageButton = document.createElement('button'); // 페이지 버튼
-        pageButton.style.display = 'inline-block';
-        pageButton.textContent = i;
-
-        // 페이지 번호를 클릭하는 이벤트 핸들러 추가
-        pageButton.addEventListener('click', () => {
-        });
-
-        paginationCell.appendChild(pageButton); // 페이지 버튼을 컨테이너에 추가
     }
 
+    const empty1 = document.createElement('tr'); // tr
+    const empty2 = document.createElement('td'); //td
+    const emtDiv = document.createElement('div'); //btn
+    empty2.colSpan = 2;
+    emtDiv.style.height = '30px'
+
+    empty2.appendChild(emtDiv);
+    empty1.appendChild(empty2);
+    table.appendChild(empty1);
+
+    // const paginationRow = createPaginationRow(currentPage, pageSize, result.length);
+    // table.appendChild(paginationRow);
+
+    return table;
+}
+
+function createHeaderRow() {
+    const headerRow = document.createElement('tr');
+    headerRow.classList.add('header-row'); // CSS 클래스 추가
+
+    const nameLabel = createTableHeaderCell('우편번호', '20%'); // 너비 설정 추가
+    headerRow.appendChild(nameLabel);
+
+    const additionalInfoLabel = createTableHeaderCell('도로명 주소', '80%'); // 너비 설정 추가
+    headerRow.appendChild(additionalInfoLabel);
+
+    return headerRow;
+}
 
 
-    const nextButton = document.createElement('button'); // btn
-    nextButton.style.display = 'inline-block';
-    nextButton.textContent = '>';
+function createTableHeaderCell(text, width) {
+    const cell = document.createElement('th');
+    cell.textContent = text;
+    cell.style.width = width; // 너비 설정
+    cell.style.textAlign = 'center';
+    return cell;
+}
 
-    // 다음 페이지로 이동하는 이벤트 핸들러 추가
-    nextButton.addEventListener('click', () => {
+function createRow(result) {
+    const row = document.createElement('tr');
 
-        // 다음 페이지 로직 구현할곳
-    });
+    // 마우스 오버 이벤트 추가
+    row.addEventListener('mouseover', () => handleMouseOver(row));
+    row.addEventListener('mouseleave', () => handleMouseLeave(row));
 
-    paginationCell.appendChild(nextButton); // td < btn
+    // 클릭 이벤트 추가
+    row.onclick = function (event) {
+        const zipCode = document.getElementById('zipCode');
+        const addr = document.getElementById('addr');
+        const details = document.getElementById('detail');
 
-    rowPageing.appendChild(paginationCell); // tr < td
+        const textContentArray = Array.from(event.currentTarget.children).map(td => td.textContent);
+        // 선택한 행의 정보를 array로 담아냄
+        if (textContentArray.length >= 2) {
+            zipCode.value = textContentArray[0];
+            addr.value = textContentArray[1];
+            details.readOnly = false;
+            $('#Modal').modal('hide'); // 모달창 숨기기
+        }
+    }
 
-    // 테이블을 결과 표시 영역에 추가
-    table.appendChild(rowPageing); // table < tr
-    searchResultsDiv.appendChild(table);
+    // 각 열 생성 및 추가
+    const nameCell = document.createElement('td');
+    nameCell.textContent = result.zipNo;
+    nameCell.style.width = '20%'; // 스타일 직접 설정
+    nameCell.style.textAlign = 'center';
+    nameCell.style.fontSize = '15px';
+    row.appendChild(nameCell);
+
+    const additionalInfoCell = document.createElement('td');
+    const link = document.createElement('a');
+    link.textContent = result.roadAddr; // 추가 정보가 없으면 빈 문자열 처리
+    link.style.fontSize = '15px';
+    additionalInfoCell.appendChild(link);
+    row.appendChild(additionalInfoCell);
+
+    return row;
 
 }
 
 
+function createPaginationRow() {
+    const paginationRow = document.createElement('tr');
 
+    // 페이지네이션 버튼 생성 등의 코드 추가
+
+    return paginationRow;
+}
+    /*
+    function displaySearchResults(results,check,addr) {
+        const searchResultsDiv = document.getElementById('searchResults');
+        let i = addr.dataset.currentPage
+        let j = i+5
+        if(!check){
+            searchResultsDiv.innerHTML = ''; // 이전에 표시된 결과를 초기화
+        }else{
+            i = j
+            j= i+5
+        }
+
+        let contextCount = results.length; // 배열의 총 개수
+
+        // 결과를 표시할 테이블 생성
+        const table = document.createElement('table');
+        table.classList.add('table', 'table-scroll'); // Bootstrap의 테이블 스타일을 사용하려면 'table' 클래스를 추가
+
+        // 테이블 헤더 생성
+        const headerRow = document.createElement('tr');
+        headerRow.style.height = '40px'
+        const nameLabel = document.createElement('th');
+        nameLabel.textContent = '우편번호'; // 결과의 필드에 따라 수정
+        nameLabel.style.width = '20%'; //
+        nameLabel.style.textAlign = 'center'; // 텍스트 정렬 설정
+
+        headerRow.appendChild(nameLabel);
+
+        const additionalInfoLabel = document.createElement('th');
+        additionalInfoLabel.textContent = '도로명 주소'; // 추가 정보의 필드에 따라 수정
+        additionalInfoLabel.style.textAlign = 'center';
+        headerRow.appendChild(additionalInfoLabel);
+
+        // 헤더를 테이블에 추가
+        table.appendChild(headerRow);
+
+
+
+
+        // 결과를 순회하면서 각 행을 생성하여 추가
+        results.forEach(result => {
+            const row = document.createElement('tr');
+            row.addEventListener('mouseover',  () => handleMouseOver(row));
+            row.addEventListener('mouseleave', ()=>handleMouseLeave(row));
+            row.onclick = function (event) {
+                const zipCode = document.getElementById('zipCode');
+                const addr = document.getElementById('addr');
+                const details = document.getElementById('detail');
+
+                const textContentArray = Array.from(event.currentTarget.children).map(td => td.textContent);
+                // 선택한 행의 정보를 array로 담아냄
+                if (textContentArray.length >= 2) {
+                    zipCode.value = textContentArray[0];
+                    addr.value = textContentArray[1];
+                    details.readOnly = false;
+                    $('#Modal').modal('hide'); // 모달창 숨기기
+                }
+            }
+
+            // 결과 필드에 따라 수정
+            const nameCell = document.createElement('td');
+            nameCell.textContent = result.zipNo;
+            nameCell.style.width = '20%'; // 스타일 직접 설정
+            nameCell.style.textAlign = 'center';
+            nameCell.style.fontSize = '15px';
+            row.appendChild(nameCell);
+
+            // 추가 정보 필드에 따라 수정
+            const additionalInfoCell = document.createElement('td');
+            const link = document.createElement('a');
+            link.textContent = result.roadAddr; // 추가 정보가 없으면 빈 문자열 처리
+            link.style.fontSize = '15px';
+            additionalInfoCell.appendChild(link);
+
+            row.appendChild(additionalInfoCell);
+
+            // 행을 테이블에 추가
+            table.appendChild(row);
+        });
+
+
+        // 페이징 처리 추가
+
+        // let current = results[0].currentPage;
+        // let totalCount = results[0].totalCount;
+        // let totalPages = Math.ceil(totalCount / 10);
+
+        const empt1 = document.createElement('tr'); // tr
+        const empt2 = document.createElement('td'); //td
+        const emtDiv = document.createElement('div'); //btn
+        empt2.colSpan = 2;
+        emtDiv.style.height = '30px'
+
+        empt2.appendChild(emtDiv);
+        empt1.appendChild(empt2);
+        table.appendChild(empt1);
+
+        const rowPageing = document.createElement('tfoot'); // tr
+        rowPageing.style.padding = '15px'
+        const paginationCell = document.createElement('td'); //td
+
+        paginationCell.colSpan = 2;
+        paginationCell.style.textAlign = 'center';
+
+        // 페이징 버튼 생성
+        const prevButton = document.createElement('button'); //btn
+        prevButton.style.display = 'inline-block';
+        prevButton.textContent = '<';
+
+        // 이전 페이지로 이동하는 이벤트 핸들러 추가
+        prevButton.addEventListener('click', () => {
+            // 이전 페이지 로직 구현할곳
+        });
+
+        paginationCell.appendChild(prevButton); //td < btn
+        // 페이지 번호 버튼을 생성하여 추가
+
+        for (let k = i; k < j; k++) {
+            const pageButton = document.createElement('button'); // 페이지 버튼
+            pageButton.style.display = 'inline-block';
+            pageButton.textContent = k;
+
+            // 페이지 번호를 클릭하는 이벤트 핸들러 추가
+            pageButton.addEventListener('click', () => {
+            });
+
+            paginationCell.appendChild(pageButton);
+        }
+
+        const nextButton = document.createElement('button'); // btn
+        nextButton.style.display = 'inline-block';
+        nextButton.textContent = '>';
+
+        // 다음 페이지로 이동하는 이벤트 핸들러 추가
+        nextButton.addEventListener('click', () => {
+
+            // 다음 페이지 로직 구현할곳
+        });
+
+        paginationCell.appendChild(nextButton); // td < btn
+
+        rowPageing.appendChild(paginationCell); // tr < td
+
+        // 테이블을 결과 표시 영역에 추가
+        table.appendChild(rowPageing); // table < tr
+        searchResultsDiv.appendChild(table);
+    }
+    */
 
 
 // business 빈칸 내역 확인 함수(왼쪽)
-function checkBusiness() {
-    const bNo = document.getElementById('businessNum').value.trim();
-    const zipCode = document.getElementById('zipCode').value.trim();
-    const addr = document.getElementById('addr').value.trim();
-    const detail = document.getElementById('detail').value.trim();
+    function checkBusiness() {
+        const bNo = document.getElementById('businessNum').value.trim();
+        const zipCode = document.getElementById('zipCode').value.trim();
+        const addr = document.getElementById('addr').value.trim();
+        const detail = document.getElementById('detail').value.trim();
 
-    if (bNo === '' || zipCode === '' || addr === '' || detail === '') {
-        return false; // 빈칸이 있으면 false 반환
-    } else {
-        return { // 객체를 반환
-            bNo: bNo,
-            zipCode: zipCode,
-            addr: addr,
-            detail: detail
-        };
+        if (bNo === '' || zipCode === '' || addr === '' || detail === '') {
+            return false; // 빈칸이 있으면 false 반환
+        } else {
+            return { // 객체를 반환
+                bNo: bNo,
+                zipCode: zipCode,
+                addr: addr,
+                detail: detail
+            };
+        }
     }
-}
 
-function businessSubmit() {
-    if (checkBusiness()) {
-        document.getElementById('form').submit();
+    function businessSubmit() {
+        if (checkBusiness()) {
+            document.getElementById('form').submit();
+        }
     }
-}
 
 // 왼쪽 section 중복 체크 이벤트
-function duplicateCheck() {
-    const dataToSend = checkBusiness(); // checkBusiness 함수를 통해 반환된 객체를 변수에 저장
-    const firstSection = document.getElementById("firstSection");
-    const secondSection = document.getElementById("secondSection");
-    if (!dataToSend) { // 빈칸이 있는지 확인
-        alert("빈칸을 채워주세요");
-    } else { // 빈칸이 없으면 AJAX 요청 보냄
-        $.ajax({
-            url: "/api/business/validation",
-            method: "POST",
-            contentType: "application/json", // Content-Type 설정
-            data: JSON.stringify(dataToSend),
-            dataType: "json",
-        }).done((res) => {
-            alert("신청할 수 있는 사업체입니다");
-            // 첫번째 section의 너비를 12에서 6으로 바꿔준다.
-            firstSection.classList.remove('col-12');
-            firstSection.classList.add('col-6');
+    function duplicateCheck() {
+        const dataToSend = checkBusiness(); // checkBusiness 함수를 통해 반환된 객체를 변수에 저장
+        const firstSection = document.getElementById("firstSection");
+        const secondSection = document.getElementById("secondSection");
+        if (!dataToSend) { // 빈칸이 있는지 확인
+            alert("빈칸을 채워주세요");
+        } else { // 빈칸이 없으면 AJAX 요청 보냄
+            $.ajax({
+                url: "/api/business/validation",
+                method: "POST",
+                contentType: "application/json", // Content-Type 설정
+                data: JSON.stringify(dataToSend),
+                dataType: "json",
+            }).done((res) => {
+                alert("신청할 수 있는 사업체입니다");
+                // 첫번째 section의 너비를 12에서 6으로 바꿔준다.
+                firstSection.classList.remove('col-12');
+                firstSection.classList.add('col-6');
 
-            secondSection.style.display = 'block';
-        }).fail((err) => {
-            alert("이미 중복된 사업체입니다");
-        });
+                secondSection.style.display = 'block';
+            }).fail((err) => {
+                alert("이미 중복된 사업체입니다");
+            });
+        }
     }
-}
 
 // 우측 section 방 추가 메서드
-function AddRoom() {
-    const countRoom = document.getElementById('countRoom');
-    let totalCount = parseInt(countRoom.value) + 1;
+    function AddRoom() {
+        const countRoom = document.getElementById('countRoom');
+        let totalCount = parseInt(countRoom.value) + 1;
 
-    // 일정 범위를 초과하는지 확인
-    if (totalCount <= 15) { // 15개 이하로 제한
-        countRoom.value = totalCount;
+        // 일정 범위를 초과하는지 확인
+        if (totalCount <= 15) { // 15개 이하로 제한
+            countRoom.value = totalCount;
 
-        // 새로운 div 요소 생성
-        const newRow = document.createElement('div');
-        newRow.className = 'row mt-2';
+            // 새로운 div 요소 생성
+            const newRow = document.createElement('div');
+            newRow.className = 'row mt-2';
 
-        // div 내부에 컬럼 요소 추가
-        newRow.innerHTML = `
-            <div class="col">
-                <img src="#" alt="#">
-            </div>
-            <div class="col">
-                <input type="number" class="form-control">
-            </div>
-            <div class="col">
-                <input type="number" value="0" class="form-control">
-            </div>
-            <div class="col">
-                <select class="form-control">
-                    <option value="1">Tj</option>
-                    <option value="2">금영</option>
-                </select>
-            </div>
-        `;
+            // div 내부에 컬럼 요소 추가
+            newRow.innerHTML = `
+                                    <div class="col">
+                                        <img src="#" alt="#">
+                                    </div>
+                                    <div class="col">
+                                        <input type="number" class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <input type="number" value="0" class="form-control">
+                                    </div>
+                                    <div class="col">
+                                        <select class="form-control">
+                                            <option value="1">Tj</option>
+                                            <option value="2">금영</option>
+                                        </select>
+                                    </div>
+                                `;
 
-        // section 요소 내에 새로운 row를 추가합니다.
-        const section = document.getElementById('secondSection');
-        section.appendChild(newRow);
-    } else {
-        alert('최대 개수를 초과했습니다.');
-    }
+            // section 요소 내에 새로운 row를 추가합니다.
+            const section = document.getElementById('secondSection');
+            section.appendChild(newRow);
+        } else {
+            alert('최대 개수를 초과했습니다.');
+        }
+
+
+    document.getElementById('previewImage').addEventListener('click', function () {
+        document.getElementById('fileInput').click();
+    });
+
+    document.getElementById('fileInput').addEventListener('change', function () {
+        const file = this.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('previewImage').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 }
-
-
-document.getElementById('previewImage').addEventListener('click', function() {
-    document.getElementById('fileInput').click();
-});
-
-document.getElementById('fileInput').addEventListener('change', function() {
-    const file = this.files[0];
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('previewImage').src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
-});
 

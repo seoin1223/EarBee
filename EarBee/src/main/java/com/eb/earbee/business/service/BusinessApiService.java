@@ -111,7 +111,7 @@ public class BusinessApiService {
             }
             System.out.println("현재 페이지 " +dto.getCurrentPage());
 
-            String postData = String.format("confmKey=%s&currentPage="+dto.getCurrentPage()+"&keyword=%s&countPerPage=10&resultType=json",
+            String postData = String.format("confmKey=%s&currentPage=1&keyword=%s&countPerPage=10&resultType=json",
                     URLEncoder.encode(confmKey, StandardCharsets.UTF_8), encodedKeyword);
 
             URL url = new URL(urlAddr);
@@ -135,7 +135,7 @@ public class BusinessApiService {
             JsonNode jusoListNode = resultsNode.get("juso");
 
             int totalCount = Integer.parseInt(commonNode.get("totalCount").asText());
-            System.out.println(totalCount);
+
             ArrayList<BusinessAddrResponse> addrList = new ArrayList<>();
 
             // 안에 내용 꺼내서 ArrayList에 담기

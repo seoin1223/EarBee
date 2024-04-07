@@ -47,7 +47,7 @@ public class BusinessApiController {
     public ResponseEntity<BusinessAddrResponse[]> addrSearch(@RequestBody BusinessAddrRequest dto) {
         System.out.println(dto.toString());
         BusinessAddrResponse[] result = businessApiService.searchAddr(dto);
-        System.out.println(Arrays.toString(result));
+        System.out.println("결과"+ Arrays.toString(result));
         return (result !=null)? ResponseEntity.ok(result):ResponseEntity.badRequest().build();
     }
 
