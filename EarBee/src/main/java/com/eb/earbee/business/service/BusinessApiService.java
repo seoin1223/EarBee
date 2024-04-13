@@ -111,8 +111,8 @@ public class BusinessApiService {
             }
             System.out.println("현재 페이지 " +dto.getCurrentPage());
 
-            String postData = String.format("confmKey=%s&currentPage=1&keyword=%s&countPerPage=10&resultType=json",
-                    URLEncoder.encode(confmKey, StandardCharsets.UTF_8), encodedKeyword);
+            String postData = String.format("confmKey=%s&currentPage=%s&keyword=%s&countPerPage=10&resultType=json",
+                    URLEncoder.encode(confmKey, StandardCharsets.UTF_8),dto.getCurrentPage(), encodedKeyword);
 
             URL url = new URL(urlAddr);
             HttpURLConnection con = openHttpURLConnection(url);

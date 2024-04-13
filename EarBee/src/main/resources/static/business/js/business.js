@@ -146,9 +146,9 @@ function checkAddr(obj) {
 
 
 // 주소 검색 ajax
-function searchAddr(keyword,check) {
+function searchAddr() {
     const addr = document.querySelector('#inputNumber');
-    const searchResultsDiv = document.getElementById('searchResults');
+
     // searchResultsDiv.innerHTML = ''; // 이전에 표시된 결과를 초기화 -> 페이징 처리로 인해 주석
     if (!checkAddr(addr)) {
         // 검증에 실패하면 여기서 중단하고 이후 코드를 실행하지 않음
@@ -243,8 +243,9 @@ function createTable(results, currentPage, pageSize){
     empty1.appendChild(empty2);
     table.appendChild(empty1);
 
-    // const paginationRow = createPaginationRow(currentPage, pageSize, result.length);
-    // table.appendChild(paginationRow);
+
+    const paginationRow = createPaginationRow(currentPage, pageSize, results[0].totalCount);
+    table.appendChild(paginationRow);
 
     return table;
 }
@@ -290,6 +291,7 @@ function createRow(result) {
             zipCode.value = textContentArray[0];
             addr.value = textContentArray[1];
             details.readOnly = false;
+            details.placeholder = "남은 주소를 채워주세요"
             $('#Modal').modal('hide'); // 모달창 숨기기
         }
     }
@@ -308,168 +310,109 @@ function createRow(result) {
     link.style.fontSize = '15px';
     additionalInfoCell.appendChild(link);
     row.appendChild(additionalInfoCell);
-
     return row;
+}
 
+function setButtonHoverEffect(buttonElement, hoverColor) {
+    // 마우스가 올라갔을 때 배경색 변경
+    buttonElement.addEventListener('mouseover', () => {
+        buttonElement.style.backgroundColor = hoverColor;
+    });
+
+    // 마우스가 내려갔을 때 배경색 원래대로
+    buttonElement.addEventListener('mouseout', () => {
+        buttonElement.style.backgroundColor = '';
+    });
 }
 
 
-function createPaginationRow() {
-    const paginationRow = document.createElement('tr');
+function createPaginationRow(currentPage, pageSize, totalCount) {
+    const paginationRow = document.createElement('tfoot');
 
-    // 페이지네이션 버튼 생성 등의 코드 추가
+    paginationRow.style.padding = '15px';
+    paginationRow.style.textAlign = 'center';
+    const paginationCell = document.createElement('td'); //td
 
-    return paginationRow;
-}
-    /*
-    function displaySearchResults(results,check,addr) {
-        const searchResultsDiv = document.getElementById('searchResults');
-        let i = addr.dataset.currentPage
-        let j = i+5
-        if(!check){
-            searchResultsDiv.innerHTML = ''; // 이전에 표시된 결과를 초기화
-        }else{
-            i = j
-            j= i+5
-        }
+    paginationCell.colSpan = 2;
+    paginationCell.style.textAlign = 'center';
 
-        let contextCount = results.length; // 배열의 총 개수
+    const startPage = Math.floor((currentPage - 1) / pageSize) * pageSize + 1;
+    const totalPages = Math.ceil(totalCount / pageSize);
 
-        // 결과를 표시할 테이블 생성
-        const table = document.createElement('table');
-        table.classList.add('table', 'table-scroll'); // Bootstrap의 테이블 스타일을 사용하려면 'table' 클래스를 추가
-
-        // 테이블 헤더 생성
-        const headerRow = document.createElement('tr');
-        headerRow.style.height = '40px'
-        const nameLabel = document.createElement('th');
-        nameLabel.textContent = '우편번호'; // 결과의 필드에 따라 수정
-        nameLabel.style.width = '20%'; //
-        nameLabel.style.textAlign = 'center'; // 텍스트 정렬 설정
-
-        headerRow.appendChild(nameLabel);
-
-        const additionalInfoLabel = document.createElement('th');
-        additionalInfoLabel.textContent = '도로명 주소'; // 추가 정보의 필드에 따라 수정
-        additionalInfoLabel.style.textAlign = 'center';
-        headerRow.appendChild(additionalInfoLabel);
-
-        // 헤더를 테이블에 추가
-        table.appendChild(headerRow);
-
-
-
-
-        // 결과를 순회하면서 각 행을 생성하여 추가
-        results.forEach(result => {
-            const row = document.createElement('tr');
-            row.addEventListener('mouseover',  () => handleMouseOver(row));
-            row.addEventListener('mouseleave', ()=>handleMouseLeave(row));
-            row.onclick = function (event) {
-                const zipCode = document.getElementById('zipCode');
-                const addr = document.getElementById('addr');
-                const details = document.getElementById('detail');
-
-                const textContentArray = Array.from(event.currentTarget.children).map(td => td.textContent);
-                // 선택한 행의 정보를 array로 담아냄
-                if (textContentArray.length >= 2) {
-                    zipCode.value = textContentArray[0];
-                    addr.value = textContentArray[1];
-                    details.readOnly = false;
-                    $('#Modal').modal('hide'); // 모달창 숨기기
-                }
-            }
-
-            // 결과 필드에 따라 수정
-            const nameCell = document.createElement('td');
-            nameCell.textContent = result.zipNo;
-            nameCell.style.width = '20%'; // 스타일 직접 설정
-            nameCell.style.textAlign = 'center';
-            nameCell.style.fontSize = '15px';
-            row.appendChild(nameCell);
-
-            // 추가 정보 필드에 따라 수정
-            const additionalInfoCell = document.createElement('td');
-            const link = document.createElement('a');
-            link.textContent = result.roadAddr; // 추가 정보가 없으면 빈 문자열 처리
-            link.style.fontSize = '15px';
-            additionalInfoCell.appendChild(link);
-
-            row.appendChild(additionalInfoCell);
-
-            // 행을 테이블에 추가
-            table.appendChild(row);
-        });
-
-
-        // 페이징 처리 추가
-
-        // let current = results[0].currentPage;
-        // let totalCount = results[0].totalCount;
-        // let totalPages = Math.ceil(totalCount / 10);
-
-        const empt1 = document.createElement('tr'); // tr
-        const empt2 = document.createElement('td'); //td
-        const emtDiv = document.createElement('div'); //btn
-        empt2.colSpan = 2;
-        emtDiv.style.height = '30px'
-
-        empt2.appendChild(emtDiv);
-        empt1.appendChild(empt2);
-        table.appendChild(empt1);
-
-        const rowPageing = document.createElement('tfoot'); // tr
-        rowPageing.style.padding = '15px'
-        const paginationCell = document.createElement('td'); //td
-
-        paginationCell.colSpan = 2;
-        paginationCell.style.textAlign = 'center';
-
+    if(startPage>1){
         // 페이징 버튼 생성
-        const prevButton = document.createElement('button'); //btn
+        const prevButton = document.createElement('a'); //btn
         prevButton.style.display = 'inline-block';
         prevButton.textContent = '<';
 
+        setButtonHoverEffect(prevButton,'#D3D3D3');
+
         // 이전 페이지로 이동하는 이벤트 핸들러 추가
         prevButton.addEventListener('click', () => {
-            // 이전 페이지 로직 구현할곳
+            const addr = document.querySelector('#inputNumber');
+            const currentPage = parseInt(addr.getAttribute('data-current-page'), 10);
+            // 현재 페이지가 startPage보다 크면 이전 페이지 번호 계산
+            if (currentPage > startPage) {
+                const prevPage = currentPage - 1;
+                addr.setAttribute('data-current-page', prevPage);
+                searchAddr();
+            } else if (currentPage === startPage && startPage > 1) {
+                // 현재 페이지가 startPage와 같고 startPage가 1보다 크면 startPage - 1로 이동
+                const prevPage = startPage - 1;
+                addr.setAttribute('data-current-page', prevPage);
+                searchAddr();
+            }
         });
 
         paginationCell.appendChild(prevButton); //td < btn
-        // 페이지 번호 버튼을 생성하여 추가
 
-        for (let k = i; k < j; k++) {
-            const pageButton = document.createElement('button'); // 페이지 버튼
-            pageButton.style.display = 'inline-block';
-            pageButton.textContent = k;
+    }
 
-            // 페이지 번호를 클릭하는 이벤트 핸들러 추가
-            pageButton.addEventListener('click', () => {
-            });
+    for (let k = startPage;  k <= Math.min(startPage + pageSize - 1, totalPages); k++) {
+        const pageButton = document.createElement('a'); // 페이지 버튼
+        pageButton.style.display = 'inline-block';
+        pageButton.textContent = k;
 
-            paginationCell.appendChild(pageButton);
+        // 페이지 번호를 클릭하는 이벤트 핸들러 추가
+        pageButton.addEventListener('click', () => {
+            const addr = document.querySelector('#inputNumber');
+            addr.setAttribute('data-current-page', k);
+            searchAddr();
+        });
+
+        setButtonHoverEffect(pageButton,'#D3D3D3');
+
+        if (k.toString() === currentPage) {
+            pageButton.style.color = '#ff0000'; // 현재 페이지의 배경색
         }
 
-        const nextButton = document.createElement('button'); // btn
+        paginationCell.appendChild(pageButton);
+    }
+
+
+    if(totalPages > startPage+pageSize-1){
+        const nextButton = document.createElement('a'); // btn
         nextButton.style.display = 'inline-block';
         nextButton.textContent = '>';
 
+        setButtonHoverEffect(nextButton,'#D3D3D3');
         // 다음 페이지로 이동하는 이벤트 핸들러 추가
         nextButton.addEventListener('click', () => {
+            const addr = document.querySelector('#inputNumber');
+            const currentPage = parseInt(addr.getAttribute('data-current-page'), 10);
+            const nextPage = currentPage + pageSize;
 
-            // 다음 페이지 로직 구현할곳
+            addr.setAttribute('data-current-page',nextPage);
+            searchAddr()
+
         });
 
         paginationCell.appendChild(nextButton); // td < btn
 
-        rowPageing.appendChild(paginationCell); // tr < td
-
-        // 테이블을 결과 표시 영역에 추가
-        table.appendChild(rowPageing); // table < tr
-        searchResultsDiv.appendChild(table);
     }
-    */
-
+    paginationRow.appendChild(paginationCell)
+    return paginationRow;
+}
 
 // business 빈칸 내역 확인 함수(왼쪽)
     function checkBusiness() {
@@ -570,7 +513,7 @@ function createPaginationRow() {
     document.getElementById('fileInput').addEventListener('change', function () {
         const file = this.files[0];
         if (file) {
-            var reader = new FileReader();
+            const reader = new FileReader();
             reader.onload = function (e) {
                 document.getElementById('previewImage').src = e.target.result;
             };
