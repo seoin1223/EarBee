@@ -1,4 +1,7 @@
-// 엔터키 이벤트
+/**
+ * 엔터키 이벤트 함수
+ * @param event
+ */
 function handleKeyPress(event) {
     if (event.key === 'Enter') {
         event.preventDefault()
@@ -7,7 +10,9 @@ function handleKeyPress(event) {
     }
 }
 
-// 모달창 이벤트
+
+
+
 const Modal = document.getElementById('Modal');
 document.querySelector('#inputNumber').addEventListener('keypress', handleKeyPress);
 
@@ -41,7 +46,11 @@ if (Modal) {
 }
 
 // 조회 버튼이 어떤 조회버튼인지 구분하는 함수
-function search() { // 조회가 사업자 조회인지 주소 검색인지 분류
+
+/**
+ * 조회 버튼 이벤트 발생 원인이 사업자 조회인지 주소 검색인지 분류하는 함수
+ */
+function search() {
     const dataSortType = document.querySelector('#searchType').getAttribute('data-sort-type');
 
     if (!(dataSortType !== 'businessNum')) {
@@ -51,7 +60,12 @@ function search() { // 조회가 사업자 조회인지 주소 검색인지 분�
     }
 }
 
-// 사업자 번호 텍스트 길이 확인
+
+/**
+ * 사업자 번호 조회의 input 값의 길이를 체크하는 함수
+ * @param businessNum
+ * @returns {boolean}
+ */
 function isBusinessNumValid(businessNum) {
     // 문자열의 길이를 확인하여 유효성을 검사합니다.
     if (businessNum.length !== 10) {
@@ -64,6 +78,10 @@ function isBusinessNumValid(businessNum) {
 }
 
 
+/**
+ * 사업자 번호 조회 ajax 함수
+ * @returns {boolean}
+ */
 function searchBusiness() {
     const businessNum = document.querySelector('#inputNumber').value;
 
@@ -106,9 +124,6 @@ function searchBusiness() {
 }
 
 
-
-
-
 // 주소 검색 필터링
 function checkAddr(obj) {
     if (obj.value.length > 0) {
@@ -117,6 +132,8 @@ function checkAddr(obj) {
         if (expText.test(obj.value) === true) {
             alert(`특수문자를 입력 할수 없습니다.`);
             obj.value = obj.split(expText).join("");
+
+
             return false;
         }
 
@@ -140,9 +157,6 @@ function checkAddr(obj) {
     }
     return true;
 }
-
-
-
 
 
 // 주소 검색 ajax
@@ -197,43 +211,50 @@ function searchAddr() {
 }
 
 
-
+// 마우스을 올렸을 때 배경색 변경
 function handleMouseOver(row){
-    row.style.backgroundColor = '#e6f7ff'; // 마우스가 나갔을 때 배경색 초기화 (기본값으로)
+    row.style.backgroundColor = '#e6f7ff';
 }
 
+// 마우스를 내렸을 때 배경색 초기화 (기본값)
 function handleMouseLeave(row){
-    row.style.backgroundColor = ''; // 마우스가 나갔을 때 배경색 초기화 (기본값으로)
+    row.style.backgroundColor = '';
 }
 
 
+
+// api로 호출한 results를 이용하여 currentPage와 pageSize에 맞춰서 searchResult에 출력하는 함수
 function displaySearchResults(result, currentPage, pageSize){
     const searchResultDiv = document.getElementById('searchResults');
-    clearSearchResults(searchResultDiv);
-
-    const table = createTable(result, currentPage, pageSize);
-
-    searchResultDiv.appendChild(table);
+    clearSearchResults(searchResultDiv); // 이전에 검색했던 결과인 results의 내용을 초기화 하는 함수 호출
+    const table = createTable(result, currentPage, pageSize); // 새로운 결과 results를 이용해서 테이블을 생성하는 함수 호출
+    searchResultDiv.appendChild(table); // div에 table을 추가하는 함수
 }
 
+
+// 이전 결과를 초기화 하는 함수   결과를 초기화 -> 테이블을 지웠다가 다시 생성
 function clearSearchResults(searchResultsDiv){
-    searchResultsDiv.innerHTML=''; // 결과를 초기화 -> 테이블을 지웠다가 다시 생성
+    searchResultsDiv.innerHTML='';
 }
 
+
+// 테이블 생성 함수  -> document create 테이블
 function createTable(results, currentPage, pageSize){
     const table = document.createElement('table');
     table.classList.add('table', 'table-scroll');
 
-    const headerRow = createHeaderRow();
-    table.appendChild(headerRow);
+    const headerRow = createHeaderRow(); // header 생성 함수 호출
+    table.appendChild(headerRow); // 생성한 테이블에 header 붙이기
 
+    // 각 루프 돌면서 페이지 버튼 생성
     for (let i = 0; i < Math.min(results.length, 10); i++) {
         const result = results[i];
         const row = createRow(result);
         table.appendChild(row);
     }
 
-    const empty1 = document.createElement('tr'); // tr
+    // 테이블 내 padding을 주기 위한 빈 tr 생성
+    const empty1 = document.createElement('tr'); //tr
     const empty2 = document.createElement('td'); //td
     const emtDiv = document.createElement('div'); //btn
     empty2.colSpan = 2;
@@ -244,12 +265,15 @@ function createTable(results, currentPage, pageSize){
     table.appendChild(empty1);
 
 
+    // 페이징 행 추가
     const paginationRow = createPaginationRow(currentPage, pageSize, results[0].totalCount);
     table.appendChild(paginationRow);
 
     return table;
 }
 
+
+// 헤더 tr 생성 함수
 function createHeaderRow() {
     const headerRow = document.createElement('tr');
     headerRow.classList.add('header-row'); // CSS 클래스 추가
@@ -264,6 +288,7 @@ function createHeaderRow() {
 }
 
 
+// 헤더의 열 생성 함수
 function createTableHeaderCell(text, width) {
     const cell = document.createElement('th');
     cell.textContent = text;
@@ -272,6 +297,8 @@ function createTableHeaderCell(text, width) {
     return cell;
 }
 
+
+// 결과의 내용을 열 단위로 추가하는 함수
 function createRow(result) {
     const row = document.createElement('tr');
 
@@ -313,6 +340,8 @@ function createRow(result) {
     return row;
 }
 
+
+// 페이징 버튼들의 마우스 이벤트 함수 ( 배경색)
 function setButtonHoverEffect(buttonElement, hoverColor) {
     // 마우스가 올라갔을 때 배경색 변경
     buttonElement.addEventListener('mouseover', () => {
@@ -326,91 +355,90 @@ function setButtonHoverEffect(buttonElement, hoverColor) {
 }
 
 
+/**
+ *
+ * @param currentPage
+ * @param pageSize
+ * @param totalCount
+ * @returns {HTMLTableSectionElement}
+ */
 function createPaginationRow(currentPage, pageSize, totalCount) {
     const paginationRow = document.createElement('tfoot');
-
     paginationRow.style.padding = '15px';
     paginationRow.style.textAlign = 'center';
-    const paginationCell = document.createElement('td'); //td
 
+    const paginationCell = document.createElement('td');
     paginationCell.colSpan = 2;
     paginationCell.style.textAlign = 'center';
 
     const startPage = Math.floor((currentPage - 1) / pageSize) * pageSize + 1;
     const totalPages = Math.ceil(totalCount / pageSize);
 
-    if(startPage>1){
-        // 페이징 버튼 생성
-        const prevButton = document.createElement('a'); //btn
+    const addr = document.querySelector('#inputNumber');
+
+    function setPageNumber(page) {
+        addr.setAttribute('data-current-page', page);
+        searchAddr();
+    }
+
+    function createPrevButton() {
+        const prevButton = document.createElement('a');
         prevButton.style.display = 'inline-block';
         prevButton.textContent = '<';
+        setButtonHoverEffect(prevButton, '#D3D3D3');
 
-        setButtonHoverEffect(prevButton,'#D3D3D3');
-
-        // 이전 페이지로 이동하는 이벤트 핸들러 추가
         prevButton.addEventListener('click', () => {
-            const addr = document.querySelector('#inputNumber');
             const currentPage = parseInt(addr.getAttribute('data-current-page'), 10);
-            // 현재 페이지가 startPage보다 크면 이전 페이지 번호 계산
-            if (currentPage > startPage) {
-                const prevPage = currentPage - 1;
-                addr.setAttribute('data-current-page', prevPage);
-                searchAddr();
-            } else if (currentPage === startPage && startPage > 1) {
-                // 현재 페이지가 startPage와 같고 startPage가 1보다 크면 startPage - 1로 이동
-                const prevPage = startPage - 1;
-                addr.setAttribute('data-current-page', prevPage);
-                searchAddr();
-            }
+            const prevPage = currentPage > startPage ? currentPage - 1 : startPage - 1;
+            setPageNumber(prevPage);
         });
 
-        paginationCell.appendChild(prevButton); //td < btn
-
+        return prevButton;
     }
 
-    for (let k = startPage;  k <= Math.min(startPage + pageSize - 1, totalPages); k++) {
-        const pageButton = document.createElement('a'); // 페이지 버튼
+    function createPageButton(page) {
+        const pageButton = document.createElement('a');
         pageButton.style.display = 'inline-block';
-        pageButton.textContent = k;
+        pageButton.textContent = page;
+        setButtonHoverEffect(pageButton, '#D3D3D3');
 
-        // 페이지 번호를 클릭하는 이벤트 핸들러 추가
-        pageButton.addEventListener('click', () => {
-            const addr = document.querySelector('#inputNumber');
-            addr.setAttribute('data-current-page', k);
-            searchAddr();
-        });
+        pageButton.addEventListener('click', () => setPageNumber(page));
 
-        setButtonHoverEffect(pageButton,'#D3D3D3');
-
-        if (k.toString() === currentPage) {
-            pageButton.style.color = '#ff0000'; // 현재 페이지의 배경색
+        if (page.toString() === currentPage) {
+            pageButton.style.color = '#ff0000';
         }
 
-        paginationCell.appendChild(pageButton);
+        return pageButton;
     }
 
-
-    if(totalPages > startPage+pageSize-1){
-        const nextButton = document.createElement('a'); // btn
+    function createNextButton() {
+        const nextButton = document.createElement('a');
         nextButton.style.display = 'inline-block';
         nextButton.textContent = '>';
+        setButtonHoverEffect(nextButton, '#D3D3D3');
 
-        setButtonHoverEffect(nextButton,'#D3D3D3');
-        // 다음 페이지로 이동하는 이벤트 핸들러 추가
         nextButton.addEventListener('click', () => {
-            const addr = document.querySelector('#inputNumber');
             const currentPage = parseInt(addr.getAttribute('data-current-page'), 10);
             const nextPage = currentPage + pageSize;
-
-            addr.setAttribute('data-current-page',nextPage);
-            searchAddr()
-
+            setPageNumber(nextPage);
         });
 
-        paginationCell.appendChild(nextButton); // td < btn
-
+        return nextButton;
     }
-    paginationRow.appendChild(paginationCell)
+
+    if (startPage > 1) {
+        paginationCell.appendChild(createPrevButton());
+    }
+
+    for (let k = startPage; k <= Math.min(startPage + pageSize - 1, totalPages); k++) {
+        paginationCell.appendChild(createPageButton(k));
+    }
+
+    if (totalPages > startPage + pageSize - 1) {
+        paginationCell.appendChild(createNextButton());
+    }
+
+    paginationRow.appendChild(paginationCell);
     return paginationRow;
 }
 
@@ -440,6 +468,9 @@ function createPaginationRow(currentPage, pageSize, totalCount) {
     }
 
 // 왼쪽 section 중복 체크 이벤트
+
+
+
     function duplicateCheck() {
         const dataToSend = checkBusiness(); // checkBusiness 함수를 통해 반환된 객체를 변수에 저장
         const firstSection = document.getElementById("firstSection");
