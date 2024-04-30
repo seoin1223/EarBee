@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/earbee")
-public class MumbershipController {
+public class MembershipController {
 
     @GetMapping("/mypage")
     public String mypage(){
-        return "mumbershop/mumbership";
+        return "mumbership/mumbership";
     }
 }
