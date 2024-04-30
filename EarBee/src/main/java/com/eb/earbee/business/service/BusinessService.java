@@ -16,12 +16,11 @@ public class BusinessService  {
 
     // 비즈니스 게시판 모든 게시글 조회
     public List<Business> findAll() {
-        return null;
+        return businessRepository.findAll();
     }
 
     @Transactional
     public Business addBusiness(Business entity) {
-        Business business = businessRepository.save(entity);
-        return business;
+        return businessRepository.save(entity);
     }
 }
