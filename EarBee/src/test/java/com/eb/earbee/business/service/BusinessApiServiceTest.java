@@ -62,6 +62,9 @@ class BusinessApiServiceTest {
 
             // 비교
             assertEquals(expected,result,"사업자 번호 조회 번호 있는 경우가 실패했습니다");
+
+
+            // 테스트
         }
     }
 }
