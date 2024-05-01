@@ -19,7 +19,7 @@ public class SignInDto {
     private String phone;
     private String email;
     private String addr;
-//    private boolean role;
+//    private String role;
 
     public SignInEntity toEntity(){
         return new SignInEntity(num,id,pwd,name,rrn,phone,email,addr);

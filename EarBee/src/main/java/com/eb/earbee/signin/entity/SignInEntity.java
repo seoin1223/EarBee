@@ -35,8 +35,8 @@ public class SignInEntity {
 
     @Column(nullable = false)
     private String addr;
-
-//    @Column
+//
+//    @Column(nullable = false)
 //    private String role;
 
 }

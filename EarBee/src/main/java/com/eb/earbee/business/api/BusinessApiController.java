@@ -21,7 +21,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/business")
-
 public class BusinessApiController {
 
     @Autowired
