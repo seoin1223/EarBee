@@ -170,7 +170,9 @@ spring boot에서는 jsp를 사용하기 위해서는 추가적으로 의존성 
    - postman 또는 웹 브라우저에서는 인증키를 Encoding키 사용
    - spring server에서는 인증키를 Decoding 사용 (로컬은 encoding key)
 
-
+#### 버그
+1. springSecurity 설정 클래스 인식 불가 : package가 com.eb.earbee인데 eb 패키지에 security를 생성한 것을 발견 -> 수정 완료
+   
 
 
 </details>
