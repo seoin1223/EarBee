@@ -21,9 +21,17 @@ spring:
     url: jdbc:postgresql://localhost:5432/firstproject_db
     username: postgres
     password: postgres
+
   sql:
     init:
       data-locations: classpath:data.sql
+
+  security:
+    user:
+      name: seoin
+      password: 123qwe
+      roles: 
+
 
 
 
@@ -35,6 +43,7 @@ logging:
         descriptor:
           sql:
             BasicBinder: TRACE
+
 
 
 
