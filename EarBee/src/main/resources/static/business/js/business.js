@@ -389,8 +389,8 @@ function createPaginationRow(currentPage, pageSize, totalCount) {
 
         prevButton.addEventListener('click', () => {
             const currentPage = parseInt(addr.getAttribute('data-current-page'), 10);
-            const prevPage = currentPage > startPage ? currentPage - 1 : startPage - 1;
-            setPageNumber(prevPage);
+            const prevPageGroupStart = currentPage - (currentPage % pageSize || pageSize);
+            setPageNumber(Math.max(prevPageGroupStart, 1));
         });
 
         return prevButton;
@@ -419,8 +419,8 @@ function createPaginationRow(currentPage, pageSize, totalCount) {
 
         nextButton.addEventListener('click', () => {
             const currentPage = parseInt(addr.getAttribute('data-current-page'), 10);
-            const nextPage = currentPage + pageSize;
-            setPageNumber(nextPage);
+            const nextPageGroupStart = currentPage + (pageSize - (currentPage % pageSize || pageSize)) + 1;
+            setPageNumber(Math.min(nextPageGroupStart, totalPages));
         });
 
         return nextButton;
