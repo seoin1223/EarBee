@@ -7,7 +7,6 @@ server:
       enabled: true
       force: true
 
-
 spring:
   jpa:
     defer-datasource-initialization: true
@@ -30,10 +29,7 @@ spring:
     user:
       name: seoin
       password: 123qwe
-      roles: 
-
-
-
+      roles: ADMIN
 
 logging:
   level:
@@ -43,9 +39,6 @@ logging:
         descriptor:
           sql:
             BasicBinder: TRACE
-
-
-
 
 business:
   url: https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=
