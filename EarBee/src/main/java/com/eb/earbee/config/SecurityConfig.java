@@ -20,6 +20,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize ->
                         authorize
+
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/earbee/**")).hasAnyRole("ADMIN", "MANAGER","USER")
                                 .anyRequest().permitAll()
@@ -28,6 +29,10 @@ public class SecurityConfig {
                 .formLogin(Customizer.withDefaults())
 
         ;
+
+
+
+
 
         return http
                 .build();

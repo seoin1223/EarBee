@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8087
   servlet:
     context-path: /
     encoding:
@@ -26,10 +26,12 @@ spring:
       data-locations: classpath:data.sql
 
   security:
+
     user:
       name: seoin
       password: 123qwe
       roles: ADMIN
+
 
 logging:
   level:
@@ -49,3 +51,5 @@ business:
 address:
   url: https://www.juso.go.kr/addrlink/addrLinkApi.do
   key: devU01TX0FVVEgyMDI0MDQwNzIxNDYzMDExNDY2OTM=
+
+  security:

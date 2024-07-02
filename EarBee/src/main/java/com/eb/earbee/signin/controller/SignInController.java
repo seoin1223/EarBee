@@ -19,9 +19,25 @@ public class SignInController {
     @Autowired
     SignInService signInService;
 
-    @GetMapping()
+    @GetMapping
+    public String login() {
+        return "redirect:/login/signin/one";
+    }
+
+    @GetMapping("/signin/one")
     public String mainUser(){
         return "signin/one";
+    }
+
+    @PostMapping("/signins/new")
+    public String create(SignInDto form, Model model) {
+        SignInEntity signInEntity = form.toEntity();
+        if(signInEntity == null){
+            model.addAttribute("warningMessage", "SignInEntity is null!");
+            return "redirect:/login/signin/one";
+        }
+
+        return "one";
     }
 
 
@@ -30,16 +46,6 @@ public class SignInController {
         return "signin/signins/createSignInForm";
     }
 
-    @PostMapping("/signins/new")
-    public String create(SignInDto form, Model model) {
-        SignInEntity signInEntity = form.toEntity();
-        if(signInEntity == null){
-            model.addAttribute("warningMessage", "SignInEntity is null!");
-            return "redirect:/one";
-        }
-
-        return "one";
-    }
 
 
 
