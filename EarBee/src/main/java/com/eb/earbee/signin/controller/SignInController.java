@@ -1,4 +1,4 @@
-package com.eb.earbee.signin.signincontroller;
+package com.eb.earbee.signin.controller;
 
 
 import com.eb.earbee.signin.entity.SignInEntity;
@@ -9,15 +9,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 
-@Controller("/earbee")
+@Controller
+@RequestMapping("/login")
 public class SignInController {
 
     @Autowired
     SignInService signInService;
 
-    @GetMapping("/one")
+    @GetMapping()
     public String mainUser(){
         return "signin/one";
     }

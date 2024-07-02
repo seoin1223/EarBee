@@ -34,6 +34,9 @@ public class SignInService {
     }
 
 
+
+
+
     public  Optional<SignInEntity> findOne(Long signInId){
         return  signInRepository.findById(signInId);
     }

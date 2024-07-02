@@ -14,14 +14,4 @@ import java.util.List;
 public class BusinessAddrRequest {
     String keyword;
     int currentPage; // 현재 페이지
-
-
-    public BusinessAddrRequest(String keyword, int currentPage) {
-        if(currentPage == 0){
-            currentPage = 1;
-        }
-        this.keyword = keyword;
-        this.currentPage = currentPage;
-
-    }
 }

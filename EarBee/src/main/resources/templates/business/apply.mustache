@@ -3,33 +3,32 @@
 
     <form id='form' action="/earbee/business/add" method="post">
         <div class="d-flex" id="second-div">
-            <section id="table-first-section" class="col-6">
+            <section id="firstSection" class="col-12">
+
                 <div class="container">
-                    <div class="row" style="height: 150px">
+                    <div class="row" style="height: 200px">
                         <div class="col-3 mt-2">
-                            <img src="#" alt="#" style="max-width: 100%;min-width: 100%; min-height: 100%;">
+                            <img id="previewImage" src="#" alt="#" style="max-height: 100px; object-fit: contain;">
                         </div>
+                        <input type="file" id="fileInput" style="display: none;">
                         <div class="col-9 container mt-2">
-                            <label class=" mb-2" style="height: 20%">소개</label>
+                            <label class="mb-2" style="height: 20%">소개</label>
                             <textarea class="form-control" style="height: 75%; width: 90.5%;"></textarea>
                         </div>
                     </div>
                 </div>
 
+                <!-- 주소 입력 부분 -->
                 <div class="form-group mt-5 ml-2 mb-1">
                     <div class="row mb-1">
                         <div class="col-3">
-                            <label for="businessNum" class="form-label"
-                                   style="margin-bottom: 5px; text-align: center;font-size: 20px;">사업자 번호</label>
+                            <label for="businessNum" class="form-label" style="margin-bottom: 5px; text-align: center;font-size: 20px;">사업자 번호</label>
                         </div>
                         <div class="col-6">
-                            <input name="bNo" type="text" class="form-control" id="businessNum" readonly
-                                   placeholder="사업자 번호를 조회해주세요" style="font-size: 15px">
+                            <input name="bNo" type="text" class="form-control" id="businessNum" readonly placeholder="사업자 번호를 조회해주세요" style="font-size: 15px">
                         </div>
                         <div class="col-2"> <!-- 버튼 영역 -->
-                            <button type="button" class="btn btn-primary mt-0" data-bs-toggle="modal"
-                                    data-bs-target="#Modal" data-bs-name='사업자 번호 조회' data-bs-type="business">조회
-                            </button>
+                            <button type="button" class="btn btn-primary mt-0" data-bs-toggle="modal" data-bs-target="#Modal" data-bs-name='사업자 번호 조회' data-bs-type="business">조회</button>
                         </div>
                     </div>
 
@@ -38,77 +37,111 @@
                             <label for="zipCode" class="form-label" style="text-align: center; font-size: 20px;">우편번호</label>
                         </div>
                         <div class="col-6 d-flex align-items-center">
-                            <input name="zipCode" type="text" class="form-control" style="font-size: 15px"
-                                   readonly placeholder="조회를 눌러주세요" id="zipCode">
+                            <input name="zipCode" type="text" class="form-control" style="font-size: 15px" readonly placeholder="조회를 눌러주세요" id="zipCode">
                         </div>
                         <div class="col-2">
-                            <button type="button" class="btn btn-primary mt-0" data-bs-toggle="modal"
-                                    data-bs-target="#Modal" data-bs-name='주소 조회' data-bs-type="address" >조회
-                            </button>
+                            <button type="button" class="btn btn-primary mt-0" data-bs-toggle="modal" data-bs-target="#Modal" data-bs-name='주소 조회' data-bs-type="address">조회</button>
                         </div>
                     </div>
 
                 </div>
 
+                <!-- 주소 출력 부분 -->
                 <div class="row mb-4 mt-3">
                     <div class="col-3 ">
                         <label for="addr" class="form-label" style="font-size: 20px; text-align: center;">주소</label>
                     </div>
                     <div class="col-8">
-                        <input name="addr" type="text" id="addr" maxlength="30" class="form-control"
-                               placeholder="조회를 눌러주세요"
-                               readonly>
+                        <input name="addr" type="text" id="addr" maxlength="30" class="form-control" placeholder="조회를 눌러주세요" readonly>
                     </div>
                 </div>
 
+                <!-- 상세 주소 입력 부분 -->
                 <div class="row mb-4 mt-3">
                     <div class="col-3 ">
-                        <label for="detailSecond" class="form-label" style="font-size: 20px; text-align: center;">상세
-                            주소</label>
-
+                        <label for="detailSecond" class="form-label" style="font-size: 20px; text-align: center;">상세 주소</label>
                     </div>
                     <div class="col-8">
-                        <input name="detail" type="text" id="detail" maxlength="30" class="form-control"
-                               placeholder="조회를 눌러주세요"
-                               readonly>
+                        <input name="detail" type="text" id="detail" maxlength="30" class="form-control" placeholder="조회를 눌러주세요" readonly>
                     </div>
                 </div>
 
-                <div class="row mt-3">
+                <!-- 중복체크 버튼 -->
+                <div class="row mt-3" >
                     <div class="col-12 text-center">
-                        <button class="btn btn-primary" onclick="duplicateCheck()" type="button">
-                            중복체크
-                        </button>
+                        <button class="btn btn-primary" onclick="duplicateCheck()" type="button">중복체크</button>
                     </div>
-
                 </div>
 
             </section>
 
-            <section class="col-6">
-                <div>
-                    <h1>check section</h1>
+            <!-- 추가 정보 입력 부분 -->
+            <section id="secondSection" class="col-6" style="display: none;">
+                <div class="container mt-3">
+                    <div class="row">
+                        <div class="col">
+                            <input type="number" value="1" hidden="hidden" id="countRoom" name="countRoom">
+                        </div>
+                        <div class="col-auto">
+                            <button onclick="AddRoom()" type="button" class="btn btn-primary">추가</button>
+                        </div>
+                    </div>
                 </div>
+                <div class="row mt-2">
+                    <div class="col text-center">
+                        <label>내부 사진</label>
+                    </div>
+
+                    <div class="col text-center">
+                        <label>호실</label>
+                    </div>
+
+                    <div class="col text-center">
+                        <label>적정 인원수</label>
+                    </div>
+
+                    <div class="col text-center">
+                        <label>업종</label>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col">
+                        <img src="#" alt="#">
+                    </div>
+
+                    <div class="col">
+                        <input type="number" class="form-control">
+                    </div>
+
+                    <div class="col">
+                        <input type="number" value="0" class="form-control">
+                    </div>
+
+                    <div class="col">
+                        <select class="form-control">
+                            <option value="1">Tj</option>
+                            <option value="2">금영</option>
+                        </select>
+                    </div>
+                </div>
+
             </section>
         </div>
 
-        <section id="button-section" class="col-12">
+        <!-- 버튼 영역 -->
+        <section id="button-section" class="col-12 mt-5">
             <div class="d-flex justify-content-center">
-                <button type="button" class="btn btn-primary" onclick="businessSubmit()" style="margin-right: 5px;">
-                    신청하기
-                </button>
-                <button type="button" class="btn btn-primary ml-5 mr-10" onclick="a()"
-                        style="margin-left: 5px; margin-right: 10px;">다시 작성
-                </button>
+                <button type="button" class="btn btn-primary" onclick="businessSubmit()" style="margin-right: 5px;">신청하기</button>
+                <button type="button" class="btn btn-primary ml-5 mr-10" onclick="a()" style="margin-left: 5px; margin-right: 10px;">다시 작성</button>
             </div>
         </section>
-
     </form>
 </main>
 
 <!-- 모달창 -->
 <div class="modal fade" id="Modal">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="selectName"></h1>
@@ -140,8 +173,29 @@
         margin: 0;
     }
 
+    #firstSection,#secondSection {
+        overflow-x: hidden;
+    }
+    select {
+        /* 화살표 이미지나 스타일링을 적용할 수 있도록 허용 */
+        -webkit-appearance: menulist-button;
+        appearance: menulist-button;
+        /* 배경 이미지를 사용하여 화살표 표시 */
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="black"><path d="M7 10l5 5 5-5H7z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right center;
+        padding-right: 20px; /* 화살표와의 간격 조정 */
+    }
+
+    select {
+        /* 화살표 이미지나 스타일링을 적용할 수 있도록 허용 */
+        -webkit-appearance: menulist-button;
+        appearance: menulist-button;
+    }
+
     section {
         border: 1px solid red;
+        width: 90%;
         overflow-y: auto; /* 섹션의 수직 스크롤을 활성화합니다. */
         max-height: 80vh; /* 섹션의 최대 높이를 지정합니다. */
     }
@@ -165,10 +219,10 @@
 
 
     main {
-        flex: 1; /* main이 남은 공간을 모두 차지하도록 설정 */
         display: flex;
-        justify-content: center;
-        padding: 80px;
+        flex-direction: column;
+        align-items: center;
+        padding: 50px;
     }
 
     hr {
@@ -176,7 +230,8 @@
     }
 
     form {
-        width: 90%;
+        width: 100%;
+        margin: 0 auto; /* 좌우 중앙 정렬을 위해 추가 */
     }
 
     #second-div {

@@ -170,10 +170,68 @@ spring boot에서는 jsp를 사용하기 위해서는 추가적으로 의존성 
    - postman 또는 웹 브라우저에서는 인증키를 Encoding키 사용
    - spring server에서는 인증키를 Decoding 사용 (로컬은 encoding key)
 
-
+#### 버그
+1. springSecurity 설정 클래스 인식 불가 : package가 com.eb.earbee인데 eb 패키지에 security를 생성한 것을 발견 -> 수정 완료
+   
 
 
 </details>
 
 
+```properties
+#Server port
+server.port= 8080
 
+        # encoding
+server.servlet.encoding.charset=UTF-8
+server.servlet.encoding.force=true
+
+spring.jpa.defer-datasource-initialization=true
+
+
+
+# JPA
+spring.jpa.properties.hibernate.format_sql=true
+
+# JPA
+logging.level.org.hibernate.SQL=DEBUG
+        # JPA
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+
+# postgres
+spring.datasource.url=jdbc:postgresql://localhost:5432/firstproject_db
+spring.datasource.username=postgres
+spring.datasource.password=postgres
+
+#dbms oracle
+#spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+#spring.datasource.url=jdbc:oracle:thin:@localhost:1521:xe
+#spring.datasource.username="EARBEE"
+        #spring.datasource.password="root"
+        #spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.OracleDialect
+
+# init
+spring.sql.init.data-locations=classpath:data.sql
+
+
+# init 
+        #spring.sql.init.mode=always
+
+# init
+spring.jpa.hibernate.ddl-auto=create-drop
+
+
+# jsp
+#spring.mvc.view.prefix=/WEB-INF/views/
+        #spring.mvc.view.suffix=.jsp
+
+
+business.url=https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=
+business.encoding=XNM%2FAHJB%2B68HV79cSGOQ%2BDtMs87Gq3gmewT2NdPV8a2uH1uwWaF2k3L1CjEypfOMtotlgr%2FG%2BYhyNtDU8DxZuw%3D%3D
+business.decoding=XNM/AHJB+68HV79cSGOQ+DtMs87Gq3gmewT2NdPV8a2uH1uwWaF2k3L1CjEypfOMtotlgr/G+YhyNtDU8DxZuw==
+address.key=devU01TX0FVVEgyMDI0MDQwNzIxNDYzMDExNDY2OTM=
+address.url=https://www.juso.go.kr/addrlink/addrLinkApi.do
+#naver.client.id=apzr0ref1b
+#naver.client.secret=PmMbwcBr39Zonrb2nWlmtmKeXhNZKMzvNaveuuUO
+
+```
