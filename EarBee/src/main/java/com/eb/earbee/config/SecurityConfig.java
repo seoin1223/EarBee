@@ -26,9 +26,7 @@ public class SecurityConfig {
                                 .anyRequest().permitAll()
 
                 )
-                .formLogin(Customizer.withDefaults())
-
-        ;
+                .formLogin(Customizer.withDefaults()) ;
 
 
 

@@ -26,7 +26,6 @@ spring:
       data-locations: classpath:data.sql
 
   security:
-
     user:
       name: seoin
       password: 123qwe
