@@ -34,6 +34,7 @@ public class SignInController {
         SignInEntity signInEntity = form.toEntity();
         if(signInEntity == null){
             model.addAttribute("warningMessage", "SignInEntity is null!");
+            System.out.println("안녕 체크");
             return "redirect:/login/signin/one";
         }
 
