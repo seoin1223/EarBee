@@ -19,7 +19,7 @@ public class SignInController {
     @Autowired
     SignInService signInService;
 
-    @GetMapping
+    @GetMapping("asdasdasd")
     public String login() {
         return "redirect:/login/signin/one";
     }

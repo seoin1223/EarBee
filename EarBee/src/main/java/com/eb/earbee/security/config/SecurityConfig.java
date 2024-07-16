@@ -1,4 +1,4 @@
-package com.eb.earbee.config;
+package com.eb.earbee.security.config;
 
 
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -20,13 +20,24 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize ->
                         authorize
-
+                                .requestMatchers(new AntPathRequestMatcher("/login", "/login-process")).permitAll()
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/earbee/**")).hasAnyRole("ADMIN", "MANAGER","USER")
                                 .anyRequest().permitAll()
 
                 )
-                .formLogin(Customizer.withDefaults()) ;
+                .formLogin(f -> f
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/earbee")
+                        .failureUrl("/user/login?fail")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .loginProcessingUrl("/login-process")
+                ).logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                );
+
 
 
 
