@@ -14,6 +14,9 @@ public class Business {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name= "title")
+    private String title;
+
     @Column(name = "b_no")
     private String bNo;
 
@@ -25,4 +28,22 @@ public class Business {
 
     @Column
     private String detail;
+
+    @Column
+    private String author;
+
+    @Column
+    private String checked;
+
+    public Business(Long id, String title, String bNo, String zipCode, String addr, String detail,String checked) {
+        this.title = title;
+        this.bNo = bNo;
+        this.zipCode = zipCode;
+        this.addr = addr;
+        this.detail = detail;
+        this.checked = checked;
+
+    }
+
+
 }

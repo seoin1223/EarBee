@@ -109,7 +109,6 @@ public class BusinessApiService {
                 System.out.println("검색어가 입력되지 않았습니다.");
                 return null;
             }
-            System.out.println("현재 페이지 " +dto.getCurrentPage());
 
             String postData = String.format("confmKey=%s&currentPage=%s&keyword=%s&countPerPage=10&resultType=json",
                     URLEncoder.encode(confmKey, StandardCharsets.UTF_8),dto.getCurrentPage(), encodedKeyword);

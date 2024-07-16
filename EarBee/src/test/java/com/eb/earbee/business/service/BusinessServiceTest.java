@@ -21,7 +21,7 @@ class BusinessServiceTest {
         {
             // 정상적으로 추가가 되었는지 확인하는 메서드
             // Data
-            Business business = new Business(1L,"1308189095","44220","울산광역시 북구 매곡1로 17 (매곡동, 매곡푸르지오2단지)","109/204");
+            Business business = new Business(1L,"1308189095","44220","울산광역시 북구 매곡1로 17 (매곡동, 매곡푸르지오2단지)","109/204",null,null);
             Business result = businessRepository.save(business);
 
             // 비교

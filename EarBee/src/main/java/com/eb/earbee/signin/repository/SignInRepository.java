@@ -7,4 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface SignInRepository extends CrudRepository<SignInEntity, Long> {
 
 
+
 }
