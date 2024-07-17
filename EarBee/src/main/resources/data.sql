@@ -158,5 +158,5 @@
 --                             CONSTRAINT reservation_Room_seq FOREIGN key(room_seq) REFERENCES room(room_Seq) on delete cascade
 -- );
 
-
+insert into user1 (username, password, email, role, provider, providerId, created) values("seoin","123qwe","seoin2389@icloud.com", "Role_ADMIN",null,null,CURRENT_TIMESTAMP);
 select * from business

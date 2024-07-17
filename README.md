@@ -11,6 +11,7 @@
    7. [서버](#서버)
    8. [Properties](#Properties)
    9. [학습](#학습) 
+   10. [Oauth2](#Oauth2) 
 
 # 프로젝트 목적
 
@@ -172,8 +173,9 @@ spring boot에서는 jsp를 사용하기 위해서는 추가적으로 의존성 
 
 #### 버그
 1. springSecurity 설정 클래스 인식 불가 : package가 com.eb.earbee인데 eb 패키지에 security를 생성한 것을 발견 -> 수정 완료
-   
-
+2. 시큐리티 로그인 후 메인페이지 접속 시 로그인 해제 : UserDetails가 아닌 User 객체로 인증된 유저 정보를 받을려고 해서 null 발생 -> 수정 완료   
+3. img의 src가 너무 길어 치환하기 위해 WebConfig를 생성하였지만 정상적으로 작동하지 않고 alt 발생 : @Configuration 추가하지 않음 -> 수정 완료 
+4. google oauth2 로그인시 google redirect_uri_mismatch 발생 : port나 uri 확인 -> 수정 완료
 
 </details>
 
@@ -235,3 +237,61 @@ address.url=https://www.juso.go.kr/addrlink/addrLinkApi.do
 #naver.client.secret=PmMbwcBr39Zonrb2nWlmtmKeXhNZKMzvNaveuuUO
 
 ```
+
+# Oauth2
+1. 사전 단계 : MavenRepo에서 Oauth2 client 맘에 드는 버전 가져오기
+```properties
+// https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-client
+implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '6.2.3' 
+```
+
+2. google:
+   1. Google API Console 접속
+   2. API 및 서비스 접속 
+   
+   ![img_1.png](img_1.png)
+   3. 프로젝트 생성
+   
+   ![img_2.png](img_2.png)
+
+   4. Oauth2 동의 화면 이동 후 External 클릭 후 만들기
+   ![img_3.png](img_3.png)
+   5. 필요한 정보 기입 후 만들기
+   
+   ![img_4.png](img_4.png)
+   6. 사용자 인증 정보 이동
+   
+   ![img_5.png](img_5.png)
+   7. 사용자 인증 정보 만들기 -> Oauth 클라이언트 ID 생성
+   
+   ![img_6.png](img_6.png)
+
+    8. 프로젝트 이름과 승인된 리다이렉션 URI 지정 후 생성 
+        - /login/oauth2/code 까지는 고정값 prefix와 subfix는 자유롭게 지정
+        - 이 리다이렉션 uri에 대한 controller를 만들 필요가 없음 -> 라이브러리가 알아서 처리
+    ![img_7.png](img_7.png)
+    ![img_8.png](img_8.png)
+
+    9. yml 파일에 clientId&PWD를 작성
+       ```properties
+        security:
+           oauth2:
+               client:
+               registration:
+                  google:
+                    client-id:
+                    client-secret:
+                    scope:
+                      - email
+                      - profile
+       ```
+   10. 전송 uri는 /oauth2/authorization/google 로 고정 
+       - 바꿀 수 없음 : test 시 404 정상
+       - SecurityConfig oauth2 추가
+   
+         ```
+            <a href="/oauth2/authorization/google"><img src="/img/oauth2/googleOauth2.png" alt="구글 로그인" ></a>
+         ```
+
+ 
+
