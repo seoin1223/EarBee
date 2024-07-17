@@ -3,6 +3,7 @@ package com.eb.earbee.business.service;
 import com.eb.earbee.business.dto.BusinessForm;
 import com.eb.earbee.business.entity.Business;
 import com.eb.earbee.business.repository.BusinessRepository;
+import com.eb.earbee.main.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,13 +23,14 @@ public class BusinessService  {
     }
 
     @Transactional
-    public Business addBusiness(BusinessForm entity, String user) {
+    public Business addBusiness(BusinessForm entity, User user) {
         Business business = entity.toEntity();
-        business.setAuthor(user);
-
+        business.setAuthor(user.getId());
+        business.setUser(user);
         return businessRepository.save(business);
 
     }
+
 
 
 }

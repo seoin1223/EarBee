@@ -1,5 +1,6 @@
 package com.eb.earbee.business.entity;
 
+import com.eb.earbee.main.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,12 +10,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "business")
 public class Business {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long num;
 
-    @Column(name= "title")
+    @Column
     private String title;
 
     @Column(name = "b_no")
@@ -34,6 +36,10 @@ public class Business {
 
     @Column
     private String checked;
+
+    @JoinColumn(name = "userNum", referencedColumnName = "num", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    private User user;
 
     public Business(Long id, String title, String bNo, String zipCode, String addr, String detail,String checked) {
         this.title = title;
