@@ -4,18 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="661f6cac-5786-4b7a-99a1-f5a1e187bd87" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/EarBee.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EarBee/src/main/resources/static/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EarBee/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/EarBee/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EarBee/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/EarBee/src/main/resources/data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EarBee/src/main/webapp/WEB-INF/views/index.jsp" beforeDir="false" />
-    </list>
+    <list default="true" id="661f6cac-5786-4b7a-99a1-f5a1e187bd87" name="변경" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -61,11 +50,19 @@
     "git-widget-placeholder": "seoin",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/Malti",
+    "last_opened_file_path": "E:/EarBee",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.17011.79" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.17011.79" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="디폴트 작업">
@@ -76,6 +73,7 @@
       <updated>1702435342892</updated>
       <workItem from="1702435344176" duration="40000" />
       <workItem from="1702500217427" duration="28000" />
+      <workItem from="1721394218261" duration="120000" />
     </task>
     <servers />
   </component>

@@ -18,7 +18,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private PrincipalOauth2UserService principalOauth2UserService;
+    private final PrincipalOauth2UserService principalOauth2UserService;
 
     public SecurityConfig(PrincipalOauth2UserService principalOauth2UserService) {
         this.principalOauth2UserService = principalOauth2UserService;
@@ -32,6 +32,7 @@ public class SecurityConfig {
                         authorize
                                 .requestMatchers(new AntPathRequestMatcher("/login", "/login-process")).permitAll()
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/myPage")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/earbee/**")).hasAnyRole("ADMIN", "MANAGER","USER")
                                 .anyRequest().permitAll()
 
@@ -51,7 +52,7 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
                                 .userService(principalOauth2UserService))
-
+                        .defaultSuccessUrl("/myPage")
                 );
 
 

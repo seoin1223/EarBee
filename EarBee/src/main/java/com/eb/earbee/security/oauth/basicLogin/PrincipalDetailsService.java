@@ -1,4 +1,4 @@
-package com.eb.earbee.security.oauth;
+package com.eb.earbee.security.oauth.basicLogin;
 
 
 import com.eb.earbee.main.entity.User;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class PrincipalDetailsService implements UserDetailsService {
 
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public PrincipalDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;

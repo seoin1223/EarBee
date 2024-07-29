@@ -3,6 +3,7 @@ package com.eb.earbee.main.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,6 +17,7 @@ import java.sql.Timestamp;
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class User  {
 
     @Id
@@ -37,20 +39,22 @@ public class User  {
     private String provider;
     @Column
     private String providerId;
+
     @CreationTimestamp
     private Timestamp created;
 
 
-    public User(String id, String password,String username, String email, String provider, String providerId) {
+
+    @Builder
+    public User(String id, String password,String username, String email, String provider, String providerId, String role) {
         this.id = id;
         this.password = password;
         this.username = username;
         this.email = email;
         this.provider = provider;
         this.providerId = providerId;
+        this.role = role;
     }
-
-
 
 
 }

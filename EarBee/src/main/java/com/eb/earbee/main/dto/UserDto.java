@@ -14,9 +14,10 @@ public class UserDto {
     private String email;
     private String provider;
     private String providerId;
+    private String role;
 
 
     public User toEntity(){
-        return new User(id,username,password,email,provider,providerId);
+        return new User(id,username,password,email,provider,providerId,role);
     }
 }
