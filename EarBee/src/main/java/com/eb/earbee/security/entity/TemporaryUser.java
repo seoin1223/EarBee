@@ -1,4 +1,4 @@
-package com.eb.earbee.main.entity;
+package com.eb.earbee.security.entity;
 
 
 import jakarta.persistence.*;
@@ -8,17 +8,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
-
 import java.sql.Timestamp;
 
 
-@Data
 @Entity
-@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class User  {
+@Table(name = "tempuser")
+@Data
+public class TemporaryUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +27,8 @@ public class User  {
     @Column
     private String password;
 
-    @Column(name="username")
+    @Column
     private String username;
-
     @Column
     private String email;
     @Column
@@ -41,21 +38,15 @@ public class User  {
     @Column
     private String providerId;
 
-    @Column
-    private String phone;
-
     @CreationTimestamp
     private Timestamp created;
 
-
-
     @Builder
-    public User(String id, String password, String username, String email, String phone,String provider, String providerId, String role) {
+    public TemporaryUser(String id, String password,String username, String email, String provider, String providerId, String role) {
         this.id = id;
         this.password = password;
         this.username = username;
         this.email = email;
-        this.phone = phone;
         this.provider = provider;
         this.providerId = providerId;
         this.role = role;

@@ -12,11 +12,14 @@ public class UserDto {
     private String username;
     private String password;
     private String email;
+    private String phone1;
+    private String phone2;
     private String provider;
     private String providerId;
+    private String role;
 
 
     public User toEntity(){
-        return new User(id,username,password,email,provider,providerId);
+        return User.builder().id(id).username(username).password(password).email(email).phone("010"+phone1+phone2).provider(provider).providerId(providerId).role(role).build();
     }
 }
