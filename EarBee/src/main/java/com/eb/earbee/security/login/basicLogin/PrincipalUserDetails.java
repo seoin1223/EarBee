@@ -1,6 +1,7 @@
-package com.eb.earbee.security.oauth.basicLogin;
+package com.eb.earbee.security.login.basicLogin;
 
 import com.eb.earbee.main.entity.User;
+import com.eb.earbee.security.entity.TemporaryUser;
 import lombok.Data;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,19 +12,35 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-@Getter
+
 @Data
 public class PrincipalUserDetails implements UserDetails, OAuth2User {
 
     private User user;
+    private TemporaryUser temporaryUser;
     private Map<String, Object> attributes; // Oauth2
 
     public PrincipalUserDetails(User user) {
         this.user = user;
     }
+
+
+    public PrincipalUserDetails(TemporaryUser temporaryUser, Map<String, Object> attributes) {
+        this.temporaryUser = temporaryUser;
+        this.attributes = attributes;
+    }
+
     public PrincipalUserDetails(User user, Map<String, Object> attributes) {
         this.user = user;
         this.attributes = attributes;
+    }
+
+    public TemporaryUser getTemporaryUser() {
+        return temporaryUser != null ?  temporaryUser: null;
+    }
+
+    public boolean isTemporaryUser() {
+        return temporaryUser != null;
     }
 
 
@@ -46,41 +63,42 @@ public class PrincipalUserDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return user != null ? user.getPassword() : null;
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user != null ? user.getUsername() : (temporaryUser != null ? temporaryUser.getUsername() : "");
     }
 
-
     public String getId() {
-        return user.getId();
+        return user != null ? user.getId() : (temporaryUser != null ? temporaryUser.getId() : "");
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return user != null || temporaryUser != null;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return user != null || temporaryUser != null;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return user != null || temporaryUser != null;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user != null || temporaryUser != null;
     }
 
     @Override
     public String getName() {
-        return user.getUsername();
+        return user != null ? user.getUsername() : (temporaryUser != null ? temporaryUser.getUsername() : "");
     }
+
+
 }

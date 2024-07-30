@@ -6,8 +6,6 @@ import com.eb.earbee.main.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-
 @Service
 public class UserService {
 
@@ -18,14 +16,27 @@ public class UserService {
         this.encoder = encoder;
     }
 
+    public boolean isUser(String id){
+        User user = userRepository.findById(id);
+        return user != null;
+    }
 
-    public User addUser(UserDto user) {
+
+
+
+    public User addUser(UserDto user, boolean check) {
         User userEntity = user.toEntity();
+        if (check) {
+            System.out.println("Before encoding: " + userEntity);
+            userEntity.setPassword(encoder.encode(user.getId())); // Assuming ID is used for password encoding
+            System.out.println("Before encoding2: " + userEntity);
+        } else {
+            System.out.println("Before encoding: " + userEntity);
+            userEntity.setPassword(encoder.encode(user.getPassword()));
+        }
         userEntity.setRole("ROLE_USER");
-        userEntity.setPassword(encoder.encode(user.getPassword()));
-        return userRepository.save(userEntity);
-
-
+        User savedUser = userRepository.save(userEntity);
+        return savedUser;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.eb.earbee.security.oauth.basicLogin;
+package com.eb.earbee.security.login.basicLogin;
 
 
 import com.eb.earbee.main.entity.User;
