@@ -22,9 +22,6 @@ public class UserService {
         return user != null;
     }
 
-
-
-
     public User addUser(UserDto user, boolean check) {
         User userEntity = user.toEntity();
         if (check) {
@@ -36,8 +33,7 @@ public class UserService {
             userEntity.setPassword(encoder.encode(user.getPassword()));
         }
         userEntity.setRole("ROLE_USER");
-        User savedUser = userRepository.save(userEntity);
-        return savedUser;
+        return userRepository.save(userEntity);
     }
 
 }

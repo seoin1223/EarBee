@@ -30,8 +30,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     /* Oauth 후처리*/
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-
         OAuth2User oauth2User = super.loadUser(userRequest);
+
         String provider = userRequest.getClientRegistration().getRegistrationId();
         String providerId = oauth2User.getAttribute("sub");
         String id = provider+"_"+providerId;
@@ -39,10 +39,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String email = oauth2User.getAttribute("email");
         String role = "ROLE_USER";
         String username = oauth2User.getAttribute("name");
+
         User user1 = userRepository.findById(id);
         TemporaryUser user2 = temporaryUserRespository.findById(id);
-
-
         if (user1 != null) {
             // User already exists, no need for TemporaryUser
             return new PrincipalUserDetails(user1, oauth2User.getAttributes());
@@ -54,8 +53,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         TemporaryUser newTempUser = TemporaryUser.builder().provider(provider).providerId(providerId).id(id).email(email).role(role).username(username).build();
         user2 = temporaryUserRespository.save(newTempUser);
-
-
         return new PrincipalUserDetails(user2,oauth2User.getAttributes());
     }
 }
