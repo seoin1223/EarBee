@@ -18,6 +18,7 @@ public class UserService {
 
     public boolean isUser(String id){
         User user = userRepository.findById(id);
+        System.out.println("id: "+id+"\n user: "+user);
         return user != null;
     }
 

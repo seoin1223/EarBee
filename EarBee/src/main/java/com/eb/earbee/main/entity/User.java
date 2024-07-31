@@ -23,31 +23,24 @@ public class User  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long num;
-
     @Column(unique = true, nullable = false)
     private String id;
     @Column
     private String password;
-
     @Column(name="username")
     private String username;
-
     @Column
     private String email;
-    @Column
+    @Column(nullable = false)
     private String role;
-    @Column
+    @Column(nullable = true)
     private String provider;
-    @Column
+    @Column(nullable = true)
     private String providerId;
-
     @Column
     private String phone;
-
     @CreationTimestamp
     private Timestamp created;
-
-
 
     @Builder
     public User(String id, String password, String username, String email, String phone,String provider, String providerId, String role) {
