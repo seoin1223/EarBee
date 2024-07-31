@@ -12,7 +12,10 @@ import jakarta.servlet.http.HttpSession;
 import org.hibernate.Session;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,11 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class mainController {
 
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private UserService userService;
 
-    public mainController(UserService userService) {
+    public mainController(UserService userService, AuthenticationManagerBuilder authenticationManagerBuilder) {
         this.userService = userService;
-
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
 
     @GetMapping
@@ -84,14 +88,12 @@ public class mainController {
             check = principal.isTemporaryUser();
             if(check) {
                 session.removeAttribute("principal");
-
             }
         }
         User resultUser = userService.addUser(user,check);
+
         return "redirect:/";
-
     }
-
 
     // 마이 페이지
     @GetMapping("/myPage")
@@ -99,14 +101,5 @@ public class mainController {
         return "main/myPage";
 
     }
-
-    // 아이디 중복 확인
-
-
-
-
-
-
-
 
 }
