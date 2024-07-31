@@ -10,6 +10,8 @@ import com.eb.earbee.security.login.basicLogin.PrincipalUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.hibernate.Session;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.stereotype.Controller;
@@ -74,26 +76,37 @@ public class mainController {
 
     @PostMapping("/join")
     public String join(HttpServletRequest request, UserDto user){
-        System.out.println("join"+user);
+        boolean check = false;
         HttpSession session = request.getSession();
         PrincipalUserDetails principal = (PrincipalUserDetails) session.getAttribute("principal");
-        boolean check = principal.isTemporaryUser();
 
-        if(check) {
-            session.removeAttribute("principal");
+        if(principal != null) {
+            check = principal.isTemporaryUser();
+            if(check) {
+                session.removeAttribute("principal");
 
+            }
         }
         User resultUser = userService.addUser(user,check);
-        System.out.println(resultUser);
         return "redirect:/";
 
     }
 
+
+    // 마이 페이지
     @GetMapping("/myPage")
     public String myPage(Model model){
         return "main/myPage";
 
     }
+
+    // 아이디 중복 확인
+
+
+
+
+
+
 
 
 }

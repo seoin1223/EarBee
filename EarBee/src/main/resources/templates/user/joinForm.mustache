@@ -1,24 +1,115 @@
 {{>layouts/header}}
 
+<style>
+    .form-container {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr; /* 레이블, 입력 필드, 버튼 3열 구조 */
+        gap: 1rem; /* 요소 사이의 간격 */
+        max-width: 500px;
+        width: 100%;
+        padding: 2rem;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
 
-<form action = "/join" method="post">
+    .form-container label {
+        display: flex;
+        align-items: center; /* 수직 중앙 정렬 */
+    }
 
-    <label> id
-        <input name="id">
-    </label>
-    <label>pwd</label>
-    <label> 비밀번호
-        <input name="password">
-    </label>
+    .form-container input {
+        width: 100%; /* 입력 필드의 너비를 100%로 설정 */
+    }
 
-    <label> 이메일
-        <input name="email">
-    </label>
+    .form-container button {
+        width: 100%; /* 버튼의 너비를 100%로 설정 */
+        font-size: 0.875rem; /* 버튼 폰트 크기 조정 */
+    }
 
-    <label> 이름
-        <input name="username">
-    </label>
-    <button type="submit">버튼</button>
+    .phone-container {
+        display: grid;
+        grid-template-columns: 1fr 2fr 2fr; /* 3열 구조: 010, input, input */
+        gap: 0.5rem; /* 입력 필드 사이의 간격 */
+        grid-column: span 2; /* 3열을 차지하도록 설정 */
+        align-items: center; /* 수직 중앙 정렬 */
+    }
+
+    .phone-container .phone-prefix {
+        text-align: center; /* 가운데 정렬 */
+    }
+
+    .submit-button-container {
+        grid-column: 3; /* 전체 너비를 차지하도록 설정 */
+        text-align: center; /* 버튼을 중앙에 위치하도록 설정 */
+    }
+    .input{
+        grid-column: span 2;
+    }
+
+
+
+</style>
+
+<script>
+    function check_userId(){
+        var userid = document.getElementById("id").value.trim();
+
+        if (userid == null || userid ===" "){
+            console.log("id를 입력해주세요");
+            return false;
+        }
+
+        var url = '/check_id';
+        var data = { id:userid};
+
+        fetch(url, {
+            method : 'POST',
+            headers: {
+                'Content-Type' : 'application/json',
+            },
+            body : JSON.stringify(data),
+        }).then(response => {
+            if(response.ok){
+                alert("사용 가능한 아이디 입니다");
+            }else{
+                alert("중복된 아이디 입니다.");
+            }
+        }).catch(error => {
+            console.error("Error", error);
+            alert("서버와의 통신 중 오류가 발생하였습니다.");
+        })
+
+        return false;
+    }
+
+
+</script>
+
+<form class="form-container" action="/join" method="post">
+    <label for="id">Id:</label>
+    <input type="text" id="id" name="id">
+    <button type="button" class="btn" onclick="check_userId()">중복 확인</button>
+
+    <label for="username">Username:</label>
+    <input type="text" class ="input" id="username" name="username">
+
+    <label for="password">Password:</label>
+    <input type="password" class ="input" id="password" name="password">
+
+    <label for="email">Email:</label>
+    <input type="email" class ="input" id="email" name="email">
+
+    <label for="phone">Phone:</label>
+    <div class="phone-container">
+        <span class="phone-prefix">010</span>
+        <input type="text" id="phone-part1" name="phone1" placeholder="1234" maxlength="4" pattern="\d{4}" required>
+        <input type="text" id="phone-part2" name="phone2" placeholder="5678" maxlength="4" pattern="\d{4}" required>
+    </div>
+
+    <div class="submit-button-container">
+        <button type="submit">회원가입</button>
+    </div>
 </form>
 
 
