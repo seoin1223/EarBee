@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -34,13 +35,18 @@ public class mainAPiController {
     }
 
     @GetMapping("/check_login")
-    public ResponseEntity<String> checkLogin(Authentication authen){
-        if(authen != null ){
-            if(authen.getPrincipal() != null){
-                PrincipalUserDetails userPrincipal = (PrincipalUserDetails ) authen.getPrincipal();
-                return ResponseEntity.ok(userPrincipal.getUser().getRole());
+    public ResponseEntity<Map<String, Object>> checkLogin(Authentication authed){
+        Map<String, Object> response = new HashMap<>();
+        if(authed != null ){
+            if(authed.getPrincipal() != null){
+                PrincipalUserDetails userPrincipal = (PrincipalUserDetails ) authed.getPrincipal();
+                System.out.println("ok");
+                response.put("ok", true);
+                response.put("role", userPrincipal.getUser().getRole());
+                return ResponseEntity.ok(response);
             }
         }
+        System.out.println("null");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
