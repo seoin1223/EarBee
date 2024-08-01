@@ -48,7 +48,7 @@ public class SecurityConfig  {
                         authorize
                                 .requestMatchers(new AntPathRequestMatcher("/login", "/login-process")).permitAll()
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/myPage")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/myPage")).hasAnyRole("ADMIN","MANAGER", "USER")
                                 .requestMatchers(new AntPathRequestMatcher("/earbee/**")).hasAnyRole("ADMIN", "MANAGER","USER")
                                 .anyRequest().permitAll()
 
