@@ -43,6 +43,10 @@ public class PrincipalUserDetails implements UserDetails, OAuth2User {
         return temporaryUser != null;
     }
 
+    public User getUser(){
+        return (user != null) ? user: null;
+    }
+
 
     @Override
     public Map<String, Object> getAttributes() {
@@ -60,6 +64,8 @@ public class PrincipalUserDetails implements UserDetails, OAuth2User {
         });
         return authorities;
     }
+
+
 
     @Override
     public String getPassword() {

@@ -58,6 +58,5 @@ public class BusinessApiController {
         } else {
             return ResponseEntity.badRequest().build(); // 실패로 처리
         }
-
     }
 }
