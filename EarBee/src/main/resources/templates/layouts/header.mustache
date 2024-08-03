@@ -19,6 +19,50 @@
             height: auto; /* 가로 비율을 유지한 채 이미지 높이를 자동으로 조정 */
             width: auto;
         }
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem; /* 열 간의 간격 */
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-form div {
+            margin-bottom: 1rem;
+        }
+
+        .modal-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-form input {
+            width: 100%;
+            padding: 0.5rem;
+        }
+        .modal-form a {
+            margin-top: 0.5rem; /* 폼과 링크 사이에 간격 추가 */
+            align-self: flex-end; /* 링크를 오른쪽 끝으로 이동 */
+        }
+
+        .modal-social {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-social img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .login{
+            font-size: 1.5rem;
+        }
+
     </style>
 </head>
 <body>
@@ -93,41 +137,89 @@
                         </ul>
                     </li>
                 </ul>
+            </div>
+            <div>
+                {{^id}} <!-- userName이 존재하지 않으면 -->
+                    <a class ="login" href="#" onclick = "showLogin(); return false;">로그인</a>
 
+
+                {{/id}}
+                {{#id}} <!-- userName이 존재하면 -->
+                    <a class ="login" href="/logout">로그아웃</a>
+                {{/id}}
             </div>
         </div>
     </nav>
 
-    <div class="modal fade" id="loginModal" tabindex="-1"  aria-hidden="true">
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" >Login</h5>
+                    <h5 class="modal-title">Login</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                   <form>
-
-                   </form>
+                    <div class="modal-grid">
+                        <div class="modal-form">
+                            <form id = "loginForm" action="/login-process" method="post">
+                                <div>
+                                    <label for="id">ID</label>
+                                    <input id="id" name="id" type="text">
+                                </div>
+                                <div>
+                                    <label for="password">Password</label>
+                                    <input id="password" name="password" type="password">
+                                </div>
+                            </form>
+                            <a href="/join">회원가입</a>
+                        </div>
+                        <div class="modal-social">
+                            <a href="/oauth2/authorization/google">
+                                <img src="/img/oauth2/googleOauth2.png" alt="구글 로그인">
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary" onclick="login()">로그인</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
     </div>
-
-
 </header>
 
 <script>
-    $(document).ready(function() {
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // 모달 객체를 선택합니다.
+        var modalElement = document.getElementById('loginModal');
+        var modal = new bootstrap.Modal(modalElement);
+
+        // 모달이 열릴 때 키보드 이벤트 리스너를 추가합니다.
+        modalElement.addEventListener('shown.bs.modal', function () {
+            document.addEventListener('keydown', handleKeyDown);
+        });
+
+        // 모달이 닫힐 때 키보드 이벤트 리스너를 제거합니다.
+        modalElement.addEventListener('hidden.bs.modal', function () {
+            document.removeEventListener('keydown', handleKeyDown);
+        });
+
+        function handleKeyDown(event) {
+            if (event.key === 'Enter') {
+                login();
+                event.preventDefault(); // 기본 동작 방지
+            }
+        }});
+
+
+    $(document).ready(function () {
+        // #profile-link 클릭 시 로그인 상태 확인
         $('#profile-link').on('click', function(event) {
             event.preventDefault(); // 링크 기본 동작 방지
 
-            console.log("넘어감");
-            // AJAX 요청으로 로그인 상태 확인
             $.ajax({
                 url: '/main/check_login', // 로그인 상태 확인 API
                 method: 'GET',
@@ -139,14 +231,44 @@
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    console.log("Status:", jqXHR.status);
-                    console.log("Response Text:", jqXHR.responseText);
-                    console.log("Error Thrown:", errorThrown);
                     var myModal = new bootstrap.Modal(document.getElementById('loginModal')); // 모달 객체 생성
                     myModal.show(); // 모달 표시
                 }
             });
         });
+
+        #loginForm 제출 시 로그인 처리
+        $('#loginForm').on('submit', function (e) {
+            e.preventDefault(); // 폼 제출 방지
+            alert($(this).serialize());
+
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'), // form action URL 사용
+                data: $(this).serialize(),
+                success: function (response) {
+                    console.log("Response received:", response); // 응답 내용 확인
+                    alert("여기 안됨");
+                    //window.location.href = "/myPage"; // 로그인 성공 시 리다이렉션
+                },
+                error: function (xhr) {
+                    var response = JSON.parse(xhr.responseText);
+                    alert(response.error); // 로그인 실패 시 alert 표시
+                }
+            });
+        });
     });
+
+    function showLogin() {
+        var myModal = new bootstrap.Modal(document.getElementById('loginModal'));
+        myModal.show();
+    }
+
+    function login(){
+        var form = document.getElementById('loginForm');
+        form.submit();
+    }
 </script>
+
+
 <!-- nav-->

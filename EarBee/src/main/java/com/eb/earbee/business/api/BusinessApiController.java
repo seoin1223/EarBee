@@ -37,16 +37,13 @@ public class BusinessApiController {
     @PostMapping("/search")
     public ResponseEntity<BusinessApplyResponse> businessSearchNum(@RequestBody BusinessApplyRequest dto){
         BusinessApplyResponse result = businessApiService.businessSearchNum(dto);
-        System.out.println(dto);
         return (result !=null)? ResponseEntity.ok(result) : ResponseEntity.badRequest().build();
     }
 
     // 모달창에서 넣은 주소를 검색
     @PostMapping("/addr")
     public ResponseEntity<BusinessAddrResponse[]> addrSearch(@RequestBody BusinessAddrRequest dto) {
-        System.out.println(dto.toString());
         BusinessAddrResponse[] result = businessApiService.searchAddr(dto);
-        System.out.println(Arrays.toString(result));
         return (result !=null)? ResponseEntity.ok(result):ResponseEntity.badRequest().build();
     }
 

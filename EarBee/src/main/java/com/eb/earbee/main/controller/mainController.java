@@ -45,7 +45,6 @@ public class mainController {
 
             if (user != null) {
                 m.addAttribute("id", user.getId());
-                System.out.println(user.toString());
             }
         }else {
             System.out.println("User is not logged in.");
@@ -73,10 +72,10 @@ public class mainController {
         return "/main/main";
     }
 
-    @GetMapping("/login")
-    public String login(Model model){
-        return "user/login";
-    }
+//    @GetMapping("/login")
+//    public String login(Model model){
+//        return "user/login";
+//    }
 
     @PostMapping("/join")
     public String join(HttpServletRequest request, UserDto user){
@@ -97,9 +96,20 @@ public class mainController {
 
     // 마이 페이지
     @GetMapping("/myPage")
-    public String myPage(Model model){
+    public String myPage(Model model, Authentication authen){
+        if(authen != null){
+            PrincipalUserDetails principal = (PrincipalUserDetails) authen.getPrincipal();
+            if(principal != null){
+                model.addAttribute("id", principal.getId());
+            }
+        }
         return "main/myPage";
 
+    }
+
+    @GetMapping("/login")
+    public String login(Model model){
+         return "user/login";
     }
 
 }
