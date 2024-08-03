@@ -23,7 +23,8 @@ public class PrincipalDetailsService implements UserDetailsService {
         User user = userRepository.findById(id);
         if(user != null) {
             return new PrincipalUserDetails(user);
+        }else{
+            throw new UsernameNotFoundException("User not found");
         }
-        return null;
     }
 }
