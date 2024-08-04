@@ -217,47 +217,25 @@
 
     $(document).ready(function () {
         // #profile-link 클릭 시 로그인 상태 확인
-        $('#profile-link').on('click', function(event) {
+        $('#profile-link').on('click', function (event) {
             event.preventDefault(); // 링크 기본 동작 방지
-
             $.ajax({
                 url: '/main/check_login', // 로그인 상태 확인 API
                 method: 'GET',
                 dataType: 'json',
-                success: function(response) {
-                    console.log("ok"+response);
+                success: function (response) {
+                    console.log("ok" + response);
                     if (response.ok) {
                         window.location.href = '/myPage';
                     }
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     var myModal = new bootstrap.Modal(document.getElementById('loginModal')); // 모달 객체 생성
                     myModal.show(); // 모달 표시
                 }
             });
         });
-
-        #loginForm 제출 시 로그인 처리
-        $('#loginForm').on('submit', function (e) {
-            e.preventDefault(); // 폼 제출 방지
-            alert($(this).serialize());
-
-            $.ajax({
-                type: 'POST',
-                url: $(this).attr('action'), // form action URL 사용
-                data: $(this).serialize(),
-                success: function (response) {
-                    console.log("Response received:", response); // 응답 내용 확인
-                    alert("여기 안됨");
-                    //window.location.href = "/myPage"; // 로그인 성공 시 리다이렉션
-                },
-                error: function (xhr) {
-                    var response = JSON.parse(xhr.responseText);
-                    alert(response.error); // 로그인 실패 시 alert 표시
-                }
-            });
-        });
-    });
+    })
 
     function showLogin() {
         var myModal = new bootstrap.Modal(document.getElementById('loginModal'));
