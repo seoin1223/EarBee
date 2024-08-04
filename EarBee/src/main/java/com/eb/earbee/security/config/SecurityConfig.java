@@ -3,6 +3,7 @@ package com.eb.earbee.security.config;
 
 //import com.eb.earbee.security.oauth.PrincipalOauth2UserService;
 import com.eb.earbee.security.login.oauth.CustomAuthenticationFailureHandler;
+import com.eb.earbee.security.login.oauth.CustomAuthenticationOauthSuccessHandler1;
 import com.eb.earbee.security.login.oauth.CustomAuthenticationSuccessHandler1;
 import com.eb.earbee.security.login.oauth.PrincipalOauth2UserService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -15,6 +16,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -29,11 +32,14 @@ public class SecurityConfig  {
 
 
     @Bean
+    public AuthenticationSuccessHandler customAuthenticationOauthSuccessHandler() {
+        return new CustomAuthenticationOauthSuccessHandler1();
+    }
+
+    @Bean
     public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
         return new CustomAuthenticationSuccessHandler1();
     }
-
-
 
     /* ajax를 위한 SecurityFilerChain*/
     @Bean
@@ -46,9 +52,6 @@ public class SecurityConfig  {
                         .anyRequest().permitAll()
                 ).sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 세션 생성 정책
-                ) .formLogin(form -> form
-                        .loginProcessingUrl("/login-process") // 로그인 처리 URL 설정
-                        .permitAll() // 로그인 URL에 대한 접근을 허용
                 );
         return http.build();
     }
@@ -62,6 +65,7 @@ public class SecurityConfig  {
                                 .requestMatchers(new AntPathRequestMatcher("/login", "/login-process")).permitAll()
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/earbee/**")).hasAnyRole("ADMIN", "MANAGER","USER")
+                                .requestMatchers(new AntPathRequestMatcher("/myPage")).hasAnyRole("ADMIN","MANAGER", "USER")
                                 .anyRequest().permitAll()
 
                 )
@@ -73,21 +77,26 @@ public class SecurityConfig  {
                         .usernameParameter("id")
                         .passwordParameter("password")
                         .loginProcessingUrl("/login-process")
+                        .successHandler(customAuthenticationSuccessHandler())
                         .permitAll()
-                ).logout(logout -> logout
+                )
+
+                .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .permitAll()
 
                 ).oauth2Login(oau ->oau
                         .loginPage("/login")
+                        .defaultSuccessUrl("/",false)
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
                                 .userService(principalOauth2UserService))
-                        .successHandler(customAuthenticationSuccessHandler())
-                );
+                        .successHandler(customAuthenticationOauthSuccessHandler())
+                ).requestCache(cache -> cache.requestCache(new HttpSessionRequestCache()));
         return http
                 .build();
     }
+
 
 
 
