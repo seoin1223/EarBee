@@ -101,9 +101,10 @@ public class mainController {
             PrincipalUserDetails principal = (PrincipalUserDetails) authen.getPrincipal();
             if(principal != null){
                 model.addAttribute("id", principal.getId());
+                model.addAttribute("role",principal.getUser().getRole());
             }
         }
-        return "main/myPage";
+        return "user/myPage";
 
     }
 

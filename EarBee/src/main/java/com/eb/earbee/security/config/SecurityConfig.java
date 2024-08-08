@@ -41,7 +41,7 @@ public class SecurityConfig  {
         return new CustomAuthenticationSuccessHandler1();
     }
 
-    /* ajax를 위한 SecurityFilerChain*/
+    /* ajax를 위한 SecurityFilerChain 추후 사용할 수 있음 아직 아님*/
     @Bean
     public SecurityFilterChain restScurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
