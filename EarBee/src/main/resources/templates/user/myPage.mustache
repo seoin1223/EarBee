@@ -1,0 +1,75 @@
+{{>layouts/header}}
+<script src="/js/user/myPage.js" defer></script>
+<style>
+    .sidebar {
+        background-color: #f8f9fa; /* 배경색 */
+        padding: 20px; /* 패딩 */
+        height: 100%; /* 사이드바의 높이 100% 설정 */
+    }
+    .content {
+        padding: 20px; /* 패딩 */
+        background-color: #fff; /* 배경색 */
+    }
+    .nav-link {
+        color: #000;
+    }
+    .nav-link.active {
+        background-color: #0d6efd; /* 활성화된 링크의 배경색 */
+        color: #fff; /* 활성화된 링크의 텍스트 색상 */
+    }
+
+    .myPage-section{
+        display: grid;
+        grid-template-columns: 1fr 7fr; /* 사이드바와 콘텐츠 비율 설정 */
+        height: auto;
+        padding-right: 30px;
+        flex: 1;
+    }
+
+</style>
+<section class = "myPage-section">
+    <div class="container-fluid">
+        <div class="sidebar p-3 bg-light">
+            <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                <span class="fs-4">MyPage</span>
+            </a>
+            <hr>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" aria-current="page">Home</a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link">Dashboard</a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link">Orders</a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link">Products</a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link">Customers</a>
+                </li>
+            </ul>
+            <hr>
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                    <strong>mdo</strong>
+                </a>
+                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                    <li><a class="dropdown-item" href="#">New project...</a></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+    </div>
+</section>
+
+{{>layouts/footer}}

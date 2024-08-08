@@ -24,6 +24,8 @@ repositories {
 
 dependencies {
 
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+
     // 룸북
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
