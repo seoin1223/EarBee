@@ -2,6 +2,8 @@
 <script src="/js/user/myPage.js" defer></script>
 <style>
     .sidebar {
+        display: flex;
+        flex-direction: column;
         background-color: #f8f9fa; /* 배경색 */
         padding: 20px; /* 패딩 */
         height: 100%; /* 사이드바의 높이 100% 설정 */
@@ -9,6 +11,12 @@
     .content {
         padding: 20px; /* 패딩 */
         background-color: #fff; /* 배경색 */
+    }
+    .sidebar .nav {
+        flex: 1; /* nav가 가능한 모든 공간을 차지하도록 설정 */
+    }
+    .sidebar .dropdown {
+        margin-top: auto; /* 사이드바 하단으로 이동 */
     }
     .nav-link {
         color: #000;
@@ -20,7 +28,7 @@
 
     .myPage-section{
         display: grid;
-        grid-template-columns: 1fr 7fr; /* 사이드바와 콘텐츠 비율 설정 */
+        grid-template-columns: 1fr 9fr; /* 사이드바와 콘텐츠 비율 설정 */
         height: auto;
         padding-right: 30px;
         flex: 1;
@@ -30,14 +38,11 @@
 <section class = "myPage-section">
     <div class="container-fluid">
         <div class="sidebar p-3 bg-light">
-            <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-                <span class="fs-4">MyPage</span>
-            </a>
+            <span class="fs-4 mb-2">MyPage</span>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto sidebar-nav" >
                 <li class="nav-item">
-                    <a href="#" class="nav-link active" data-content="home" aria-current="page">Home</a>
+                    <a href="#" id = "userInfo" class="nav-link active" data-content="home" aria-current="page" data-user="{{user}}">회원정보</a>
                 </li>
                 <li>
                     <a href="#" class="nav-link" data-content="dashboard">Dashboard</a>
@@ -55,8 +60,9 @@
             <hr>
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                    <strong>mdo</strong>
+                    <img src="#" alt="" width="32" height="32" class="rounded-circle me-2">
+<!--                    프로필 사진-->
+                    <strong id = "profile"></strong>
                 </a>
                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
                     <li><a class="dropdown-item" href="#">New project...</a></li>
@@ -70,6 +76,9 @@
     </div>
     <div class="content" id="content">
     </div>
+</section>
+<section>
+
 </section>
 
 {{>layouts/footer}}

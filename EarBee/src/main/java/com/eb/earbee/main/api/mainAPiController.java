@@ -1,7 +1,9 @@
 package com.eb.earbee.main.api;
 
 
+import com.eb.earbee.main.dto.UserDto;
 import com.eb.earbee.main.entity.User;
+import com.eb.earbee.main.repository.UserRepository;
 import com.eb.earbee.main.service.UserService;
 import com.eb.earbee.security.login.basicLogin.PrincipalUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -22,10 +26,18 @@ import java.util.Map;
 @RequestMapping("/main")
 public class mainAPiController {
 
+    private final UserRepository userRepository;
     private UserService userService;
 
-    public mainAPiController(UserService userService) {
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public mainAPiController(UserService userService, PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/check_id")
@@ -48,6 +60,15 @@ public class mainAPiController {
                 response.put("role", userPrincipal.getUser().getRole());
                 return ResponseEntity.ok(response);
             }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @PostMapping("/checkUserMyPage")
+    public ResponseEntity<Boolean> checkUserMyPage(UserDto check){
+        User user = userRepository.findById(check.getId());
+        if(user!=null){
+            return ResponseEntity.ok(passwordEncoder.matches(check.getPassword(),user.getPassword()));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }

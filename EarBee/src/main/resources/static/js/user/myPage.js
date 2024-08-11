@@ -16,6 +16,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 페이지 로드 시 기본적으로 'Home' 링크를 클릭한 것처럼 처리
     const defaultActiveLink = document.querySelector('.sidebar-nav .nav-link.active');
+
+
+
+
+    // data-user 속성을 읽어옵니다.
+    var userLink = document.querySelector('#userInfo');
+    // data-user 속성에서 JSON 문자열을 가져옵니다.
+    var userJson = userLink.getAttribute('data-user');
+    var user = JSON.parse(userJson);
+    document.getElementById('profile').textContent=user.id;
+
+
     if (defaultActiveLink) {
         loadContent(defaultActiveLink.getAttribute('data-content'));
     }
@@ -40,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function loadContent(type) {
         switch (type) {
             case 'home':
-                contentDiv.innerHTML = '<h1>Home Content</h1><p>Welcome to the home page.</p>';
+                myPage(contentDiv,user);
                 break;
             case 'dashboard':
                 contentDiv.innerHTML = '<h1>Dashboard Content</h1><p>Here is your dashboard.</p>';
@@ -60,3 +72,36 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+
+function myPage(contentDiv,user){
+    contentDiv.innerHTML = `
+        <form id="myForm">
+            <div>
+                <span>ID : </span>
+                <input name ="id" value=${user.id}>            
+            </div>
+            <input name ="num" type="hidden" readonly disabled value= ${user.num}>
+            <div>
+                <span>Password : </span>
+                <input name ="password" type="password" placeholder="Enter your password"/>
+            </div> 
+            
+            <button type="button" onclick="userCheck()"> 비밀번호 확인</button>
+        </form>
+    `;
+}
+
+function userCheck(){
+    var form = document.getElementById('myForm');
+    var formData = new FormData(form);
+    fetch("/main/checkUserMyPage",{
+        method : 'post',
+        body : formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert("yes")
+        }).catch(error => {
+            alert("error")
+    })
+}

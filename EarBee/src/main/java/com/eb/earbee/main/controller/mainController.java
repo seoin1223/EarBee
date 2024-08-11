@@ -5,18 +5,14 @@ package com.eb.earbee.main.controller;
 import com.eb.earbee.main.dto.UserDto;
 import com.eb.earbee.main.entity.User;
 import com.eb.earbee.main.service.UserService;
-import com.eb.earbee.security.entity.TemporaryUser;
 import com.eb.earbee.security.login.basicLogin.PrincipalUserDetails;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.hibernate.Session;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +25,8 @@ public class mainController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private UserService userService;
+
+
 
     public mainController(UserService userService, AuthenticationManagerBuilder authenticationManagerBuilder) {
         this.userService = userService;
@@ -96,16 +94,18 @@ public class mainController {
 
     // 마이 페이지
     @GetMapping("/myPage")
-    public String myPage(Model model, Authentication authen){
+    public String myPage(Model model, Authentication authen) throws JsonProcessingException {
         if(authen != null){
             PrincipalUserDetails principal = (PrincipalUserDetails) authen.getPrincipal();
             if(principal != null){
+                ObjectMapper mapper = new ObjectMapper();
+                String user = mapper.writeValueAsString(principal.getUser().toFilerUser());
+
                 model.addAttribute("id", principal.getId());
-                model.addAttribute("role",principal.getUser().getRole());
+                model.addAttribute("user",user);
             }
         }
         return "user/myPage";
-
     }
 
     @GetMapping("/login")
