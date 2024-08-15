@@ -17,9 +17,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // 페이지 로드 시 기본적으로 'Home' 링크를 클릭한 것처럼 처리
     const defaultActiveLink = document.querySelector('.sidebar-nav .nav-link.active');
 
-
-
-
     // data-user 속성을 읽어옵니다.
     var userLink = document.querySelector('#userInfo');
     // data-user 속성에서 JSON 문자열을 가져옵니다.
@@ -78,12 +75,12 @@ function myPage(contentDiv,user){
         <form id="myForm">
             <div>
                 <span>ID : </span>
-                <input name ="id" value=${user.id}>            
+                <input name ="id" value=${user.id} autocomplete="name">            
             </div>
             <input name ="num" type="hidden" readonly disabled value= ${user.num}>
             <div>
                 <span>Password : </span>
-                <input name ="password" type="password" placeholder="Enter your password"/>
+                <input name ="password" type="password" placeholder="Enter your password" autocomplete="current-password"/>
             </div> 
             
             <button type="button" onclick="userCheck()"> 비밀번호 확인</button>
@@ -98,10 +95,62 @@ function userCheck(){
         method : 'post',
         body : formData
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.ok) {
+                return response.text(); // 응답을 텍스트로 읽기
+            } else {
+                throw new Error('Network response was not ok.');
+            }
+        })
         .then(data => {
-            alert("yes")
-        }).catch(error => {
-            alert("error")
-    })
+            alert("확인 되었습니다"); // 성공적인 응답 본문 표시
+            ManpageUser();
+        })
+        .catch(error => {
+            alert("Error: " + error.message); // 오류 메시지 표시
+        });
+}
+
+function ManpageUser(){
+    const contentDiv = document.getElementById('content');
+    var userLink = document.querySelector('#userInfo');
+    var userJson = userLink.getAttribute('data-user');
+    var user = JSON.parse(userJson);
+    contentDiv.innerHTML=`
+        <form action="/user/update" method="post" id="updateUser">
+        <div>
+            <label for="userid">id : </label>
+            <input name="id" id="userid" value=${user.id} readonly>
+        </div>
+        <div>
+            <label for="alias">별칭 : </label>
+            <input name="alias" id="alias" autocomplete="name">
+            <button type="button" onclick="check_userAlias()">중복 체크</button>
+        </div>            
+        <div>
+            <label for="password">비밀번호 : </label>
+            <input type="password" name="password" autocomplete="current-password">
+        </div>
+        <div>
+            <label for="phone">전화번호 : </label> 
+            <label>010</label>
+            <input name="phone1">
+            <input name="phone2">
+        </div>    
+        <div>
+            <button type="button" onclick="updateUser()">수정하기</button>
+        </div>
+        <input id="checkAlias" value="">
+        </form>
+`
+}
+
+function updateUser(){
+    let check = document.getElementById("checkAlias").value.trim();
+    let form =  document.getElementById('updateUser')
+    if(check==="ok"){
+        form.submit();
+    }else{
+        alert("중복확인을 해주세요");
+    }
 }

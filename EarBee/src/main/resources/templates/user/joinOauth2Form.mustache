@@ -60,12 +60,15 @@
         <input type="text" id="phone-part1" name="phone1" placeholder="1234" maxlength="4" pattern="\d{4}" required>
         <input type="text" id="phone-part2" name="phone2" placeholder="5678" maxlength="4" pattern="\d{4}" required>
     </div>
+    <label for="alias">Alias: </label>
+    <input id="alias" name="alias">
 
     <button type="submit">회원가입</button>
 
     <input type="hidden" name = id value="{{user.id}}">
     <input type="hidden" name = provider value = "{{user.provider}}" >
     <input type="hidden" name = providerId value = "{{user.providerId}}" >
+
 
 </form>
 

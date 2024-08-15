@@ -1,104 +1,120 @@
 {{>layouts/header}}
 
 <style>
+    .main-section {
+        flex: 1;
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* 수평 중앙 정렬 */
+        padding-top: 20px; /* 상단 여백 (선택적) */
+    }
+    /* form-container 스타일 */
     .form-container {
         display: grid;
-        grid-template-columns: 1fr 2fr 1fr; /* 레이블, 입력 필드, 버튼 3열 구조 */
+        grid-template-columns: 2fr 7fr 1.5fr; /* 레이블, 입력 필드, 버튼 비율 설정 */
+        grid-template-rows: auto; /* 행의 높이를 자동으로 설정 */
         gap: 1rem; /* 요소 사이의 간격 */
-        max-width: 500px;
-        width: 100%;
+        width: 70%; /* 너비를 70%로 설정 */
+        max-width: 90%; /* 최대 너비 설정 (선택적) */
+        height: 100%; /* 전체 높이 설정 */
         padding: 2rem;
         background-color: #fff;
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        box-sizing: border-box; /* 패딩과 보더를 포함한 전체 크기 조정 */
     }
 
+    /* 폼 내부 요소의 스타일 */
+    .form-container label,
+    .form-container input,
+    .form-container button {
+        margin: 0; /* 기본 마진 제거 */
+        padding: 0.5rem; /* 패딩 조정 */
+    }
+
+    /* 레이블 스타일 */
     .form-container label {
         display: flex;
         align-items: center; /* 수직 중앙 정렬 */
     }
 
-    .form-container input {
-        width: 100%; /* 입력 필드의 너비를 100%로 설정 */
+    /* 입력 필드 및 버튼의 중앙 정렬을 위한 공통 스타일 */
+    .form-container input,
+    .form-container button {
+        max-width: 90%; /* 너비를 100%로 설정 */
     }
 
+    /* 각 그리드 셀을 중앙에 배치하기 위한 스타일 */
+    .form-container > * {
+        display: flex;
+        align-items: center; /* 수직 중앙 정렬 */
+        justify-content: center; /* 수평 중앙 정렬 */
+    }
+
+    /* 입력 필드 스타일 */
+    .form-container .inputText {
+        margin-top: 2rem;
+        height: 2.5rem; /* 높이 조정 */
+        font-size: 0.875rem; /* 폰트 크기 조정 */
+    }
+
+    /* 버튼 스타일 */
     .form-container button {
-        width: 100%; /* 버튼의 너비를 100%로 설정 */
+        margin-top: 2rem;
+        height: 2.5rem; /* 높이 조정 */
         font-size: 0.875rem; /* 버튼 폰트 크기 조정 */
     }
 
+    /* phone-container 스타일 */
     .phone-container {
         display: grid;
-        grid-template-columns: 1fr 2fr 2fr; /* 3열 구조: 010, input, input */
+        grid-template-columns: 1fr 1fr 1fr; /* 3열 구조: 010, input, input */
         gap: 0.5rem; /* 입력 필드 사이의 간격 */
-        grid-column: span 2; /* 3열을 차지하도록 설정 */
+        grid-column: 2 / -1; /* 두 번째 열부터 시작하여 전체 너비를 차지하도록 설정 */
         align-items: center; /* 수직 중앙 정렬 */
     }
 
+    /* phone-container .phone-prefix 스타일 */
     .phone-container .phone-prefix {
         text-align: center; /* 가운데 정렬 */
     }
 
+    /* submit-button-container 스타일 */
     .submit-button-container {
         grid-column: 3; /* 전체 너비를 차지하도록 설정 */
         text-align: center; /* 버튼을 중앙에 위치하도록 설정 */
     }
-    .input{
-        grid-column: span 2;
+
+    /* input 클래스 스타일 */
+    .input {
+        grid-column: span 2; /* 두 열을 차지하도록 설정 */
+
     }
-
-
-
 </style>
 
-<script>
-    function check_userId(){
-        var userid = document.getElementById("id").value.trim();
-
-        if (userid == null || userid ===" "){
-            console.log("id를 입력해주세요");
-            return false;
-        }
-
-        var url = '/main/check_id';
-        var data = { id:userid};
-
-        fetch(url, {
-            method : 'POST',
-            headers: {
-                'Content-Type' : 'application/json',
-            },
-            body : JSON.stringify(data),
-        }).then(response => {
-            if(response.ok){
-                alert("사용 가능한 아이디 입니다");
-            }else{
-                alert("중복된 아이디 입니다.");
-            }
-        }).catch(error => {
-            console.error("Error", error);
-            alert("서버와의 통신 중 오류가 발생하였습니다.");
-        })
-
-        return false;
-    }
+<script src="/js/usercheck.js"></script>
 
 
-</script>
-
-<form class="form-container" action="/join" method="post">
-    <label for="id">Id:</label>
-    <input type="text" id="id" name="id">
+<h1> 회원가입</h1>
+<form class="form-container" action="/join" method="post" id="joinForm">
+    <label for="userid">Id:</label>
+    <input type="text" id="userid" name="id" class="inputText" maxlength="20">
     <button type="button" class="btn" onclick="check_userId()">중복 확인</button>
 
     <label for="username">Username:</label>
-    <input type="text" class ="input" id="username" name="username">
+    <input type="text" class="input inputText" id="username" name="username" maxlength="20">
 
-    <label for="password">Password:</label>
-    <input type="password" class ="input" id="password" name="password">
+    <label for="user_password">Password:</label>
+    <input type="password" class="input inputText" id="user_password" name="password" maxlength="20">
+
+    <label for="alias">Alias:</label>
+    <input id="alias" name="alias" class="inputText" maxlength="20">
+    <button type="button" class="btn" onclick="check_userAlias()">중복 확인</button>
 
     <label for="email">Email:</label>
-    <input type="email" class ="input" id="email" name="email">
+    <input type="email" class="input inputText" id="email" name="email" maxlength="20">
 
     <label for="phone">Phone:</label>
     <div class="phone-container">
@@ -108,8 +124,11 @@
     </div>
 
     <div class="submit-button-container">
-        <button type="submit">회원가입</button>
+        <button type="button" onclick="check_join()">회원가입</button>
     </div>
+    <input id="checkId" hidden="hidden">
+    <input id="checkAlias" hidden="hidden">
+
 </form>
 
 
