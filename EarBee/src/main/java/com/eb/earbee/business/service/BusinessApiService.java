@@ -38,7 +38,6 @@ public class BusinessApiService {
     @Autowired
     BusinessRepository businessRepository;
 
-
     @Value("${business.url}")
     private String urlBusiness;
 

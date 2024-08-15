@@ -71,10 +71,6 @@ public class mainController {
         return "main/main";
     }
 
-//    @GetMapping("/login")
-//    public String login(Model model){
-//        return "user/login";
-//    }
 
     @PostMapping("/join")
     public String join(HttpServletRequest request, UserDto user){
@@ -105,12 +101,9 @@ public class mainController {
     }
 
 
-
-
     @PostMapping("/user/update")
     public String updateUser(@ModelAttribute UserDto dao, Model model, Authentication authen) throws JsonProcessingException {
         User resultuser = userService.updateUser(dao.toEntity());
-
         if(resultuser == null){
             return "redirect:/";
         }
@@ -124,7 +117,6 @@ public class mainController {
             if(principal != null){
                 ObjectMapper mapper = new ObjectMapper();
                 String user = mapper.writeValueAsString(principal.getUser().toFilerUser());
-
                 model.addAttribute("id", principal.getId());
                 model.addAttribute("user",user);
             }
