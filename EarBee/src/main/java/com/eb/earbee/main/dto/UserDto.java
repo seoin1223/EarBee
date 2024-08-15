@@ -17,9 +17,10 @@ public class UserDto {
     private String provider;
     private String providerId;
     private String role;
+    private String alias;
 
 
     public User toEntity(){
-        return User.builder().id(id).username(username).password(password).email(email).phone("010"+phone1+phone2).provider(provider).providerId(providerId).role(role).build();
+        return User.builder().id(id).username(username).password(password).email(email).phone("010"+phone1+phone2).provider(provider).providerId(providerId).role(role).alias(alias).build();
     }
 }

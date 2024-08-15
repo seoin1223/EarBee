@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -67,7 +68,7 @@ public class mainController {
                 return "/user/joinOauth2Form";
             }
         }
-        return "/main/main";
+        return "main/main";
     }
 
 //    @GetMapping("/login")
@@ -94,7 +95,30 @@ public class mainController {
 
     // 마이 페이지
     @GetMapping("/myPage")
-    public String myPage(Model model, Authentication authen) throws JsonProcessingException {
+    public String myPage(Model model, Authentication authed) throws JsonProcessingException {
+        return getString(model, authed);
+    }
+
+    @GetMapping("/login")
+    public String login(Model model){
+         return "user/login";
+    }
+
+
+
+
+    @PostMapping("/user/update")
+    public String updateUser(@ModelAttribute UserDto dao, Model model, Authentication authen) throws JsonProcessingException {
+        User resultuser = userService.updateUser(dao.toEntity());
+
+        if(resultuser == null){
+            return "redirect:/";
+        }
+        return "redirect:/myPage";
+
+    }
+
+    private String getString(Model model, Authentication authen) throws JsonProcessingException {
         if(authen != null){
             PrincipalUserDetails principal = (PrincipalUserDetails) authen.getPrincipal();
             if(principal != null){
@@ -108,9 +132,6 @@ public class mainController {
         return "user/myPage";
     }
 
-    @GetMapping("/login")
-    public String login(Model model){
-         return "user/login";
-    }
 
 }
+

@@ -52,13 +52,16 @@ public class User  {
     @Column
     private String phone;
 
+    @Column(nullable = false, unique = true)
+    private String alias;
+
     @CreationTimestamp
     private Timestamp created;
 
 
 
     @Builder
-    public User(String id, String password, String username, String email, String phone,String provider, String providerId, String role) {
+    public User(String id, String password, String username, String email, String phone,String provider, String providerId, String role, String alias) {
         this.id = id;
         this.password = password;
         this.username = username;
@@ -67,6 +70,7 @@ public class User  {
         this.provider = provider;
         this.providerId = providerId;
         this.role = role;
+        this.alias = alias;
     }
 
     public User(Long num, String id, String username, String email, String role, String phone) {

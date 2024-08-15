@@ -6,6 +6,8 @@ import com.eb.earbee.main.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
+
 @Service
 public class UserService {
 
@@ -34,6 +36,20 @@ public class UserService {
         }
         userEntity.setRole("ROLE_USER");
         return userRepository.save(userEntity);
+    }
+
+    public boolean isUserAlias(String alias){
+        System.out.println("alias: " + alias);
+        User user = userRepository.findByAlias(alias);
+        System.out.println("alias User check: " +user);
+        return user == null;
+    }
+
+    public User updateUser(User user) {
+        User postUser = userRepository.findById(user.getId());
+        postUser.setAlias(user.getAlias());
+        postUser.setPhone(user.getPhone());
+        return userRepository.save(postUser);
     }
 
 }

@@ -6,19 +6,15 @@ import com.eb.earbee.main.entity.User;
 import com.eb.earbee.main.repository.UserRepository;
 import com.eb.earbee.main.service.UserService;
 import com.eb.earbee.security.login.basicLogin.PrincipalUserDetails;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,11 +24,12 @@ public class mainAPiController {
 
     private final UserRepository userRepository;
     private UserService userService;
-
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private DataSourceTransactionManagerAutoConfiguration dataSourceTransactionManagerAutoConfiguration;
 
     public mainAPiController(UserService userService, PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.userService = userService;
@@ -65,12 +62,24 @@ public class mainAPiController {
     }
 
     @PostMapping("/checkUserMyPage")
-    public ResponseEntity<Boolean> checkUserMyPage(UserDto check){
+    public ResponseEntity<String> checkUserMyPage(UserDto check){
         User user = userRepository.findById(check.getId());
-        if(user!=null){
-            return ResponseEntity.ok(passwordEncoder.matches(check.getPassword(),user.getPassword()));
+        boolean match = passwordEncoder.matches(check.getPassword(),user.getPassword());
+        if(match){
+            System.out.println(match);
+            return ResponseEntity.ok("");
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @PostMapping("/check_alias")
+    public ResponseEntity<String> checkUsername(@RequestBody Map<String, String> aliass){
+        if (!aliass.containsKey("alias")) {
+            return ResponseEntity.badRequest().body("alias가 사라짐.");
+        }
+        String alias = aliass.get("alias");
+        boolean check = userService.isUserAlias(alias);
+        return (check)? ResponseEntity.ok("ok") : ResponseEntity.badRequest().build();
     }
 
 
