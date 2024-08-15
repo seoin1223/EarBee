@@ -20,18 +20,14 @@ public class UserService {
 
     public boolean isUser(String id){
         User user = userRepository.findById(id);
-        System.out.println("id: "+id+"\n user: "+user);
         return user != null;
     }
 
     public User addUser(UserDto user, boolean check) {
         User userEntity = user.toEntity();
         if (check) {
-            System.out.println("Before encoding: " + userEntity);
             userEntity.setPassword(encoder.encode(user.getId())); // Assuming ID is used for password encoding
-            System.out.println("Before encoding2: " + userEntity);
         } else {
-            System.out.println("Before encoding: " + userEntity);
             userEntity.setPassword(encoder.encode(user.getPassword()));
         }
         userEntity.setRole("ROLE_USER");
@@ -39,9 +35,7 @@ public class UserService {
     }
 
     public boolean isUserAlias(String alias){
-        System.out.println("alias: " + alias);
         User user = userRepository.findByAlias(alias);
-        System.out.println("alias User check: " +user);
         return user == null;
     }
 

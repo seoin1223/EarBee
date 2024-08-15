@@ -48,7 +48,6 @@ public class mainAPiController {
 
     @GetMapping("/check_login")
     public ResponseEntity<Map<String, Object>> checkLogin(Authentication authed){
-        System.out.println("여기까지 됨");
         Map<String, Object> response = new HashMap<>();
         if(authed != null ){
             if(authed.getPrincipal() != null){
@@ -66,7 +65,6 @@ public class mainAPiController {
         User user = userRepository.findById(check.getId());
         boolean match = passwordEncoder.matches(check.getPassword(),user.getPassword());
         if(match){
-            System.out.println(match);
             return ResponseEntity.ok("");
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
