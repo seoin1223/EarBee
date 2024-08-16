@@ -38,9 +38,27 @@
         }
 
         function login() {
-            var form = document.getElementById('loginForm');
-            form.submit();
+            const id = document.getElementById("id").value;
+            const password = document.getElementById("password").value;
+
+            fetch(("/api/login"),{
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json",
+                    "X-Requested-With":"XMLHttpRequest"
+                },
+                body:JSON.stringify({"id":id,
+                    "password":password}),
+            })
+            .then(response => {
+                if(response.ok)window.location.replace("/");
+            })
+            .catch(error =>{
+
+                console.error("Error during login:",error);
+            });
         }
+
     </script>
     <style>
         html, body {
