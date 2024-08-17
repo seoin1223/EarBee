@@ -45,9 +45,13 @@
                 <li class="nav-item">
                     <a href="#" id = "userInfo" class="nav-link active" data-content="home" aria-current="page" data-user="{{user}}">회원정보</a>
                 </li>
-                <li>
-                    <a href="#" class="nav-link" data-content="dashboard">Dashboard</a>
-                </li>
+
+                {{#role}}
+                    <li>
+                        <a href="#" class="nav-link" data-content="admin">관리자</a>
+                    </li>
+                {{/role}}
+
                 <li>
                     <a href="#" class="nav-link" data-content="orders">Orders</a>
                 </li>

@@ -172,10 +172,10 @@
                 </ul>
             </div>
             <div>
-                {{^id}} <!-- userName이 존재하지 않으면 -->
+                {{^id}} <!-- id이 존재하지 않으면 -->
                     <a class="login" href="#" onclick="showLogin(); return false;">로그인</a>
                 {{/id}}
-                {{#id}} <!-- userName이 존재하면 -->
+                {{#id}} <!-- id이 존재하면 -->
                     <a class="login" href="/logout">로그아웃</a>
                 {{/id}}
             </div>

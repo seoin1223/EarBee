@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // data-user 속성에서 JSON 문자열을 가져옵니다.
     var userJson = userLink.getAttribute('data-user');
     var user = JSON.parse(userJson);
-    document.getElementById('profile').textContent=user.id;
+    alert(user.alias)
+    document.getElementById('profile').textContent=user.alias;
 
 
     if (defaultActiveLink) {
@@ -51,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'home':
                 myPage(contentDiv,user);
                 break;
-            case 'dashboard':
+            case 'admin':
                 contentDiv.innerHTML = '<h1>Dashboard Content</h1><p>Here is your dashboard.</p>';
                 break;
             case 'orders':
@@ -71,21 +72,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 function myPage(contentDiv,user){
-    contentDiv.innerHTML = `
-        <form id="myForm">
-            <div>
-                <span>ID : </span>
-                <input name ="id" value=${user.id} autocomplete="name">            
-            </div>
-            <input name ="num" type="hidden" readonly disabled value= ${user.num}>
-            <div>
-                <span>Password : </span>
-                <input name ="password" type="password" placeholder="Enter your password" autocomplete="current-password"/>
-            </div> 
-            
-            <button type="button" onclick="userCheck()"> 비밀번호 확인</button>
-        </form>
-    `;
+    if(user.provider !=null){
+        ManpageUser();
+    }else{
+        contentDiv.innerHTML = `
+            <form id="myForm">
+                <div>
+                    <span>ID : </span>
+                    <input name ="id" value=${user.id} autocomplete="name">            
+                </div>
+                <input name ="num" type="hidden" readonly disabled value= ${user.num}>
+                <div>
+                    <span>Password : </span>
+                    <input name ="password" type="password" placeholder="Enter your password" autocomplete="current-password"/>
+                </div> 
+                
+                <button type="button" onclick="userCheck()"> 비밀번호 확인</button>
+            </form>
+        `;
+    }
 }
 
 function userCheck(){
@@ -119,8 +124,7 @@ function ManpageUser(){
     contentDiv.innerHTML=`
         <form action="/user/update" method="post" id="updateUser">
         <div>
-            <label for="userid">id : </label>
-            <input name="id" id="userid" value=${user.id} readonly>
+            <input type = "hidden"name="id" id="userid" value=${user.id} readonly>
         </div>
         <div>
             <label for="alias">별칭 : </label>
