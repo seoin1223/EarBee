@@ -124,10 +124,17 @@
             border-top: 1px solid black;
             border-bottom: 1px solid black;
         }
-        .earbee {
+        .earbee{
             text-align: center;
             max-height: 150px;
         }
+
+        .large-img {
+            margin-right: 15px;
+            max-height: 200px; /* 첫 번째 이미지의 최대 높이 */
+            width: 150px; /* 비율 유지 */
+        }
+
         .custom-navbar {
             font-family: 'Arial', sans-serif; /* 폰트 패밀리 설정 */
             font-size: 20px; /* 폰트 크기 설정 */
@@ -140,7 +147,10 @@
 <body>
 <header class="container-fluid header">
     <div class="earbee">
-        <a href="/"><img src="/img/earbee/earbee_200.png" alt="Earbee"></a>
+        <a href="/">
+            <img src="/img/earbee/earbee.png" class="large-img">
+            <img src="/img/earbee/earbee_200.png" alt="Earbee">
+        </a>
     </div>
     <hr style="margin-bottom: 0.5rem; margin-top: 2.5rem">
     <div class="header-title mb-2"></div>
