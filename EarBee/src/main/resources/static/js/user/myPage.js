@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // data-user 속성에서 JSON 문자열을 가져옵니다.
     var userJson = userLink.getAttribute('data-user');
     var user = JSON.parse(userJson);
-    alert(user.alias)
     document.getElementById('profile').textContent=user.alias;
 
 
@@ -53,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 myPage(contentDiv,user);
                 break;
             case 'admin':
-                contentDiv.innerHTML = '<h1>Dashboard Content</h1><p>Here is your dashboard.</p>';
+                adminPage(contentDiv);
                 break;
             case 'orders':
                 contentDiv.innerHTML = '<h1>Orders Content</h1><p>Manage your orders here.</p>';
@@ -69,6 +68,19 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 });
+
+function adminPage(contentDiv){
+    contentDiv.innerHTML =
+        `
+        <div class="adminDiv">
+            <button> 유저 관리 </button>
+            <button> 사업체 관리</button>
+            <button> 예약 현황</button>
+            <button> 고객센터 </button>
+        </div>
+        
+        `;
+}
 
 
 function myPage(contentDiv,user){
