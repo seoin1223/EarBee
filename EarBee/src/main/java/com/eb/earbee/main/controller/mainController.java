@@ -36,9 +36,8 @@ public class mainController {
 
     @GetMapping
     public String index(Authentication authentication, Model m){
-
+        System.out.println("인증 객체"+authentication);
         if(authentication != null && authentication.isAuthenticated()) {
-
             PrincipalUserDetails principalUserDetails = (PrincipalUserDetails) authentication.getPrincipal();
             User user = principalUserDetails.getUser();
 
@@ -97,7 +96,10 @@ public class mainController {
 
     @GetMapping("/login")
     public String login(Model model){
-         return "user/login";
+
+
+
+        return "user/login";
     }
 
 
