@@ -36,7 +36,6 @@ public class mainController {
 
     @GetMapping
     public String index(Authentication authentication, Model m){
-        System.out.println("인증 객체"+authentication);
         if(authentication != null && authentication.isAuthenticated()) {
             PrincipalUserDetails principalUserDetails = (PrincipalUserDetails) authentication.getPrincipal();
             User user = principalUserDetails.getUser();
@@ -91,14 +90,14 @@ public class mainController {
     // 마이 페이지
     @GetMapping("/myPage")
     public String myPage(Model model, Authentication authed) throws JsonProcessingException {
+        if(authed == null || ((PrincipalUserDetails)authed.getPrincipal()).getUser() == null) {
+            return "redirect:/login";
+        }
         return getString(model, authed);
     }
 
     @GetMapping("/login")
     public String login(Model model){
-
-
-
         return "user/login";
     }
 
@@ -121,6 +120,8 @@ public class mainController {
                 String user = mapper.writeValueAsString(principal.getUser().toFilerUser());
                 model.addAttribute("id", principal.getId());
                 model.addAttribute("user",user);
+                model.addAttribute("role",principal.getUser().getRole());
+                System.out.println(principal.getUser().getRole());
             }
         }
         return "user/myPage";

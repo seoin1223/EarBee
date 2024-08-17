@@ -53,12 +53,9 @@
                     .then(response => {
                         // JSON 응답만 처리
                         if (response.ok) {
-                            alert("여기까진 됨")
                             window.location.replace("/");
                         } else {
-                            return response.text().then(text => {
-                                throw new Error(`Login failed: ${text}`);
-                            });
+                            alert("아이디 또는 비밀번호를 확인해주세요");
                         }
                     })
                     .catch(error => {

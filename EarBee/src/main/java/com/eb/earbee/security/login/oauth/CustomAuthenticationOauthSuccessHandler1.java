@@ -39,10 +39,8 @@ public class CustomAuthenticationOauthSuccessHandler1 implements AuthenticationS
         boolean isUserRegistered = userService.isUser(userDetails.getId());
         // 원래 요청 URL을 가져오기
         SavedRequest savedRequest = requestCache.getRequest(request, response);
-        System.out.println("save"+savedRequest);
         String redirectUrl = savedRequest != null ? savedRequest.getRedirectUrl() : "/";
 
-        System.out.println("경로"+redirectUrl);
         // 사용자 정보를 기반으로 리다이렉트 처리
         if (isUserRegistered) {
             // 회원가입이 완료된 사용자
