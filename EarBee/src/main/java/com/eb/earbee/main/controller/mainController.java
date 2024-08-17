@@ -117,11 +117,16 @@ public class mainController {
             PrincipalUserDetails principal = (PrincipalUserDetails) authen.getPrincipal();
             if(principal != null){
                 ObjectMapper mapper = new ObjectMapper();
+                String role = principal.getUser().getRole();
+
+                System.out.println();
                 String user = mapper.writeValueAsString(principal.getUser().toFilerUser());
                 model.addAttribute("id", principal.getId());
                 model.addAttribute("user",user);
-                model.addAttribute("role",principal.getUser().getRole());
-                System.out.println(principal.getUser().getRole());
+
+                if(role.equals("ROLE_ADMIN")) {
+                    model.addAttribute("role", role);
+                }
             }
         }
         return "user/myPage";

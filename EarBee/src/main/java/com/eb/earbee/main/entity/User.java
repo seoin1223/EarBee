@@ -42,7 +42,6 @@ public class User  {
     private String role;
 
     @Column(nullable = true)
-    @JsonIgnore
     private String provider;
 
     @Column(nullable = true)
@@ -73,17 +72,19 @@ public class User  {
         this.alias = alias;
     }
 
-    public User(Long num, String id, String username, String email, String role, String phone) {
+    public User(Long num, String id, String username, String email, String role, String phone, String provider,String alias) {
         this.num = num;
         this.id = id;
         this.username = username;
         this.email = email;
         this.role = role;
         this.phone = phone;
+        this.provider = provider;
+        this.alias = alias;
     }
 
     public User toFilerUser(){
-        return new User(num,id,username,email,role,phone);
+        return new User(num,id,username,email,role,phone,provider,alias);
     }
 
 
