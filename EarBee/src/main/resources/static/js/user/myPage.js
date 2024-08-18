@@ -73,15 +73,29 @@ function adminPage(contentDiv){
     contentDiv.innerHTML =
         `
         <div class="adminDiv">
-            <button> 유저 관리 </button>
-            <button> 사업체 관리</button>
-            <button> 예약 현황</button>
+            <button onclick = "userManagement()"> 유저 관리 </button>
+            <button onclick = "businessManagement()"> 사업체 관리</button>
+            <button onclick = "ReservationManagement()"> 예약 현황</button>
             <button> 고객센터 </button>
         </div>
-        
         `;
 }
 
+function userManagement(){
+    window.open("","_blank");
+}
+
+function businessManagement(){
+    window.openNewPa
+}
+
+function ReservationManagement(){
+    window.openNewPa
+}
+
+function userManagement(){
+    window.openNewPa
+}
 
 function myPage(contentDiv,user){
     if(user.provider !=null){
