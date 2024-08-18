@@ -86,6 +86,7 @@ public class SecurityConfig  {
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/earbee/**")).hasAnyRole("ADMIN", "MANAGER","USER")
                                 .requestMatchers(new AntPathRequestMatcher("/myPage")).hasAnyRole("ADMIN","MANAGER", "USER")
+                                .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAnyRole("ADMIN","MANAGER")
                                 .anyRequest().permitAll()
                 )
                 .formLogin(f -> f
