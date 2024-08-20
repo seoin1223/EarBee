@@ -73,29 +73,18 @@ function adminPage(contentDiv){
     contentDiv.innerHTML =
         `
         <div class="adminDiv">
-            <button onclick = "userManagement()"> 유저 관리 </button>
-            <button onclick = "businessManagement()"> 사업체 관리</button>
-            <button onclick = "ReservationManagement()"> 예약 현황</button>
+            <button type="button" onclick = "management('user')"> 유저 관리 </button>
+            <button type="button" onclick = "management('business')"> 사업체 관리</button>
+            <button type="button" onclick = "management('reservation')"> 예약 현황</button>
             <button> 고객센터 </button>
         </div>
         `;
 }
 
-function userManagement(){
-    window.open("","_blank");
+function management(check){
+    window.open(`/admin/management?check=${check}`,"_blank");
 }
 
-function businessManagement(){
-    window.openNewPa
-}
-
-function ReservationManagement(){
-    window.openNewPa
-}
-
-function userManagement(){
-    window.openNewPa
-}
 
 function myPage(contentDiv,user){
     if(user.provider !=null){

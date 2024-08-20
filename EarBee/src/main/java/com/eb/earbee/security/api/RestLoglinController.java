@@ -1,4 +1,4 @@
-package com.eb.earbee.security.controller;
+package com.eb.earbee.security.api;
 
 
 import org.springframework.http.ResponseEntity;

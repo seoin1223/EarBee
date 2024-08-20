@@ -25,58 +25,38 @@ repositories {
 dependencies {
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-
     // 룸북
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     // jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
     // mustache
     implementation 'org.springframework.boot:spring-boot-starter-mustache'
-
     /* PostgreSql driver 추가*/
     runtimeOnly 'org.postgresql:postgresql'
     //    runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
-
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
-
     implementation 'net.minidev:json-smart:2.3' // Use the latest version available
-
-
-
-
-
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.17.1'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.17.0'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.17.1'
-
-
-
     // jsp
     // implementation 'javax.servlet:jstl:1.2'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     //    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
-
-
     // oracle
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 // https://mvnrepository.com/artifact/org.springframework.security/spring-security-oauth2-client
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '6.3.1'
-
     compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
-
-
-
 }
 
 
