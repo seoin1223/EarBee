@@ -1,3 +1,6 @@
+
+
+
 // nav-link 요소들에 대해 click 이벤트 리스너 추가 (네비
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', function () {
@@ -69,33 +72,43 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+
+let adminPageWindow = null;
+
+/* 관리자 페이지 출력*/
 function adminPage(contentDiv){
     contentDiv.innerHTML =
         `
         <div class="adminDiv">
-            <button onclick = "userManagement()"> 유저 관리 </button>
-            <button onclick = "businessManagement()"> 사업체 관리</button>
-            <button onclick = "ReservationManagement()"> 예약 현황</button>
+            <button type="button" onclick = "management('user')"> 유저 관리 </button>
+            <button type="button" onclick = "management('business')"> 사업체 관리</button>
+            <button type="button" onclick = "management('reservation')"> 예약 현황</button>
             <button> 고객센터 </button>
         </div>
         `;
 }
 
-function userManagement(){
-    window.open("","_blank");
+function management(check){
+    const url = `/admin/management?check=${check}`;
+    if (adminPageWindow && !adminPageWindow.closed) {
+        // 이미 열린 페이지가 있을 때, URL을 업데이트하고 포커스를 맞추려 시도합니다.
+        adminPageWindow.location.href = url;
+            adminPageWindow.focus();
+
+    } else {
+        // 새 페이지를 열고 전역 변수에 저장합니다.
+        adminPageWindow = window.open(url, "adminPageWindow");
+
+        // 페이지가 열리고 나서 처리할 로직을 추가할 수 있습니다.
+        if (adminPageWindow) {
+            adminPageWindow.onload = function() {
+                console.log("Page opened and loaded.");
+            };
+        }
+    }
 }
 
-function businessManagement(){
-    window.openNewPa
-}
 
-function ReservationManagement(){
-    window.openNewPa
-}
-
-function userManagement(){
-    window.openNewPa
-}
 
 function myPage(contentDiv,user){
     if(user.provider !=null){
