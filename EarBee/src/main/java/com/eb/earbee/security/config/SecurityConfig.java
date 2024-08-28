@@ -69,7 +69,10 @@ public class SecurityConfig  {
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/login").permitAll()
-                        .requestMatchers("/css/**","/image/**", "/js/**","/favicon.*","/*/icon-*").permitAll())
+                        .requestMatchers("/css/**","/image/**", "/js/**","/favicon.*","/*/icon-*").permitAll()
+                        .requestMatchers("/api/admin/**").authenticated()
+                )
+
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) )// 세션 생성 정책
                 .addFilterBefore(restAuthenticationFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class)

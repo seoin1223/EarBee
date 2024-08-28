@@ -1,11 +1,122 @@
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
+{{>layouts/header}}
+<style>
+    li {
+        display: list-item;
+        text-align: -webkit-match-parent;
+        unicode-bidi: isolate;
+    }
+    .btn-toggle {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 
-<section class = "main-section">
+    .btn-toggle::before {
+        content: url("/img/admin/allow.svg");
+        width: 1.25em;
+        height: 1.25em;
+        transition: transform .35s ease;
+        transform-origin: center;
+    }
+
+    .btn-toggle[aria-expanded="true"]::before {
+        transform: rotate(90deg); /* 화살표를 오른쪽으로 회전 */
+    }
+    .btn-toggle-nav {
+        padding-left: 1rem; /* 조정할 수 있는 값, 버튼과 리스트 항목의 정렬을 맞추기 */
+    }
+
+    /* 리스트 항목의 padding을 조정하여 원하는 위치로 이동 */
+    .btn-toggle-nav li {
+        padding-left: 1rem; /* 필요에 따라 조정, 리스트 항목이 왼쪽으로 이동하지 않도록 */
+    }
+    .admin_total {
+        display: flex; /* 사이드바와 admin_section을 수평으로 배치 */
+        flex: 1; /* 남은 공간을 차지하도록 설정 */
+        height: 100vh; /* 전체 화면 높이 설정 */
+    }
+
+    .sidebar {
+        width: 280px; /* 사이드바의 고정 너비 */
+        background-color: #ffffff; /* 배경색 설정 */
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* 사이드바 그림자 */
+        overflow-y: auto; /* 내용이 많을 경우 스크롤 가능 */
+    }
+
+    .admin_section {
+        flex: 1; /* 사이드바 옆의 남은 공간을 차지하도록 설정 */
+        padding: 20px; /* 필요에 따라 패딩 추가 */
+        background-color: #f8f9fa; /* 배경색 설정, 필요에 따라 조정 */
+        overflow: auto; /* 내용이 많을 경우 스크롤 가능 */
+    }
+</style>
+<section class="admin_total">
+<section class = "sidebar">
+    <div class="flex-shrink-0 p-3 bg-white" style="width: 280px;">
+        <a href="#" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+            <svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+            <span class="fs-5 fw-semibold">관리자 페이지</span>
+        </a>
+        <ul class="list-unstyled ps-0">
+            <li class="mb-1">
+                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#admin-user" aria-expanded="false">
+                    유저 관리
+                </button>
+                <div class="collapse" id="admin-user">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a href="#" class="link-dark rounded">Overview</a></li>
+                        <li><a href="#" class="link-dark rounded">Updates</a></li>
+                        <li><a href="#" class="link-dark rounded">Reports</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="mb-1">
+                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+                    Dashboard
+                </button>
+                <div class="collapse" id="dashboard-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a onclick="searchUser()" class="link-dark rounded">Overview</a></li>
+                        <li><a href="#" class="link-dark rounded">Weekly</a></li>
+                        <li><a href="#" class="link-dark rounded">Monthly</a></li>
+                        <li><a href="#" class="link-dark rounded">Annually</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="mb-1">
+                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+                    Orders
+                </button>
+                <div class="collapse" id="orders-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a href="#" class="link-dark rounded">New</a></li>
+                        <li><a href="#" class="link-dark rounded">Processed</a></li>
+                        <li><a href="#" class="link-dark rounded">Shipped</a></li>
+                        <li><a href="#" class="link-dark rounded">Returned</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="border-top my-3"></li>
+            <li class="mb-1">
+                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                    Account
+                </button>
+                <div class="collapse" id="account-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <li><a href="#" class="link-dark rounded">New...</a></li>
+                        <li><a href="#" class="link-dark rounded">Profile</a></li>
+                        <li><a href="#" class="link-dark rounded">Settings</a></li>
+                        <li><a href="#" class="link-dark rounded">Sign out</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</section>
+<section class = "admin_section">
+    <h1>출력될 화면</h1>
+
+</section>
+</section>
+

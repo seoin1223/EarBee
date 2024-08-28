@@ -1,3 +1,6 @@
+
+
+
 // nav-link 요소들에 대해 click 이벤트 리스너 추가 (네비
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', function () {
@@ -69,6 +72,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+
+let adminPageWindow = null;
+
+/* 관리자 페이지 출력*/
 function adminPage(contentDiv){
     contentDiv.innerHTML =
         `
@@ -82,8 +89,25 @@ function adminPage(contentDiv){
 }
 
 function management(check){
-    window.open(`/admin/management?check=${check}`,"_blank");
+    const url = `/admin/management?check=${check}`;
+    if (adminPageWindow && !adminPageWindow.closed) {
+        // 이미 열린 페이지가 있을 때, URL을 업데이트하고 포커스를 맞추려 시도합니다.
+        adminPageWindow.location.href = url;
+            adminPageWindow.focus();
+
+    } else {
+        // 새 페이지를 열고 전역 변수에 저장합니다.
+        adminPageWindow = window.open(url, "adminPageWindow");
+
+        // 페이지가 열리고 나서 처리할 로직을 추가할 수 있습니다.
+        if (adminPageWindow) {
+            adminPageWindow.onload = function() {
+                console.log("Page opened and loaded.");
+            };
+        }
+    }
 }
+
 
 
 function myPage(contentDiv,user){
