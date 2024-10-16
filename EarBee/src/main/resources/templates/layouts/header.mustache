@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -10,16 +11,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // 모달 객체를 선택
             var modalElement = document.getElementById('loginModal');
             var modal = new bootstrap.Modal(modalElement);
 
-            // 모달이 열릴 때 키보드 이벤트 리스너를 추가
             modalElement.addEventListener('shown.bs.modal', function () {
                 document.addEventListener('keydown', handleKeyDown);
             });
 
-            // 모달이 닫힐 때 키보드 이벤트 리스너를 제거
             modalElement.addEventListener('hidden.bs.modal', function () {
                 document.removeEventListener('keydown', handleKeyDown);
             });
@@ -51,9 +49,15 @@
                 credentials: "include" // 쿠키 포함 설정
             })
                     .then(response => {
-                        // JSON 응답만 처리
                         if (response.ok) {
-                            window.location.replace("/");
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const redirectUrl = urlParams.get('redirect') || '/';
+                            // 로그인 페이지로 리다이렉트되지 않도록 필터링
+                            if (redirectUrl !== '/login') {
+                                window.location.replace(redirectUrl);
+                            } else {
+                                window.location.replace('/');
+                            }
                         } else {
                             alert("아이디 또는 비밀번호를 확인해주세요");
                         }
@@ -62,7 +66,6 @@
                         console.error("Error during login:", error);
                     });
         }
-
     </script>
     <style>
         html, body {
@@ -78,6 +81,9 @@
         }
         .header {
             flex-shrink: 0; /* 헤더의 크기를 고정 */
+            background-color: #ffffff;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
         }
         .main-section {
             flex: 1; /* 남은 공간을 차지하도록 설정 */
@@ -124,31 +130,35 @@
             border-top: 1px solid black;
             border-bottom: 1px solid black;
         }
-        .earbee{
+        .earbee {
             text-align: center;
             max-height: 150px;
         }
-
         .large-img {
             margin-right: 15px;
             max-height: 200px; /* 첫 번째 이미지의 최대 높이 */
             width: 150px; /* 비율 유지 */
         }
-
         .custom-navbar {
             font-family: 'Arial', sans-serif; /* 폰트 패밀리 설정 */
             font-size: 20px; /* 폰트 크기 설정 */
             color: #333; /* 폰트 색상 설정 */
         }
-
-
+        @media (max-width: 768px) {
+            .modal-grid {
+                grid-template-columns: 1fr; /* 작은 화면에서는 한 열로 표시 */
+            }
+            .header-title {
+                font-size: 14px; /* 작은 화면에서 폰트 크기 조정 */
+            }
+        }
     </style>
 </head>
 <body>
 <header class="container-fluid header">
     <div class="earbee">
         <a href="/">
-            <img src="/img/earbee/earbee.png" class="large-img">
+            <img src="/img/earbee/earbee.png" class="large-img" alt="Earbee">
             <img src="/img/earbee/earbee_200.png" alt="Earbee">
         </a>
     </div>
@@ -173,7 +183,7 @@
                             MyPage
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" id="profile-link"  href="/myPage">회원 정보</a></li>
+                            <li><a class="dropdown-item" id="profile-link" href="/myPage">회원 정보</a></li>
                             <li><a class="dropdown-item" href="#">임시</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#">Something else here</a></li>
@@ -192,8 +202,9 @@
         </div>
     </nav>
     <hr class="mt-2">
-    <input id = "checkUrl" hidden="hidden">
+    <input id="checkUrl" hidden="hidden">
 </header>
+
 <!-- 로그인 모달 -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
@@ -225,10 +236,11 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" onclick="login()">로그인</button>
+                <button type="button" class="btn btn-primary" onclick="login()">로그인</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
             </div>
         </div>
     </div>
 </div>
+
 <section class="main-section">

@@ -1,6 +1,7 @@
 package com.eb.earbee.main.entity;
 
 
+import com.eb.earbee.business.entity.Business;
 import com.eb.earbee.main.dto.UserDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

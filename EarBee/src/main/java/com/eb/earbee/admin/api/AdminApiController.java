@@ -21,13 +21,15 @@ public class AdminApiController {
 
     @GetMapping("/user/search")
     public ResponseEntity<List<User>> search() {
-        List<User> users = repository.findAll();
-        System.out.println("안녕");
-        System.out.println(users);
+        List<User> users = repository.findAllUsers();
         if (!users.isEmpty()) {
+            System.out.println(users);
             return ResponseEntity.ok(users);
         }
         return ResponseEntity.noContent().build(); // 204 No Content
+
     }
+
+
 
 }

@@ -37,8 +37,8 @@ public class Business {
     @Column
     private String checked;
 
-    @JoinColumn(name = "userNum", referencedColumnName = "num", nullable = false)
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_num", referencedColumnName = "num", nullable = false)
     private User user;
 
     public Business(Long id, String title, String bNo, String zipCode, String addr, String detail,String checked) {

@@ -84,7 +84,7 @@ function isBusinessNumValid(businessNum) {
  */
 function searchBusiness() {
     const businessNum = document.querySelector('#inputNumber').value;
-
+    console.log(businessNum);
     if (!isBusinessNumValid(businessNum)) {
         return false;
     } // 사업자 번호가 정상적인지 체크

@@ -1,8 +1,20 @@
 {{>layouts/header}}
 <script>
+    function showLoginModal() {
+        const currentPath = window.location.pathname;
+        // 로그인 페이지로 리다이렉트되는 것을 방지
+        const redirectPath = (currentPath !== '/login') ? currentPath : '/';
+
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('redirect', redirectPath);
+        window.history.replaceState({}, '', `${window.location.pathname}?${urlParams}`);
+
+        var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+        loginModal.show();
+    }
+
     document.addEventListener("DOMContentLoaded", function() {
-    var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-    loginModal.show();
+        showLoginModal();
     });
 </script>
 

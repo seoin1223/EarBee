@@ -27,14 +27,12 @@ public class RestAuthenticationFilter extends AbstractAuthenticationProcessingFi
     public RestAuthenticationFilter() {
         super(new AntPathRequestMatcher("/api/login", "POST"));
     }
-
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
         if (!HttpMethod.POST.name().equals(request.getMethod()) || !WebUtil.isAjax(request)) {
             System.out.println("error");
             throw new IllegalArgumentException("Authentication method not supported");
         }
-
         AccountDto accountDto = objectMapper.readValue(request.getReader(), AccountDto.class);
 
         if (!StringUtils.hasText(accountDto.getId()) || !StringUtils.hasText(accountDto.getPassword())) {
@@ -44,7 +42,6 @@ public class RestAuthenticationFilter extends AbstractAuthenticationProcessingFi
         AjaxAuthenticationToken restAuthenticationToken = new AjaxAuthenticationToken(accountDto.getId(), accountDto.getPassword());
         return getAuthenticationManager().authenticate(restAuthenticationToken);
     }
-
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         SecurityContextHolder.getContext().setAuthentication(authResult);

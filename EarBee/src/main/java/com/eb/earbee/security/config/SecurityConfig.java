@@ -56,8 +56,6 @@ public class SecurityConfig  {
 
 
 
-
-
     /* ajax를 위한 SecurityFilerChain 추후 사용할 수 있음 아직 아님*/
     @Bean
     @Order(1)
@@ -69,6 +67,7 @@ public class SecurityConfig  {
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/login").permitAll()
+                        .requestMatchers("/api/business/**").hasAnyRole("ADMIN", "MANAGER","USER")
                         .requestMatchers("/css/**","/image/**", "/js/**","/favicon.*","/*/icon-*").permitAll()
                         .requestMatchers("/api/admin/**").authenticated()
                 )
@@ -79,6 +78,9 @@ public class SecurityConfig  {
                 .authenticationManager(authenticationManager);
         return http.build();
     }
+
+
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -94,7 +96,7 @@ public class SecurityConfig  {
                 )
                 .formLogin(f -> f
                         .loginPage("/login")
-                        .defaultSuccessUrl("/",false)
+                        .defaultSuccessUrl("/",true)
                         .failureHandler(new CustomAuthenticationFailureHandler())
                         .failureUrl("/login")
                         .usernameParameter("id")
